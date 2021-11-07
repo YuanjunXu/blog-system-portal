@@ -35,80 +35,149 @@
       </div>
 
       <div class="top-article-box">
-        <div class="top-article-item default-border-radius" v-for="(item,index) in topArticles" :key="index">
-          <!--          <div class="top-article-cover"><img :src="item.cover"></div>-->
-          <div class="top-article-title">
-            <span class="top-tips">置顶</span>
-            <span class="top-title">{{ item.title }}</span>
+        <div class="article-item default-border-radius clear-fix" v-for="(item,index) in topArticles" :key="index">
+          <div class="article-right float-right">
+            <div class="article-cover"><img :src="item.cover"></div>
           </div>
-          <div class="top-article-summary">
-            <p>{{ item.summary }}
-              <span>...</span>
-              <span class="read-more">阅读全文</span>
-            </p>
+          <div class="article-left float-left">
+            <div class="article-title">
+              <span class="tips">置顶</span>
+              <span class="title">{{ item.title }}</span>
+            </div>
+            <div class="article-summary clear-fix">
+              <div class="article-summary-left float-left">
+                <p>{{ item.summary }}</p>
+              </div>
+              <div class="article-summary-right float-right">
+                <span class="read-more">阅读全文</span>
+              </div>
+            </div>
+            <div class="article-label">
+              <el-tag size="mini"
+                      v-for="(tag,takIndex) in item.labels" :key="takIndex" effect="plain">
+                {{ tag }}
+              </el-tag>
+            </div>
           </div>
-          <div class="top-article-label">
-            <el-tag size="mini"
-                    v-for="(tag,takIndex) in item.labels" :key="takIndex" effect="plain">
-                    {{ tag }}
-            </el-tag>
-          </div>
+
         </div>
       </div>
+
+      <div class="latest-article">
+        <div class="article-item default-border-radius clear-fix" v-for="(item,index) in latestArticles.data"
+             :key="index">
+          <div class="article-right float-right">
+            <div class="article-cover"><img :src="item.cover"></div>
+          </div>
+          <div class="article-left float-left">
+            <div class="article-title">
+              <span class="title">{{ item.title }}</span>
+            </div>
+            <div class="article-summary clear-fix">
+              <div class="article-summary-left float-left">
+                <p>{{ item.summary }}</p>
+              </div>
+              <div class="article-summary-right float-right">
+                <span class="read-more">阅读全文</span>
+              </div>
+            </div>
+            <div class="article-label">
+              <el-tag size="mini"
+                      v-for="(tag,takIndex) in item.labels" :key="takIndex" effect="plain">
+                {{ tag }}
+              </el-tag>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
-    <div class="index-right-part float-left default-border-radius"></div>
+    <div class="index-right-part float-right default-border-radius"></div>
+
   </div>
 </template>
 
 <style>
-.top-article-label .el-tag {
-  margin-left: 10px;
+.article-label .el-tag {
+  margin-left: 5px;
   cursor: pointer;
 }
 
-.top-article-label{
+.article-label {
+  margin-top: 10px;
+}
+.article-summary-right{
   margin-top: 10px;
 }
 
-.top-article-summary {
+.article-summary-left{
+  width: 400px;
   margin-left: 10px;
+  color: #909399;
+  margin-top: 10px;
+
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+
 }
 
 
+.article-title {
+  margin-top: 10px;
+  margin-left: 10px;
+  font-size: 12px;
+  width: 440px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
 .read-more:hover {
-  border: #AEAAA8D6 solid 1px;
+  color: #373735FF;
 }
 
 .read-more {
-  border: #D6CFC7D6 solid 1px;
+  color: #D6CFC7D6;
   border-radius: 8px;
   padding: 2px 10px;
   cursor: pointer;
-  margin-left: 10px;
+  font-size: 12px;
 }
 
-.top-article-summary {
-  margin-top: 10px;
-}
 
-.top-article-title .top-tips {
+.article-title .tips {
   padding: 2px 10px;
-  background: #f97144;
+  background: #f05c29;
   border-radius: 4px;
   margin-right: 5px;
+  vertical-align: middle;
   color: white;
 }
 
-.top-article-title .top-title {
+.article-cover img {
+  width: 150px;
+  height: 100px;
+  margin-right: 10px;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+
+.article-title .title {
   font-size: 20px;
+  color: #606266;
+  vertical-align: middle;
 }
 
 .top-article-box {
   margin-top: 10px;
 }
 
-.top-article-item {
+.article-item {
   padding: 10px 0;
   margin-bottom: 10px;
   background: white;
@@ -183,34 +252,30 @@
 }
 
 .index-page-box {
+  overflow: auto;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-.index-left-part {
+.index-left-part, .index-right-part {
   width: 215px;
-  margin-right: 5px;
   background: #ffffff;
   padding: 10px;
 }
 
 .index-center-part {
   width: 660px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
-.index-right-part {
-  width: 215px;
-  margin-left: 5px;
-  background: #ffffff;
-  padding: 10px;
-}
 
 </style>
 
 
 <script>
 import * as api from '../api/api'
-import {getLoopImages, getTopArticles} from "../api/api";
+import {getLatestArticles, getLoopImages, getTopArticles} from "../api/api";
 
 export default {
   async asyncData({params}) {
@@ -218,12 +283,16 @@ export default {
     let categoriesRes = await api.getCategories();
     let loopImageRes = await api.getLoopImages();
     let topArticlesRes = await api.getTopArticles();
-    console.log(topArticlesRes.data);
+    let articlesRes = await api.getLatestArticles(1, 100);
+
+
+    console.log(articlesRes.data);
     return {
       userInfo: adminUserInfoRes.data,
       categories: categoriesRes.data,
       loopImages: loopImageRes.data,
       topArticles: topArticlesRes.data,
+      latestArticles: articlesRes.data,
     }
   }
 }

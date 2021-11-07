@@ -73,9 +73,9 @@ a:hover {
 }
 
 .blog-footer {
-  margin-top: 80%;
   text-align: center;
   font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .logo-box .logo {
@@ -123,7 +123,7 @@ a:hover {
 
 
 .copyright-box {
-  margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 .blog-box {
