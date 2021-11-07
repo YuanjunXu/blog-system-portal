@@ -1,0 +1,30 @@
+[
+  {
+    "name": "about",
+    "path": "/about",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\about\\\\index.vue",
+    "chunkName": "pages/about/index",
+    "_name": "_679e4ad0"
+  },
+  {
+    "name": "article",
+    "path": "/article",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\article\\\\index.vue",
+    "chunkName": "pages/article/index",
+    "_name": "_0ec90a62"
+  },
+  {
+    "name": "link",
+    "path": "/link",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\link\\\\index.vue",
+    "chunkName": "pages/link/index",
+    "_name": "_0d1c9df5"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_101e616f"
+  }
+]

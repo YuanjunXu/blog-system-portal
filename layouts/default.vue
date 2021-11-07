@@ -1,6 +1,6 @@
 <template>
   <div class="blog-box">
-    <div class="blog-header clear-fix">
+    <div class="blog-header clear-fix default-border-radius">
       <div class="logo-box float-left">
         <div class="logo">
           <a href="/" target="_blank">猿村</a>
@@ -9,8 +9,8 @@
       </div>
 
       <div class="login-tips-text-box float-right">
-        <span><i class="sob_blog sobfingermap"></i> 登录</span> |
-        <span><i class="sob_blog sobmembers-add"></i> 注册</span>
+        <span class="sob_blog sobfingermap"> 登录</span> |
+        <span class="sob_blog sobmembers-add"> 注册</span>
       </div>
 
       <div class="navigation-box float-right">
@@ -28,7 +28,9 @@
 
       <div class="user-info-box float-left" style="display: none">用户信息</div>
     </div>
+
     <Nuxt/>
+
     <div class="blog-footer">
       <div class="copyright-box">
         <p> Copyright ©
@@ -52,7 +54,7 @@
 }
 
 body {
-  background: #F2F2FA;
+  background: rgba(244, 239, 239, 0.8);
 }
 
 a {
@@ -68,12 +70,11 @@ a:hover {
   background: #Fff;
   padding: 10px;
   line-height: 30px;
-  border-radius: 8px;
 }
 
 .blog-footer {
+  margin-top: 80%;
   text-align: center;
-  margin-bottom: 10px;
   font-size: 14px;
 }
 
@@ -141,6 +142,10 @@ a:hover {
 .clear-fix {
   overflow: hidden;
   zoom: 1;
+}
+
+.default-border-radius {
+  border-radius: 8px;
 }
 
 </style>
