@@ -24,5 +24,22 @@ export const getTopArticles = () => {
 
 // 获取最新文章列表
 export const getLatestArticles = (page, size) => {
-  return http.requestGetHandle(baseUrl + 'portal/article/list/' + page + '/' + size);
+  if (process.client) {
+    // 客户端配置跨域代理
+    return http.requestGetHandle('portal/article/list/' + page + '/' + size);
+  } else {
+    // 服务端直接请求
+    return http.requestGetHandle(baseUrl + 'portal/article/list/' + page + '/' + size);
+  }
+
+}
+
+// 获取热门标签
+export const getHotLabels = (size) => {
+  if (process.client) {
+    return http.requestGetHandle("portal/article/label/" + size);
+  } else {
+    return http.requestGetHandle(baseUrl + "portal/article/label/" + size);
+  }
+
 }

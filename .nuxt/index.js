@@ -13,7 +13,9 @@ import { setContext, getLocation, getRouteData, normalizeError } from './utils'
 /* Plugins */
 
 import nuxt_plugin_plugin_a77a49d0 from 'nuxt_plugin_plugin_a77a49d0' // Source: .\\components\\plugin.js (mode: 'all')
+import nuxt_plugin_axios_6b4f998a from 'nuxt_plugin_axios_6b4f998a' // Source: .\\axios.js (mode: 'all')
 import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ..\\plugins\\element-ui (mode: 'all')
+import nuxt_plugin_wordcloud_f0c2c2b4 from 'nuxt_plugin_wordcloud_f0c2c2b4' // Source: ..\\plugins\\word-cloud (mode: 'client')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -181,8 +183,16 @@ async function createApp(ssrContext, config = {}) {
     await nuxt_plugin_plugin_a77a49d0(app.context, inject)
   }
 
+  if (typeof nuxt_plugin_axios_6b4f998a === 'function') {
+    await nuxt_plugin_axios_6b4f998a(app.context, inject)
+  }
+
   if (typeof nuxt_plugin_elementui_d905880e === 'function') {
     await nuxt_plugin_elementui_d905880e(app.context, inject)
+  }
+
+  if (process.client && typeof nuxt_plugin_wordcloud_f0c2c2b4 === 'function') {
+    await nuxt_plugin_wordcloud_f0c2c2b4(app.context, inject)
   }
 
   // Lock enablePreview in context

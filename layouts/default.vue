@@ -54,7 +54,7 @@
 }
 
 body {
-  background: rgba(244, 239, 239, 0.8);
+  background: #F4EFEFCC;
 }
 
 a {

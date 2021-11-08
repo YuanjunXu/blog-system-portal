@@ -63,7 +63,7 @@
         </div>
       </div>
 
-      <div class="latest-article">
+      <div class="latest-article" v-loading="isLoading">
         <div class="article-item default-border-radius clear-fix" v-for="(item,index) in latestArticles.data"
              :key="index">
           <div class="article-right float-right">
@@ -88,18 +88,144 @@
               </el-tag>
             </div>
           </div>
+        </div>
 
+        <div class="article-page-navigation">
+          <el-pagination
+            background
+            @current-change="onPageChange"
+            :page-size="pageSize"
+            layout="prev, pager, next"
+            :total="latestArticles.totalCount">
+          </el-pagination>
         </div>
       </div>
 
     </div>
 
-    <div class="index-right-part float-right default-border-radius"></div>
+    <div class="index-right-part float-right default-border-radius">
+      <div class="search-card default-border-radius">
+        <div class="card-title">
+          内容搜索
+        </div>
+        <div class="card-content">
+          <el-input
+            placeholder="请输入搜索内容"
+            prefix-icon="el-icon-search"
+            v-model="keyword">
+          </el-input>
+        </div>
+      </div>
+
+      <div class="hot-labels-card default-border-radius">
+        <div class="card-title">
+          热门标签
+        </div>
+        <div class="card-content">
+          <div class="label-list-box">
+            <wordcloud
+              :data="hotLabels"
+              :margin="margin"
+              :rotate="rotate"
+              :fontSize="fontSize"
+              nameKey="name"
+              valueKey="count"
+              :showTooltip="false"
+              :wordClick="wordClickHandler">
+            </wordcloud>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-card default-border-radius">
+        <div class="card-title">
+          每日一句
+        </div>
+        <div class="card-content">
+          热闹只是消耗品，撑起人生的是孤独。 ——宣君
+        </div>
+      </div>
+
+      <div class="right-card default-border-radius">
+        <div class="card-title">
+          公众号
+        </div>
+        <div class="card-content">
+          <div class="gong-zhong-hao">
+            <img src="http://fs.xuyuanjun.cn/20211109/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg">
+          </div>
+        </div>
+      </div>
+
+      <div class="right-card default-border-radius">
+        <div class="card-title">
+          其它卡片
+        </div>
+        <div class="card-content">
+
+        </div>
+      </div>
+    </div>
 
   </div>
 </template>
 
 <style>
+
+.gong-zhong-hao img {
+  height: 150px;
+  width: 150px;
+  margin-left: 30px;
+  border-radius: 44px;
+}
+
+.search-card {
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #ffffff;
+}
+
+.search-card .card-title {
+  margin-bottom: 5px;
+}
+
+.right-card {
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #ffffff;
+}
+
+.hot-labels-card {
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #ffffff;
+}
+
+.hot-labels-card .card-content .label-list-box .wordCloud {
+  width: 215px;
+  height: 204px;
+}
+
+.wordCloud .text {
+  cursor: pointer;
+}
+
+.right-card .card-title {
+  color: #737F90;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.article-page-navigation {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.article-page-navigation .el-pagination.is-background li {
+  background: #F4EFEFCC;
+}
+
 .article-label .el-tag {
   margin-left: 5px;
   cursor: pointer;
@@ -108,11 +234,12 @@
 .article-label {
   margin-top: 10px;
 }
-.article-summary-right{
+
+.article-summary-right {
   margin-top: 10px;
 }
 
-.article-summary-left{
+.article-summary-left {
   width: 400px;
   margin-left: 10px;
   color: #909399;
@@ -257,10 +384,15 @@
   margin-bottom: 10px;
 }
 
-.index-left-part, .index-right-part {
+.index-left-part {
   width: 215px;
   background: #ffffff;
   padding: 10px;
+}
+
+.index-right-part {
+  width: 235px;
+  color: #737F90;
 }
 
 .index-center-part {
@@ -278,21 +410,65 @@ import * as api from '../api/api'
 import {getLatestArticles, getLoopImages, getTopArticles} from "../api/api";
 
 export default {
+
+  data() {
+    return {
+      isLoading: false,
+      keyword: '',
+      margin: {top: 0, right: 0, bottom: 0, left: 0},
+      rotate: {from: -10, to: 30, numOfOrientation: 10},
+      fontSize: [10, 40],
+      hotLabels: [],
+    }
+  },
+
+  mounted() {
+    this.getHotLabels(10);
+  },
+
+  methods: {
+
+    getHotLabels(size) {
+      api.getHotLabels(size).then(res => {
+        if (res.code == api.successCode) {
+          this.hotLabels = res.data.data;
+        }
+      })
+    },
+
+    wordClickHandler(name, value, vm) {
+      console.log('wordClickHandler', name, value, vm);
+    },
+
+    onPageChange(page) {
+      this.isLoading = true;
+      api.getLatestArticles(page, this.pageSize).then(res => {
+        this.isLoading = false;
+        if (res.code == api.successCode) {
+          this.latestArticles = res.data;
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    }
+  },
+
   async asyncData({params}) {
     let adminUserInfoRes = await api.getAdmin();
     let categoriesRes = await api.getCategories();
     let loopImageRes = await api.getLoopImages();
     let topArticlesRes = await api.getTopArticles();
-    let articlesRes = await api.getLatestArticles(1, 100);
 
+    let pageSize = 10;
+    let articlesRes = await api.getLatestArticles(1, pageSize);
 
-    console.log(articlesRes.data);
     return {
       userInfo: adminUserInfoRes.data,
       categories: categoriesRes.data,
       loopImages: loopImageRes.data,
       topArticles: topArticlesRes.data,
       latestArticles: articlesRes.data,
+      pageSize: pageSize,
     }
   }
 }
