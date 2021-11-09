@@ -1,6 +1,6 @@
 <template>
   <div class="blog-box">
-    <div class="blog-header clear-fix default-border-radius">
+    <div id="blog-header" class="blog-header clear-fix default-border-radius">
       <div class="logo-box float-left">
         <div class="logo">
           <a href="/" target="_blank">猿村</a>

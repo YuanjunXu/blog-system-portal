@@ -1,7 +1,8 @@
 <template>
-  <div class="index-page-box">
+  <div id="index-page-box" class="index-page-box">
 
-    <div class="index-left-part float-left default-border-radius">
+    <div id="index-left-part" class="index-left-part float-left default-border-radius">
+      <!--用户信息-->
       <div class="index-left-user-info">
         <div class="user-avatar">
           <img :src="userInfo.avatar">
@@ -18,14 +19,18 @@
           <span class="sob_blog sobbilibili-line"></span>
         </div>
       </div>
+
+      <!--文章分类-->
       <div class="left-categories-box">
         <div class="category-item default-border-radius" v-for="(item,index) in categories" :key="index">
-          <span v-text="item.name"></span>
+          <div v-text="item.name" v-on:click="listArticlesByCategoryId(item)"></div>
         </div>
       </div>
+
     </div>
 
-    <div class="index-center-part float-left default-border-radius">
+    <div id="index-center-part" class="index-center-part float-left default-border-radius">
+      <!--顶部轮播图-->
       <div class="loop-box default-border-radius">
         <el-carousel :interval="4000" type="card" height="200px">
           <el-carousel-item v-for="(item,index) in loopImages" :key="index">
@@ -34,6 +39,7 @@
         </el-carousel>
       </div>
 
+      <!--置顶文章-->
       <div class="top-article-box">
         <div class="article-item default-border-radius clear-fix" v-for="(item,index) in topArticles" :key="index">
           <div class="article-right float-right">
@@ -63,6 +69,7 @@
         </div>
       </div>
 
+      <!--最新文章列表-->
       <div class="latest-article" v-loading="isLoading">
         <div class="article-item default-border-radius clear-fix" v-for="(item,index) in latestArticles.data"
              :key="index">
@@ -90,10 +97,12 @@
           </div>
         </div>
 
+        <!--分页栏-->
         <div class="article-page-navigation">
           <el-pagination
             background
             @current-change="onPageChange"
+            :current-page="pageNum"
             :page-size="pageSize"
             layout="prev, pager, next"
             :total="latestArticles.totalCount">
@@ -103,7 +112,8 @@
 
     </div>
 
-    <div class="index-right-part float-right default-border-radius">
+    <div id="index-right-part" class="index-right-part float-right default-border-radius">
+      <!--搜索卡片-->
       <div class="search-card default-border-radius">
         <div class="card-title">
           内容搜索
@@ -117,6 +127,7 @@
         </div>
       </div>
 
+      <!--热门标签卡片-->
       <div class="hot-labels-card default-border-radius">
         <div class="card-title">
           热门标签
@@ -137,6 +148,7 @@
         </div>
       </div>
 
+      <!--每日一句卡片-->
       <div class="right-card default-border-radius">
         <div class="card-title">
           每日一句
@@ -146,6 +158,7 @@
         </div>
       </div>
 
+      <!--公众号卡片-->
       <div class="right-card default-border-radius">
         <div class="card-title">
           公众号
@@ -157,6 +170,7 @@
         </div>
       </div>
 
+      <!--其它卡片-->
       <div class="right-card default-border-radius">
         <div class="card-title">
           其它卡片
@@ -165,12 +179,30 @@
 
         </div>
       </div>
+
+      <!--淘宝广告轮播卡片-->
+      <div class="taobao-ads-box">
+        <!--          <TaobaoLoop></TaobaoLoop>-->
+      </div>
+
     </div>
 
   </div>
 </template>
 
 <style>
+
+.taobao-ads-box {
+
+}
+
+.index-left-part {
+  background: #FFffff;
+  margin-bottom: 10px;
+  width: 235px;
+  position: fixed;
+  top: 71px;
+}
 
 .gong-zhong-hao img {
   height: 150px;
@@ -319,9 +351,11 @@
   height: 200px;
 }
 
+
 .left-categories-box {
   margin-top: 20px;
   text-align: center;
+  padding: 0 0 10px 0;
 }
 
 .loop-box .el-carousel .el-carousel__button {
@@ -336,13 +370,17 @@
   color: #737F90;
 }
 
+
 .left-categories-box .category-item:hover {
-  background: rgba(235, 233, 238, 0.76);
+  background: #EBE9EEC1;
 }
 
 .index-left-user-info {
   text-align: center;
-  margin-top: 10px;
+}
+
+.index-left-user-info .user-avatar {
+  padding: 20px 10px;
 }
 
 .index-left-user-info .user-avatar img {
@@ -352,7 +390,6 @@
 }
 
 .index-left-user-info .user-name {
-  margin-top: 10px;
   font-size: 18px;
 }
 
@@ -385,19 +422,20 @@
 }
 
 .index-left-part {
-  width: 215px;
-  background: #ffffff;
-  padding: 10px;
+  width: 235px;
 }
 
 .index-right-part {
   width: 235px;
   color: #737F90;
+  position: fixed;
+  top: 71px;
+  margin-left: 905px;
 }
 
 .index-center-part {
   width: 660px;
-  margin-left: 5px;
+  margin-left: 240px;
   margin-right: 5px;
 }
 
@@ -407,7 +445,7 @@
 
 <script>
 import * as api from '../api/api'
-import {getLatestArticles, getLoopImages, getTopArticles} from "../api/api";
+import {getLatestArticles, getLatestArticlesByCategoryId, getLoopImages, getTopArticles} from "../api/api";
 
 export default {
 
@@ -419,14 +457,74 @@ export default {
       rotate: {from: -10, to: 30, numOfOrientation: 10},
       fontSize: [10, 40],
       hotLabels: [],
+      currentCategoryId: ''
     }
   },
 
   mounted() {
     this.getHotLabels(10);
+
+    this.onWindowScroll();
+    window.addEventListener("scroll", this.onWindowScroll);
+    let _this = this
+    window.onresize = function () {
+      _this.onWindowScroll();
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onWindowScroll);
   },
 
   methods: {
+
+    listArticlesByCategoryId(category) {
+
+      this.currentCategoryId = category.id;
+      // 重置页码
+      this.pagenum = 1;
+      // 获取数据
+      api.getLatestArticlesByCategoryId(this.currentCategoryId, this.pagenum, this.pageSize).then(res => {
+        if (res.code == api.successCode) {
+          this.latestArticles = res.data;
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+
+    // 窗口滚动时，让左右板块悬浮滑动
+    onWindowScroll() {
+      let scrollTop = document.documentElement.scrollTop;
+      let scrollLeft = document.documentElement.scrollLeft;
+      let leftPart = document.getElementById('index-left-part');
+      let rightPart = document.getElementById('index-right-part');
+      let centerPart = document.getElementById('index-center-part');
+      let indexPageBox = document.getElementById('index-page-box');
+      if (rightPart && leftPart && centerPart && indexPageBox) {
+        // 处理上下滑动
+        let baseTop = centerPart.offsetTop;
+        if (scrollTop < baseTop) {
+          leftPart.style.top = (baseTop - scrollTop) + 'px';
+          rightPart.style.top = (baseTop - scrollTop) + 'px';
+        } else {
+          leftPart.style.top = 10 + 'px';
+          rightPart.style.top = 10 + 'px';
+        }
+        // 处理左右滑动
+        if (scrollLeft > 0) {
+          leftPart.style.left = -scrollLeft + 'px';
+          console.log(leftPart.style.left)
+          rightPart.style.left = -scrollLeft + 'px';
+        } else {
+          // 正常状态
+          leftPart.style.left = indexPageBox.offsetLeft + 'px';
+          console.log("indexPageBox.offsetLeft", indexPageBox.offsetLeft);
+          console.log("  leftPart.style.left", leftPart.style.left);
+          rightPart.style.left = indexPageBox.offsetLeft + 'px';
+        }
+      }
+    },
+
 
     getHotLabels(size) {
       api.getHotLabels(size).then(res => {
@@ -441,10 +539,16 @@ export default {
     },
 
     onPageChange(page) {
+      this.pagenum = page;
       this.isLoading = true;
-      api.getLatestArticles(page, this.pageSize).then(res => {
+      api.getLatestArticlesByCategoryId(this.currentCategoryId, page, this.pageSize).then(res => {
         this.isLoading = false;
         if (res.code == api.successCode) {
+          // 回到页面顶部
+          let header = document.getElementById('blog-header');
+          if (header) {
+            header.scrollIntoView({block: "start", behavior: "smooth"})
+          }
           this.latestArticles = res.data;
         } else {
           this.$message.error(res.message)
@@ -460,15 +564,23 @@ export default {
     let topArticlesRes = await api.getTopArticles();
 
     let pageSize = 10;
-    let articlesRes = await api.getLatestArticles(1, pageSize);
+    let articlesRes = await api.getLatestArticlesByCategoryId('', 1, pageSize);
 
+
+    let tmpCategories = [];
+    tmpCategories.push({
+      name: "全部分类",
+      id: ""
+    });
+    tmpCategories = tmpCategories.concat(categoriesRes.data);
     return {
       userInfo: adminUserInfoRes.data,
-      categories: categoriesRes.data,
+      categories: tmpCategories,
       loopImages: loopImageRes.data,
       topArticles: topArticlesRes.data,
       latestArticles: articlesRes.data,
       pageSize: pageSize,
+      pageNum: 1,
     }
   }
 }
