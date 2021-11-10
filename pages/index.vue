@@ -22,7 +22,9 @@
 
       <!--文章分类-->
       <div class="left-categories-box">
-        <div class="category-item default-border-radius" v-for="(item,index) in categories" :key="index">
+        <div
+          :class="currentCategoryId===item.id?'category-item-active default-border-radius':'category-item default-border-radius'"
+          v-for="(item,index) in categories" :key="index">
           <div v-text="item.name" v-on:click="listArticlesByCategoryId(item)"></div>
         </div>
       </div>
@@ -120,6 +122,7 @@
         </div>
         <div class="card-content">
           <el-input
+            @keyup.enter.native="toSearchPage"
             placeholder="请输入搜索内容"
             prefix-icon="el-icon-search"
             v-model="keyword">
@@ -354,6 +357,8 @@
 
 .left-categories-box {
   margin-top: 20px;
+  margin-left: 5px;
+  margin-right: 5px;
   text-align: center;
   padding: 0 0 10px 0;
 }
@@ -364,15 +369,17 @@
   border-radius: 50%;
 }
 
-.left-categories-box .category-item {
+.left-categories-box .category-item, .left-categories-box .category-item-active {
   padding: 5px;
   cursor: pointer;
   color: #737F90;
+  margin-bottom: 5px;
 }
 
 
-.left-categories-box .category-item:hover {
+.left-categories-box .category-item:hover, .left-categories-box .category-item-active {
   background: #EBE9EEC1;
+  color: #c9adf3;
 }
 
 .index-left-user-info {
@@ -477,8 +484,19 @@ export default {
 
   methods: {
 
-    listArticlesByCategoryId(category) {
+    toSearchPage() {
+      if (this.keyword === '') {
+        console.log("搜索内容为空~~~~~~")
+        return;
+      }
+      // 跳转到搜索结果页面
+      location.href = '/search/' + encodeURIComponent(this.keyword);
+    },
 
+    listArticlesByCategoryId(category) {
+      if (this.currentCategoryId == category.id) {
+        return;
+      }
       this.currentCategoryId = category.id;
       // 重置页码
       this.pagenum = 1;

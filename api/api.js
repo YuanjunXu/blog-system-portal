@@ -6,19 +6,32 @@ const baseUrl = 'http://localhost:2021/';
 
 //获取管理员信息
 export const getAdmin = () => {
-  return http.requestGetHandle(baseUrl + 'user/user_info/20173013961932800');
+  if (process.client) {
+    return http.requestGetHandle('user/user_info/20173013961932800');
+  } else {
+    return http.requestGetHandle(baseUrl + 'user/user_info/20173013961932800');
+  }
 }
 
 // 获取分类
 export const getCategories = () => {
+  if (process.client) {
+    return http.requestGetHandle('portal/article/categories');
+  }
   return http.requestGetHandle(baseUrl + 'portal/article/categories');
 }
 // 获取轮播图
 export const getLoopImages = () => {
+  if (process.client) {
+    return http.requestGetHandle('portal/web_size_info/loop');
+  }
   return http.requestGetHandle(baseUrl + 'portal/web_size_info/loop');
 }
 // 获取置顶文章列表
 export const getTopArticles = () => {
+  if (process.client) {
+    return http.requestGetHandle('portal/article/top');
+  }
   return http.requestGetHandle(baseUrl + 'portal/article/top');
 }
 
@@ -45,5 +58,15 @@ export const getHotLabels = (size) => {
   } else {
     return http.requestGetHandle(baseUrl + "portal/article/label/" + size);
   }
-
 }
+
+// 获取友链
+
+export const getLinkList = () => {
+  if (process.client) {
+    return http.requestGetHandle("portal/web_size_info/friend_link");
+  }
+  return http.requestGetHandle(baseUrl + "portal/web_size_info/friend_link");
+}
+
+

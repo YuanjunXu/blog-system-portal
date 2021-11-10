@@ -51,6 +51,9 @@ export default {
   proxy: {
     '/portal': {
       target: 'http://localhost:2021',
+    },
+    '/user': {
+      target: 'http://localhost:2021',
     }
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build

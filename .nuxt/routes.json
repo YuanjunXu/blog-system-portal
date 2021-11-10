@@ -21,6 +21,13 @@
     "_name": "_0d1c9df5"
   },
   {
+    "name": "search-keyword",
+    "path": "/search/:keyword?",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\search\\\\_keyword.vue",
+    "chunkName": "pages/search/_keyword",
+    "_name": "_92464d76"
+  },
+  {
     "name": "index",
     "path": "/",
     "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\index.vue",
