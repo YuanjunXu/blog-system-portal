@@ -61,12 +61,17 @@ export const getHotLabels = (size) => {
 }
 
 // 获取友链
-
 export const getLinkList = () => {
   if (process.client) {
     return http.requestGetHandle("portal/web_size_info/friend_link");
   }
   return http.requestGetHandle(baseUrl + "portal/web_size_info/friend_link");
+}
+
+// 搜索内容
+export const doSearch = (categoryId, keyword, page, size, sort) => {
+  return http.requestGetHandle(baseUrl + "portal/search?keyword=" + encodeURIComponent(keyword) + "&page=" + page + "&size="
+    + size + "&categoryId=" + categoryId + "&sort=" + sort);
 }
 
 

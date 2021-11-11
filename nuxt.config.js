@@ -31,6 +31,10 @@ export default {
     {
       src: '@/plugins/word-cloud',
       ssr: false
+    },
+    {
+      src: '@/plugins/dateformat',
+      ssr: true
     }
   ],
 

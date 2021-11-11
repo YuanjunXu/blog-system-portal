@@ -62,8 +62,11 @@
             </div>
             <div class="article-label">
               <el-tag size="mini"
-                      v-for="(tag,takIndex) in item.labels" :key="takIndex" effect="plain">
-                {{ tag }}
+                      v-for="(tag,takIndex) in item.labels"
+                      :key="takIndex"
+                      type="info"
+                      effect="plain">
+                <a :href="'/search?keyword='+tag" target="_blank">{{ tag }}</a>
               </el-tag>
             </div>
           </div>
@@ -92,8 +95,11 @@
             </div>
             <div class="article-label">
               <el-tag size="mini"
-                      v-for="(tag,takIndex) in item.labels" :key="takIndex" effect="plain">
-                {{ tag }}
+                      v-for="(tag,takIndex) in item.labels"
+                      :key="takIndex"
+                      type="info"
+                      effect="plain">
+                <a :href="'/search?keyword='+tag" target="_blank"> {{ tag }}</a>
               </el-tag>
             </div>
           </div>
@@ -261,9 +267,18 @@
   background: #F4EFEFCC;
 }
 
+.article-label .el-tag a:hover{
+  color: #c9adf3;
+}
+
+.article-label .el-tag a{
+  color: #909399;
+}
+
 .article-label .el-tag {
   margin-left: 5px;
   cursor: pointer;
+
 }
 
 .article-label {
@@ -286,7 +301,6 @@
   -webkit-line-clamp: 1;
 
 }
-
 
 .article-title {
   margin-top: 10px;
@@ -329,10 +343,15 @@
   vertical-align: middle;
 }
 
+.article-title .title:hover {
+  color: #c9adf3;
+}
+
 .article-title .title {
   font-size: 20px;
   color: #606266;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .top-article-box {
@@ -485,12 +504,8 @@ export default {
   methods: {
 
     toSearchPage() {
-      if (this.keyword === '') {
-        console.log("搜索内容为空~~~~~~")
-        return;
-      }
       // 跳转到搜索结果页面
-      location.href = '/search/' + encodeURIComponent(this.keyword);
+      location.href = '/search?keyword=' + encodeURIComponent(this.keyword);
     },
 
     listArticlesByCategoryId(category) {
@@ -553,7 +568,8 @@ export default {
     },
 
     wordClickHandler(name, value, vm) {
-      console.log('wordClickHandler', name, value, vm);
+      // 通过标签跳转搜索页面
+      location.href = "/search?keyword=" + encodeURIComponent(name);
     },
 
     onPageChange(page) {
