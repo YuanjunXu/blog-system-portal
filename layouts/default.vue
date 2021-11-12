@@ -9,8 +9,12 @@
       </div>
 
       <div class="login-tips-text-box float-right">
-        <span class="sob_blog sobfingermap"> 登录</span> |
-        <span class="sob_blog sobmembers-add"> 注册</span>
+        <span>
+          <a href="/login" target="_blank"> <i class="sob_blog sobfingermap"></i> 登录 &nbsp;&nbsp;</a>
+        </span>
+        <span>
+          <a href="/register" target="_blank"> <i class="sob_blog sobmembers-add"></i> 注册</a>
+        </span>
       </div>
 
       <div class="navigation-box float-right">
@@ -102,7 +106,13 @@ a:hover {
 }
 
 .navigation-box span:hover {
-  cursor: pointer;
+  color: #c9adf3;
+}
+
+.login-tips-text-box a{
+  color: #737F90;
+}
+.login-tips-text-box a:hover{
   color: #c9adf3;
 }
 
@@ -114,11 +124,6 @@ a:hover {
 .login-tips-text-box span {
   font-size: 14px;
   font-weight: 500;
-}
-
-.login-tips-text-box span:hover {
-  cursor: pointer;
-  color: #c9adf3;
 }
 
 

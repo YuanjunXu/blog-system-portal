@@ -14,11 +14,32 @@
     "_name": "_0ec90a62"
   },
   {
+    "name": "forget",
+    "path": "/forget",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\forget\\\\index.vue",
+    "chunkName": "pages/forget/index",
+    "_name": "_b72bee3c"
+  },
+  {
     "name": "link",
     "path": "/link",
     "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\link\\\\index.vue",
     "chunkName": "pages/link/index",
     "_name": "_0d1c9df5"
+  },
+  {
+    "name": "login",
+    "path": "/login",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\login\\\\index.vue",
+    "chunkName": "pages/login/index",
+    "_name": "_bb456588"
+  },
+  {
+    "name": "register",
+    "path": "/register",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\register\\\\index.vue",
+    "chunkName": "pages/register/index",
+    "_name": "_755f612c"
   },
   {
     "name": "search",

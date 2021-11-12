@@ -136,23 +136,14 @@
         </div>
       </div>
 
-      <!--热门标签卡片-->
+      <!--搜索热词卡片-->
       <div class="hot-labels-card default-border-radius">
         <div class="card-title">
-          热门标签
+          热词
         </div>
         <div class="card-content">
           <div class="label-list-box">
-            <wordcloud
-              :data="hotLabels"
-              :margin="margin"
-              :rotate="rotate"
-              :fontSize="fontSize"
-              nameKey="name"
-              valueKey="count"
-              :showTooltip="false"
-              :wordClick="wordClickHandler">
-            </wordcloud>
+            <wordCcloud></wordCcloud>
           </div>
         </div>
       </div>
@@ -191,7 +182,7 @@
 
       <!--淘宝广告轮播卡片-->
       <div class="taobao-ads-box">
-        <!--          <TaobaoLoop></TaobaoLoop>-->
+<!--                  <TaobaoLoop></TaobaoLoop>-->
       </div>
 
     </div>
@@ -240,10 +231,11 @@
   padding: 10px;
   margin-bottom: 10px;
   background: #ffffff;
+  border-radius: 8px;
 }
 
 .hot-labels-card .card-content .label-list-box .wordCloud {
-  width: 215px;
+  width: 100%;
   height: 204px;
 }
 
@@ -267,11 +259,11 @@
   background: #F4EFEFCC;
 }
 
-.article-label .el-tag a:hover{
+.article-label .el-tag a:hover {
   color: #c9adf3;
 }
 
-.article-label .el-tag a{
+.article-label .el-tag a {
   color: #909399;
 }
 
@@ -448,21 +440,20 @@
 }
 
 .index-left-part {
-  width: 235px;
+  width: 230px;
 }
 
 .index-right-part {
-  width: 235px;
+  width: 230px;
   color: #737F90;
   position: fixed;
   top: 71px;
-  margin-left: 905px;
+  margin-left: 910px;
 }
 
 .index-center-part {
   width: 660px;
   margin-left: 240px;
-  margin-right: 5px;
 }
 
 
@@ -479,10 +470,6 @@ export default {
     return {
       isLoading: false,
       keyword: '',
-      margin: {top: 0, right: 0, bottom: 0, left: 0},
-      rotate: {from: -10, to: 30, numOfOrientation: 10},
-      fontSize: [10, 40],
-      hotLabels: [],
       currentCategoryId: ''
     }
   },
@@ -567,10 +554,6 @@ export default {
       })
     },
 
-    wordClickHandler(name, value, vm) {
-      // 通过标签跳转搜索页面
-      location.href = "/search?keyword=" + encodeURIComponent(name);
-    },
 
     onPageChange(page) {
       this.pagenum = page;

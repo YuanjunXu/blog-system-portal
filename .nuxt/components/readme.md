@@ -9,3 +9,4 @@ You can directly use them in pages and other components without the need to impo
 - `<NuxtLogo>` | `<nuxt-logo>` (components/NuxtLogo.vue)
 - `<TaobaoLoop>` | `<taobao-loop>` (components/TaobaoLoop.vue)
 - `<Tutorial>` | `<tutorial>` (components/Tutorial.vue)
+- `<WordCcloud>` | `<word-ccloud>` (components/wordCcloud.vue)

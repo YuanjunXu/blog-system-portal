@@ -6,7 +6,10 @@ import scrollBehavior from './router.scrollBehavior.js'
 
 const _679e4ad0 = () => interopDefault(import('..\\pages\\about\\index.vue' /* webpackChunkName: "pages/about/index" */))
 const _0ec90a62 = () => interopDefault(import('..\\pages\\article\\index.vue' /* webpackChunkName: "pages/article/index" */))
+const _b72bee3c = () => interopDefault(import('..\\pages\\forget\\index.vue' /* webpackChunkName: "pages/forget/index" */))
 const _0d1c9df5 = () => interopDefault(import('..\\pages\\link\\index.vue' /* webpackChunkName: "pages/link/index" */))
+const _bb456588 = () => interopDefault(import('..\\pages\\login\\index.vue' /* webpackChunkName: "pages/login/index" */))
+const _755f612c = () => interopDefault(import('..\\pages\\register\\index.vue' /* webpackChunkName: "pages/register/index" */))
 const _70f37247 = () => interopDefault(import('..\\pages\\search\\index.vue' /* webpackChunkName: "pages/search/index" */))
 const _101e616f = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
@@ -30,9 +33,21 @@ export const routerOptions = {
     component: _0ec90a62,
     name: "article"
   }, {
+    path: "/forget",
+    component: _b72bee3c,
+    name: "forget"
+  }, {
     path: "/link",
     component: _0d1c9df5,
     name: "link"
+  }, {
+    path: "/login",
+    component: _bb456588,
+    name: "login"
+  }, {
+    path: "/register",
+    component: _755f612c,
+    name: "register"
   }, {
     path: "/search",
     component: _70f37247,

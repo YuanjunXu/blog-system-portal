@@ -74,4 +74,19 @@ export const doSearch = (categoryId, keyword, page, size, sort) => {
     + size + "&categoryId=" + categoryId + "&sort=" + sort);
 }
 
+// 获取二维码
+export const getLoginQrCode = () => {
+  return http.requestGet("/user/utils/pc_login_qr_code");
+};
+
+// 登录
+export const doLogin = (verifyCode, sobUser) => {
+  return http.requestPost('/user/account/login/' + verifyCode + '/?from=_p', sobUser);
+};
+
+// 检查扫描登录状态
+export const checkScanLoginState = (loginId) => {
+  return http.requestGet('/user/account/qr_code_state/' + loginId);
+};
+
 
