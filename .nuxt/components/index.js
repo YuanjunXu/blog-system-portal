@@ -1,7 +1,7 @@
 export { default as NuxtLogo } from '../..\\components\\NuxtLogo.vue'
 export { default as TaobaoLoop } from '../..\\components\\TaobaoLoop.vue'
 export { default as Tutorial } from '../..\\components\\Tutorial.vue'
-export { default as WordCcloud } from '../..\\components\\wordCcloud.vue'
+export { default as WordCloud } from '../..\\components\\wordCloud.vue'
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {

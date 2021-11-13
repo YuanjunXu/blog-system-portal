@@ -7,7 +7,7 @@ const baseUrl = 'http://localhost:2021/';
 //获取管理员信息
 export const getAdmin = () => {
   if (process.client) {
-    return http.requestGetHandle('user/user_info/20173013961932800');
+    return http.requestGetHandle('/user/user_info/20173013961932800');
   } else {
     return http.requestGetHandle(baseUrl + 'user/user_info/20173013961932800');
   }
@@ -16,21 +16,21 @@ export const getAdmin = () => {
 // 获取分类
 export const getCategories = () => {
   if (process.client) {
-    return http.requestGetHandle('portal/article/categories');
+    return http.requestGetHandle('/portal/article/categories');
   }
   return http.requestGetHandle(baseUrl + 'portal/article/categories');
 }
 // 获取轮播图
 export const getLoopImages = () => {
   if (process.client) {
-    return http.requestGetHandle('portal/web_size_info/loop');
+    return http.requestGetHandle('/portal/web_size_info/loop');
   }
   return http.requestGetHandle(baseUrl + 'portal/web_size_info/loop');
 }
 // 获取置顶文章列表
 export const getTopArticles = () => {
   if (process.client) {
-    return http.requestGetHandle('portal/article/top');
+    return http.requestGetHandle('/portal/article/top');
   }
   return http.requestGetHandle(baseUrl + 'portal/article/top');
 }
@@ -39,11 +39,11 @@ export const getTopArticles = () => {
 // 获取最新文章列表
 export const getLatestArticlesByCategoryId = (categoryId, page, size) => {
   if (categoryId !== '') {
-    return http.requestGetHandle('portal/article/list/' + categoryId + '/' + page + '/' + size);
+    return http.requestGetHandle('/portal/article/list/' + categoryId + '/' + page + '/' + size);
   }
   if (process.client) {
     // 客户端配置跨域代理
-    return http.requestGetHandle('portal/article/list/' + page + '/' + size);
+    return http.requestGetHandle('/portal/article/list/' + page + '/' + size);
   } else {
     // 服务端直接请求
     return http.requestGetHandle(baseUrl + 'portal/article/list/' + page + '/' + size);
@@ -53,17 +53,13 @@ export const getLatestArticlesByCategoryId = (categoryId, page, size) => {
 
 // 获取热门标签
 export const getHotLabels = (size) => {
-  if (process.client) {
-    return http.requestGetHandle("portal/article/label/" + size);
-  } else {
-    return http.requestGetHandle(baseUrl + "portal/article/label/" + size);
-  }
+  return http.requestGetHandle("/portal/article/label/" + size);
 }
 
 // 获取友链
 export const getLinkList = () => {
   if (process.client) {
-    return http.requestGetHandle("portal/web_size_info/friend_link");
+    return http.requestGetHandle("/portal/web_size_info/friend_link");
   }
   return http.requestGetHandle(baseUrl + "portal/web_size_info/friend_link");
 }
@@ -95,7 +91,7 @@ export const checkToken = () => {
 }
 
 export const logout = () => {
-  return http.requestGetHandle("user/account/logout");
+  return http.requestGetHandle("/user/account/logout");
 }
 
 export const sendEmail = (captchaCode, email, type) => {
@@ -104,7 +100,7 @@ export const sendEmail = (captchaCode, email, type) => {
 
 // 检查用户名是否存在
 export const checkUserName = (userName) => {
-  return http.requestGetHandle("user/utils/user_name?userName=" + userName);
+  return http.requestGetHandle("/user/utils/user_name?userName=" + userName);
 }
 
 // 注册
@@ -114,10 +110,36 @@ export const doRegister = (captcha_code, email_code, sobUser) => {
 
 //验证邮箱验证码
 export const checkEmailCode = (captchaCode, email, emailCode) => {
-  return http.requestGetHandle("user/utils/check_email_code?captchaCode=" + captchaCode + "&email=" + email + "&emailCode=" + emailCode);
+  return http.requestGetHandle("/user/utils/check_email_code?captchaCode=" + captchaCode + "&email=" + email + "&emailCode=" + emailCode);
 }
 
 //更新密码
 export const updatePassword = (verifyCode, user) => {
-  return http.requestPutHandle("user/password/" + verifyCode, user);
+  return http.requestPutHandle("/user/password/" + verifyCode, user);
+}
+
+// 获取文章详情
+export const getArticle = (id) => {
+  if (process.client) {
+    return http.requestGetHandle("/portal/article/" + id);
+  }
+  return http.requestGetHandle(baseUrl + "portal/article/" + id);
+}
+
+// 获取相关文章列表
+export const getRecommendArticle = (id, size) => {
+  return http.requestGetHandle(baseUrl + "portal/article/recommend/" + id + "/" + size);
+}
+
+// 获取文章评论列表
+export const getComments = (id, page, size) => {
+  if (process.client) {
+    return http.requestGetHandle("/portal/comment/list/" + id + "/" + page + "/" + size);
+  }
+  return http.requestGetHandle(baseUrl + "portal/comment/list/" + id + "/" + page + "/" + size);
+}
+
+// 提交评论
+export const postComment = (comment) => {
+  return http.requestPostHandle('/portal/comment', comment);
 }

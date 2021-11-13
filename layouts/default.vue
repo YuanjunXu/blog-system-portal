@@ -187,6 +187,10 @@ a:hover {
   margin-right: 10px;
 }
 
+.default-font-family {
+  font-family: PingFangSC-Regular, sans-serif;
+}
+
 </style>
 
 <script>
@@ -212,6 +216,7 @@ export default {
     handleCommand(command) {
       if (command === 'logout') {
         api.logout().then(res => {
+          console.log("退出登录", res);
           if (res.code === api.successCode) {
             // 跳转到登录界面
             location.href = '/login';

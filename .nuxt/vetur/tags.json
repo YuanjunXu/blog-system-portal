@@ -8,7 +8,7 @@
   "Tutorial": {
     "description": "Auto imported from components/Tutorial.vue"
   },
-  "WordCcloud": {
-    "description": "Auto imported from components/wordCcloud.vue"
+  "WordCloud": {
+    "description": "Auto imported from components/wordCloud.vue"
   }
 }

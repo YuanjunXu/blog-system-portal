@@ -1,5 +1,4 @@
 <template>
-
   <div class="link-page-box">
     <div class="link-list-box clear-fix">
       <div class="link-title">

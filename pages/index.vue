@@ -50,7 +50,9 @@
           <div class="article-left float-left">
             <div class="article-title">
               <span class="tips">置顶</span>
-              <span class="title">{{ item.title }}</span>
+              <span class="title">
+                <a :href="'/article/'+item.id">{{ item.title }}</a>
+              </span>
             </div>
             <div class="article-summary clear-fix">
               <div class="article-summary-left float-left">
@@ -83,7 +85,9 @@
           </div>
           <div class="article-left float-left">
             <div class="article-title">
-              <span class="title">{{ item.title }}</span>
+              <span class="title">
+              <a :href="'/article/'+item.id">{{ item.title }}</a>
+              </span>
             </div>
             <div class="article-summary clear-fix">
               <div class="article-summary-left float-left">
@@ -143,7 +147,7 @@
         </div>
         <div class="card-content">
           <div class="label-list-box">
-            <wordCcloud></wordCcloud>
+            <wordCloud></wordCloud>
           </div>
         </div>
       </div>
@@ -182,7 +186,7 @@
 
       <!--淘宝广告轮播卡片-->
       <div class="taobao-ads-box">
-<!--                  <TaobaoLoop></TaobaoLoop>-->
+        <!--                  <TaobaoLoop></TaobaoLoop>-->
       </div>
 
     </div>
@@ -273,7 +277,12 @@
 
 }
 
+.article-label .el-tag{
+  margin-right: 10px;
+}
+
 .article-label {
+  margin-left: 30px;
   margin-top: 10px;
 }
 
@@ -292,6 +301,14 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 
+}
+
+.article-title .title a:hover {
+  color: #c9adf3;
+}
+
+.article-title .title a {
+  color: #909399;
 }
 
 .article-title {
@@ -475,7 +492,6 @@ export default {
   },
 
   mounted() {
-    this.getHotLabels(10);
 
     this.onWindowScroll();
     window.addEventListener("scroll", this.onWindowScroll);
@@ -544,16 +560,6 @@ export default {
         }
       }
     },
-
-
-    getHotLabels(size) {
-      api.getHotLabels(size).then(res => {
-        if (res.code == api.successCode) {
-          this.hotLabels = res.data.data;
-        }
-      })
-    },
-
 
     onPageChange(page) {
       this.pagenum = page;

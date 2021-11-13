@@ -37,11 +37,13 @@
       <div class="search-left-part float-left default-border-radius">
         <!--搜索结果数量-->
         <div class="search-result-count-info">
-          找到 <span v-text="searchResult.totalCount"></span> 条结果
+          找到 <span v-text="totalCount"></span> 条结果
         </div>
         <div class="search-result-list-box" v-if="searchResult.data.length!==0">
           <div class="search-result-item" v-for="(item,index) in searchResult.data" :key="index">
-            <div class="result-item-title" v-html="item.blogTitle"></div>
+            <a :href="'/article/'+item.id">
+              <div class="result-item-title" v-html="item.blogTitle"></div>
+            </a>
             <div class="result-item-content" v-html="item.blogContent"></div>
             <div class="search-info-box">
               <span class="sob_blog sobicon">
@@ -90,7 +92,7 @@
           <div class="card-title">
             热词
           </div>
-          <wordCcloud></wordCcloud>
+          <wordCloud></wordCloud>
         </div>
 
         <div class="other-card">
@@ -115,7 +117,7 @@
 
 .card-title {
   color: #737F90;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
 }
 
@@ -243,8 +245,12 @@
   margin-bottom: 20px;
 }
 
-.result-item-title:hover {
+.search-result-item a:hover {
   color: #c9adf3;
+}
+
+.search-result-item a {
+  color: #909399;
 }
 
 .result-item-title {
@@ -265,7 +271,7 @@
 }
 
 .search-result-count-info {
-  color: rgba(138, 150, 165, 0.67);
+  color: #8A96A5AA;
   font-size: 14px;
   margin-top: 10px;
   padding: 20px 0px 0px 20px;
@@ -326,6 +332,10 @@ export default {
     },
 
     toSearchPage() {
+      if (this.keyword === '') {
+        this.$message("请告诉小猿您想搜索的内容哦~");
+        return;
+      }
       location.href = '/search?keyword=' + encodeURIComponent(this.keyword);
     }
   },
@@ -336,13 +346,17 @@ export default {
     let page = query.page ? query.page : 1;
     let size = query.size ? query.size : 10;
     let sort = query.sort ? query.sort : '';
-    if (keyword == '') {
+    if (keyword === '') {
       return;
     }
     let res = await api.doSearch(categoryId, keyword, page, size, sort);
     // 处理标签
     let tmpRes = res.data;
     let contents = tmpRes.data;
+    let totalCount = 0;
+    if (tmpRes) {
+      totalCount = tmpRes.totalCount;
+    }
     let isFirst = false;
     let isLast = false;
     contents.forEach(c => {
@@ -366,6 +380,7 @@ export default {
 
     return {
       categories: categoriesRes.data,
+      totalCount: totalCount,
       searchResult: tmpRes,
       isFirst: isFirst,
       isLast: isLast,
