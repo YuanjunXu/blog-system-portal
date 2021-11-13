@@ -76,17 +76,48 @@ export const doSearch = (categoryId, keyword, page, size, sort) => {
 
 // 获取二维码
 export const getLoginQrCode = () => {
-  return http.requestGet("/user/utils/pc_login_qr_code");
+  return http.requestGetHandle("/user/utils/pc_login_qr_code");
 };
 
 // 登录
 export const doLogin = (verifyCode, sobUser) => {
-  return http.requestPost('/user/account/login/' + verifyCode + '/?from=_p', sobUser);
+  return http.requestPostHandle('/user/account/login/' + verifyCode + '/?from=_p', sobUser);
 };
 
 // 检查扫描登录状态
 export const checkScanLoginState = (loginId) => {
-  return http.requestGet('/user/account/qr_code_state/' + loginId);
+  return http.requestGetHandle('/user/account/qr_code_state/' + loginId);
 };
 
+// 获取用户登录状态
+export const checkToken = () => {
+  return http.requestGetHandle("/user/utils/check_token");
+}
 
+export const logout = () => {
+  return http.requestGetHandle("user/account/logout");
+}
+
+export const sendEmail = (captchaCode, email, type) => {
+  return http.requestGetHandle("/user/utils/verify_code?captchaCode=" + captchaCode + "&email=" + email + "&type=" + type);
+}
+
+// 检查用户名是否存在
+export const checkUserName = (userName) => {
+  return http.requestGetHandle("user/utils/user_name?userName=" + userName);
+}
+
+// 注册
+export const doRegister = (captcha_code, email_code, sobUser) => {
+  return http.requestPostHandle("/user/join_in?captcha_code=" + captcha_code + "&email_code=" + email_code, sobUser);
+}
+
+//验证邮箱验证码
+export const checkEmailCode = (captchaCode, email, emailCode) => {
+  return http.requestGetHandle("user/utils/check_email_code?captchaCode=" + captchaCode + "&email=" + email + "&emailCode=" + emailCode);
+}
+
+//更新密码
+export const updatePassword = (verifyCode, user) => {
+  return http.requestPutHandle("user/password/" + verifyCode, user);
+}

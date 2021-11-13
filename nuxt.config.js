@@ -56,7 +56,7 @@ export default {
     '/portal': {
       target: 'http://localhost:2021',
     },
-    '/user': {
+    '/user/': {
       target: 'http://localhost:2021',
     }
   },

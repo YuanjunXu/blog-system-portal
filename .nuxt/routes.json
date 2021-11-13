@@ -49,6 +49,13 @@
     "_name": "_70f37247"
   },
   {
+    "name": "userInfo",
+    "path": "/userInfo",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\userInfo\\\\index.vue",
+    "chunkName": "pages/userInfo/index",
+    "_name": "_8d3c3a14"
+  },
+  {
     "name": "index",
     "path": "/",
     "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\index.vue",

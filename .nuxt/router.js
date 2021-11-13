@@ -11,6 +11,7 @@ const _0d1c9df5 = () => interopDefault(import('..\\pages\\link\\index.vue' /* we
 const _bb456588 = () => interopDefault(import('..\\pages\\login\\index.vue' /* webpackChunkName: "pages/login/index" */))
 const _755f612c = () => interopDefault(import('..\\pages\\register\\index.vue' /* webpackChunkName: "pages/register/index" */))
 const _70f37247 = () => interopDefault(import('..\\pages\\search\\index.vue' /* webpackChunkName: "pages/search/index" */))
+const _8d3c3a14 = () => interopDefault(import('..\\pages\\userInfo\\index.vue' /* webpackChunkName: "pages/userInfo/index" */))
 const _101e616f = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
@@ -52,6 +53,10 @@ export const routerOptions = {
     path: "/search",
     component: _70f37247,
     name: "search"
+  }, {
+    path: "/userInfo",
+    component: _8d3c3a14,
+    name: "userInfo"
   }, {
     path: "/",
     component: _101e616f,

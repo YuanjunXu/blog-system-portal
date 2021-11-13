@@ -8,13 +8,32 @@
 
       </div>
 
-      <div class="login-tips-text-box float-right">
+      <div id="login-tips-text-box" style="display: none" class="login-tips-text-box float-right">
         <span>
-          <a href="/login" target="_blank"> <i class="sob_blog sobfingermap"></i> 登录 &nbsp;&nbsp;</a>
+          <a :href="'/login'+redirectPath" target=""> <i
+            class="sob_blog sobfingermap"></i> 登录 &nbsp;&nbsp;</a>
         </span>
         <span>
-          <a href="/register" target="_blank"> <i class="sob_blog sobmembers-add"></i> 注册</a>
+          <a href="/register" target=""> <i class="sob_blog sobmembers-add"></i> 注册</a>
         </span>
+      </div>
+
+      <div id="user-info-box" style="display: none" class="user-info-box float-right clear-fix">
+        <div class="header-user-avatar float-left">
+          <img v-if="userInfo!==null" :src="userInfo.avatar" style="object-fit: cover">
+        </div>
+        <div class="header-user-name float-left" v-if="userInfo!==null">
+          <el-dropdown @command="handleCommand">
+            <span class="el-dropdown-link">
+              {{ userInfo.userName }} <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="userInfo">个人中心</el-dropdown-item>
+              <el-dropdown-item command="admin" v-if="userInfo.roles==='role_admin'">管理中心</el-dropdown-item>
+              <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </div>
 
       <div class="navigation-box float-right">
@@ -29,8 +48,6 @@
         </nuxt-link>
 
       </div>
-
-      <div class="user-info-box float-left" style="display: none">用户信息</div>
     </div>
 
     <Nuxt/>
@@ -74,6 +91,7 @@ a:hover {
   background: #Fff;
   padding: 10px;
   line-height: 30px;
+  position: relative;
 }
 
 .blog-footer {
@@ -95,7 +113,8 @@ a:hover {
 }
 
 .navigation-box {
-  margin-right: 60px;
+  position: absolute;
+  right: 200px;
 }
 
 .navigation-box span {
@@ -109,10 +128,11 @@ a:hover {
   color: #c9adf3;
 }
 
-.login-tips-text-box a{
+.login-tips-text-box a {
   color: #737F90;
 }
-.login-tips-text-box a:hover{
+
+.login-tips-text-box a:hover {
   color: #c9adf3;
 }
 
@@ -153,4 +173,86 @@ a:hover {
   border-radius: 8px;
 }
 
+.header-user-name span {
+  color: #737F90;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.header-user-avatar img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
 </style>
+
+<script>
+import * as api from "../api/api";
+
+export default {
+  mounted() {
+
+    if (this.redirectPath !== '?redirect=' + location.href
+      && this.$route.path !== '/'
+      && this.$route.path !== '/login'
+      && this.$route.path !== '/register'
+      && this.$route.path !== '/forget'
+    ) {
+
+      this.redirectPath = '?redirect=' + location.href;
+    }
+
+
+    this.checkToken();
+  },
+  methods: {
+    handleCommand(command) {
+      if (command === 'logout') {
+        api.logout().then(res => {
+          if (res.code === api.successCode) {
+            // 跳转到登录界面
+            location.href = '/login';
+          }
+        })
+      } else if (command === 'admin') {
+        // 跳转到管理中心
+        console.log("======跳转到管理中心=====")
+        // location.href='/login';
+      } else if (command === 'userInfo') {
+        location.href = '/userInfo';
+      }
+    },
+    checkToken() {
+      api.checkToken().then(res => {
+        let loginTipsBox = document.getElementById('login-tips-text-box');
+        let userInfoBox = document.getElementById('user-info-box');
+        if (res.code == api.successCode) {
+          this.userInfo = res.data;
+
+          // 控制顶部用户信息和登录注册显示
+          if (userInfoBox) {
+            userInfoBox.style.display = 'block';
+          } else {
+            if (loginTipsBox) {
+              loginTipsBox.style.display = 'block';
+            }
+          }
+        } else if (loginTipsBox) {
+          loginTipsBox.style.display = 'block';
+        }
+        ;
+      })
+    },
+  },
+  data() {
+    return {
+      redirectPath: '',
+      userInfo: null
+    }
+  }
+
+}
+</script>
