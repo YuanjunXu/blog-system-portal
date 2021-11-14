@@ -1,111 +1,74 @@
 <template>
   <div class="register-box">
     <div class="register-form-container">
-      <div class="register-title">注 册</div>
-      <div class="form-container">
+      <div class="register-title">
+        注册
+      </div>
+      <div class="form-content">
         <el-form label-width="100px">
-          <el-form-item label="验证码" required>
-            <el-input v-model="captchaCode" placeholder="请输入验证码"></el-input>
-            <img :src="captchaPath" @click="updateVerifyCode" class="captcha-code">
+          <el-form-item label="人类验证码" required>
+            <el-input v-model="captchaCode" placeholder="请输入右侧验证码"
+                      @keyup.enter.native="doLogin"></el-input>
+            <img
+              :src="captchaPath"
+              @click="updateVerifyCode" class="captcha-code">
           </el-form-item>
-          <el-form-item label="邮箱地址" required>
-            <el-input v-model="user.email" placeholder="请输入邮箱地址"></el-input>
-            <el-button v-if="!isCountDowning" type="primary" @click="sendEmail" class="get-verify-code">获取验证码
+          <el-form-item
+            label="邮箱地址" required>
+            <el-input v-model="sobUser.email" placeholder="请输入邮箱地址"></el-input>
+            <el-button v-if="!isCountDowning" type="primary" @click="getVerifyCode"
+                       class="email-get-verify-code-btn">获取验证码
             </el-button>
-            <el-button v-else class="get-verify-code" @click.prevent="sendEmail" type="primary" disabled>
+            <el-button v-else class="get-verify-code-btn" @click.prevent="getVerifyCode" type="primary">
               {{ countDownText }}
             </el-button>
           </el-form-item>
-          <el-form-item label="邮箱验证码" required>
+          <el-form-item
+            label="验证码" required>
             <el-input v-model="emailCode" placeholder="请输入邮箱验证码"></el-input>
           </el-form-item>
-          <el-form-item label="用户名" required>
-            <el-input v-model="user.userName" placeholder="请输入用户名" @blur="checkUserName"></el-input>
-            <span class="el-icon-error" v-if="isUserNameAvailable===2"> 用户名已存在</span>
-            <span class="el-icon-success" v-if="isUserNameAvailable===1">用户名可用</span>
+          <el-form-item
+            label="用户名" required>
+            <el-input v-model="sobUser.userName" @blur="checkUserName" placeholder="唯一的昵称"></el-input>
+            <span class="el-icon-error" v-if="isUserNameOkay==='1'"> 该用户名已注册</span>
+            <span class="el-icon-success" v-if="isUserNameOkay==='0'"> 您的用户名也太棒了</span>
           </el-form-item>
-          <el-form-item label="密码" required>
-            <el-input v-model="originalPassword" type="password" placeholder="请输入验密码"></el-input>
+          <el-form-item
+            label="密  码" required>
+            <el-input v-model="originalPassword" type="password" placeholder="请输入暗号"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="doRegister()">注册</el-button>
+            <el-button type="primary" @click="doRegister">注册</el-button>
           </el-form-item>
         </el-form>
       </div>
     </div>
   </div>
 </template>
-
-<style>
-.form-container .el-icon-error {
-  color: #F56C6C;
-}
-
-.form-container .el-icon-success {
-  color: #67C23A;
-}
-
-.form-container {
-  margin-left: 80px;
-}
-
-.register-title {
-  position: absolute;
-  margin-left: 20px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #999;
-}
-
-.register-form-container {
-  position: relative;
-}
-
-.captcha-code {
-  cursor: pointer;
-  vertical-align: middle;
-  margin-left: 10px;
-  border: solid 1px #E6E6E6;
-  width: 116px;
-  padding-left: 10px;
-  padding-right: 10px;
-  height: 36px;
-  border-radius: 8px;
-}
-
-.get-verify-code {
-  margin-left: 10px;
-}
-
-.register-form-container .el-input__inner {
-  width: 250px;
-}
-
-.register-form-container .el-input {
-  width: auto;
-}
-
-.register-box {
-  background: #FFffff;
-  border-radius: 8px;
-  margin-top: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-</style>
-
 <script>
-/*
-注册逻辑：
-1. 鼠标离开用户名输入框，校验用户名是否注册
-2. 点击获取邮箱验证码，检查油箱格式且校验邮箱是否注册，发送邮箱验证码
-3. 注册成功跳转登录界面
-* */
-import * as api from '../../api/api';
-import {checkUserName, sendEmail} from "../../api/api";
-import {hex_md5} from "@/utils/md5";
+import * as api from '../../api/api'
+import {hex_md5} from "../../utils/md5";
+/*注册相关的逻辑：
+* 1、当鼠标离开用户名时候，需要校验用户名是否已经存在
+* 2、点击获取验证码，检查格式和邮箱是否已经注册，再获取验证码
+*
+* 输入框：
 
+* 2、邮箱地址  ---> 获取验证码按钮
+* 3、邮箱验证码
+* 1、用户名
+* 4、密码
+* 5、人类验证码
+* 6、注册按钮
+*
+* 结果处理：
+*
+* 1、用户名已经注册（toast）
+* 2、验证码不正确（toast） ---> 停止倒计时
+* 3、图灵验证码不正确 ---> 重新加载一个新的图灵验证码
+* 4、邮箱格式不正确---> （toast）
+* 5、注册成功结果---->跳转到登录页面
+* */
 export default {
   head() {
     return {
@@ -119,145 +82,199 @@ export default {
         {
           hid: 'keywords',
           name: 'keywords',
-          content: '猿村,博客系统，程序员，前端，后端，随笔'
+          content: '猿村,java,android,开发,毕业设计,系统,程序员,拉大锯'
         }
       ]
     }
   },
-
   mounted() {
-    this.$store.commit('setCurrentActivatedTab', 'index');
+    this.$store.commit("setCurrentActivityTab", "index");
   },
-
   methods: {
-
     checkUserName() {
-      if (this.user.userName === '') {
-        this.isUserNameAvailable = 0;
+      if (this.sobUser.userName === '') {
+        this.isUserNameOkay = '';
         return;
       }
-      api.checkUserName(this.user.userName).then(res => {
-        // 1 表示用户名不可用 2 表示可用 默认0
-        this.isUserNameAvailable = res.code === api.successCode ? 1 : 2;
-      })
+      //查询用户名是否可用
+      api.checkUserName(this.sobUser.userName).then(result => {
+        if (result.code === api.success_code) {
+          //不可用，已经存在
+          this.isUserNameOkay = '1';
+        } else {
+          //可用，不存在
+          this.isUserNameOkay = '0';
+        }
+      });
     },
-
+    updateVerifyCode() {
+      this.captchaPath = '/user/utils/captcha' + "?random=" + Date.parse(new Date());
+      //console.log(this.captchaPath);
+    },
     doRegister() {
-      console.log(this.user.userName);
       //检查内容
       if (this.captchaCode === '') {
-        this.$message.error("验证码为空");
+        this.$message.error("证明一下你是人类");
         return;
       }
-      if (this.user.email === '') {
-        this.$message.error("邮箱地址为空");
+      if (this.sobUser.email === '') {
+        this.$message.error("您没写邮箱呢！");
         return;
       }
       if (this.emailCode === '') {
-        this.$message.error("邮箱验证码为空");
+        this.$message.error("您没有收到邮箱验证码？");
         return;
       }
-      if (this.user.userName === '') {
-        this.$message.error("用户名为空");
+      if (this.sobUser.userName === '') {
+        this.$message.error("怎么称呼您呢？");
         return;
       }
       if (this.originalPassword === '') {
-        this.$message.error("密码为空");
+        this.$message.error("没有输入暗号");
         return;
       }
-      // 加密密码
-      this.user.password = hex_md5(this.originalPassword);
-      // 提交数据
-      api.doRegister(this.captchaCode, this.emailCode, this.user).then(res => {
-        if (res.code == api.successCode) {
+      //转换密码
+      this.sobUser.password = hex_md5(this.originalPassword);
+      //提交数据
+      api.registerUser(this.captchaCode, this.emailCode, this.sobUser).then(result => {
+        //处理结果
+        if (result.code === 20002) {
           //注册成功
-          this.$message.success(res.message);
-          //跳转登录界面
+          //给出提示
+          this.$message.success(result.message);
+          //直接跳转到登录页面
           location.href = "/login";
         } else {
-          this.$message.error(res.message);
+          this.$message.error(result.message);
+          //给出提示，更新验证码
           this.updateVerifyCode();
         }
-      }).catch(err => {
-        this.$message.error(err.message);
-        this.updateVerifyCode();
-      })
+      });
     },
-
-    sendEmail() {
-      /*
-      * 1. 检查验证码是否为空
-      * 2. 校验邮箱格式
-      * 3. 发送验证码
-      * 4. 禁止按钮 并倒计时
-      * */
-      if (this.captchaCode === '') {
-        this.$message.error("验证码为空");
-        return;
-      }
-      if (this.user.email === '') {
-        this.$message.error("邮箱地址为空");
-        return;
-      }
-      // 检查邮箱格式
-      let reg = /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/;
-      if (!reg.test(this.user.email)) {
-        this.$message.error('邮箱地址格式错误');
-        return;
-      }
-      // 发送邮件
-      api.sendEmail(this.captchaCode, this.user.email, "register").then(res => {
-        console.log('=======>', res);
-        if (res.code == api.successCode) {
-          //发送成功，开启倒计时
-          this.startCountDown();
-          this.$message.success(res.message);
-        } else {
-          this.$message.error(res.message);
-          this.updateVerifyCode();
-        }
-      }).catch(err => {
-        this.$message.error(err.message);
-        this.updateVerifyCode();
-      })
-    },
-
-    // 开启倒计时
     startCountDown() {
       let time = 60;
       this.isCountDowning = true;
       let that = this;
-      let interval = setInterval(() => {
+      let interval = setInterval(function () {
+        //执行倒计时内容
         time--;
         if (time <= 0) {
           that.isCountDowning = false;
           clearInterval(interval);
         }
-        this.countDownText = "重新发送(" + time + " s)";
+        that.countDownText = '重新发送(' + time + ')';
+        // console.log('倒计时 == >  ' + time + '  ' + that.countDownText);
       }, 1000);
     },
+    getVerifyCode() {
+      /*
+      * 检查人类验证码是否为空
+      * 检查邮箱地址是否为空
+      * 校验邮箱格式
+      * 请求发送验证码
+      * 禁止按钮点击并且倒计时
+      * */
+      if (this.captchaCode === '') {
+        this.$message.error("请输入人类验证码");
+        return;
+      }
 
-    updateVerifyCode() {
-      this.captchaPath = '/user/utils/captcha?random=' + Date.parse(new Date());
-    },
+      if (this.sobUser.email === '') {
+        this.$message.error("请输入邮箱地址");
+        return;
+      }
+      console.log(this.sobUser.email);
+      // 检查邮箱格式，判空
+      let reg =  /\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/
+      if (!reg.test(this.sobUser.email)) {
+        this.$message.error("邮箱地址格式不正确");
+        return
+      }
+
+      api.sendEmailCode(this.captchaCode, this.sobUser.email, 'register').then(result => {
+        if (result.code === api.success_code) {
+          //如果发送成功，开始倒计时
+          this.startCountDown();
+          this.$message.success(result.message);
+        } else {
+          //否则给出提示
+          this.$message.error(result.message);
+        }
+      })
+    }
   },
-
   data() {
     return {
-      isUserNameAvailable: 0,
+      isUserNameOkay: '',
       isCountDowning: false,
-      countDownText: '重新发送(60s)',
-      emailCode: '',
+      countDownText: '重新发送(60)',
       captchaPath: '/user/utils/captcha',
       captchaCode: '',
+      emailCode: '',
       originalPassword: '',
-      user: {
+      sobUser: {
         userName: '',
         password: '',
-        email: '',
-
+        email: ''
       }
     }
   }
-}
+};
 </script>
+<style>
+
+.form-content .el-icon-error {
+  color: #F56C6C;
+}
+
+.form-content .el-icon-success {
+  color: #67C23A;
+}
+
+.form-content {
+  margin-left: 60px;
+}
+
+.register-title {
+  color: #999;
+  position: absolute;
+  margin-right: 20px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.register-form-container {
+  position: relative;
+}
+
+.captcha-code {
+  cursor: pointer;
+  vertical-align: middle;
+  margin-left: 10px;
+  border: solid 1px #E6E6E6;
+  width: 118px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 36px;
+}
+
+
+.get-verify-code-btn {
+  margin-left: 10px;
+}
+
+.register-form-container .el-input__inner {
+  width: 250px;
+}
+
+.register-form-container .el-input {
+  width: auto;
+}
+
+.register-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: #fff;
+}
+</style>

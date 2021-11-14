@@ -16,8 +16,8 @@ import { createStore } from './store.js'
 import nuxt_plugin_plugin_a77a49d0 from 'nuxt_plugin_plugin_a77a49d0' // Source: .\\components\\plugin.js (mode: 'all')
 import nuxt_plugin_axios_6b4f998a from 'nuxt_plugin_axios_6b4f998a' // Source: .\\axios.js (mode: 'all')
 import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ..\\plugins\\element-ui (mode: 'all')
-import nuxt_plugin_wordcloud_f0c2c2b4 from 'nuxt_plugin_wordcloud_f0c2c2b4' // Source: ..\\plugins\\word-cloud (mode: 'client')
 import nuxt_plugin_dateformat_9df47bce from 'nuxt_plugin_dateformat_9df47bce' // Source: ..\\plugins\\dateformat (mode: 'all')
+import nuxt_plugin_wordcloud_f0c2c2b4 from 'nuxt_plugin_wordcloud_f0c2c2b4' // Source: ..\\plugins\\word-cloud (mode: 'client')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -85,7 +85,7 @@ async function createApp(ssrContext, config = {}) {
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: {"title":"src","htmlAttrs":{"lang":"en"},"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
+    head: {"title":"src","meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":"博客系统门户站点"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"}],"style":[],"script":[]},
 
     store,
     router,
@@ -226,12 +226,12 @@ async function createApp(ssrContext, config = {}) {
     await nuxt_plugin_elementui_d905880e(app.context, inject)
   }
 
-  if (process.client && typeof nuxt_plugin_wordcloud_f0c2c2b4 === 'function') {
-    await nuxt_plugin_wordcloud_f0c2c2b4(app.context, inject)
-  }
-
   if (typeof nuxt_plugin_dateformat_9df47bce === 'function') {
     await nuxt_plugin_dateformat_9df47bce(app.context, inject)
+  }
+
+  if (process.client && typeof nuxt_plugin_wordcloud_f0c2c2b4 === 'function') {
+    await nuxt_plugin_wordcloud_f0c2c2b4(app.context, inject)
   }
 
   // Lock enablePreview in context

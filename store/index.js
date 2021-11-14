@@ -1,13 +1,13 @@
 export const state = () => ({
-  currentActivatedTab: 'index',
+  currentActivityTab: 'index',
   currentUserId: ''
 });
 
 export const mutations = {
-  setCurrentActivatedTab(state, currentActivatedTab) {
-    state.currentActivatedTab = currentActivatedTab;
+  setCurrentActivityTab(state, currentActivityTab) {
+    state.currentActivityTab = currentActivityTab;
   },
   setCurrentUserId(state, currentUserId) {
     state.currentUserId = currentUserId;
   }
-}
+};

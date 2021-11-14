@@ -1,157 +1,160 @@
 import http from './http';
 
-export const successCode = 200;
+const baseUrl =  'http://localhost:2021';
 
-const baseUrl = 'http://localhost:2021/';
+export const success_code = 20000;
 
-//获取管理员信息
-export const getAdmin = () => {
+export const getAdminInfo = () => {
   if (process.client) {
-    return http.requestGetHandle('/user/user_info/909158951612841984');
+    return http.requestGet('/user/user_info/909640634728448000');
   } else {
-    return http.requestGetHandle(baseUrl + 'user/user_info/909158951612841984');
+    return http.requestGet(baseUrl + '/user/user_info/909640634728448000');
   }
-}
-
-export const getUserInfo = (id) => {
-  if (process.client) {
-    return http.requestGetHandle('/user/user_info/' + id);
-  } else {
-    return http.requestGetHandle(baseUrl + 'user/user_info/' + id);
-  }
-}
-
-export const updateUserInfo = (user, userId) => {
-  return http.requestPutHandle('/user/user_info/' + userId, user);
 };
 
-// 获取分类
 export const getCategories = () => {
   if (process.client) {
-    return http.requestGetHandle('/portal/article/categories');
-  }
-  return http.requestGetHandle(baseUrl + 'portal/article/categories');
-}
-// 获取轮播图
-export const getLoopImages = () => {
-  if (process.client) {
-    return http.requestGetHandle('/portal/web_size_info/loop');
-  }
-  return http.requestGetHandle(baseUrl + 'portal/web_size_info/loop');
-}
-// 获取置顶文章列表
-export const getTopArticles = () => {
-  if (process.client) {
-    return http.requestGetHandle('/portal/article/top');
-  }
-  return http.requestGetHandle(baseUrl + 'portal/article/top');
-}
-
-
-// 获取最新文章列表
-export const getLatestArticlesByCategoryId = (categoryId, page, size) => {
-  if (categoryId !== '') {
-    return http.requestGetHandle('/portal/article/list/' + categoryId + '/' + page + '/' + size);
-  }
-  if (process.client) {
-    // 客户端配置跨域代理
-    return http.requestGetHandle('/portal/article/list/' + page + '/' + size);
+    return http.requestGet('/portal/article/categories');
   } else {
-    // 服务端直接请求
-    return http.requestGetHandle(baseUrl + 'portal/article/list/' + page + '/' + size);
+    return http.requestGet(baseUrl + '/portal/article/categories');
   }
-}
+};
+export const getLoop = () => {
+  if (process.client) {
+    return http.requestGet('/portal/web_size_info/loop');
+  } else {
+    return http.requestGet(baseUrl + '/portal/web_size_info/loop');
+  }
+};
+export const getTopArticle = () => {
+  if (process.client) {
+    return http.requestGet('/portal/article/top');
+  } else {
+    return http.requestGet(baseUrl + '/portal/article/top');
+  }
+};
+export const getLabels = (count) => {
+  return http.requestGet('/portal/article/label/' + count);
+};
+export const getArticles = (categoryId, page, size) => {
+  if (categoryId !== '') {
+    return http.requestGet('/portal/article/list/' + categoryId + '/' + page + '/' + size);
+  }
+  if (process.client) {
+    //客户端
+    return http.requestGet('/portal/article/list/' + page + '/' + size);
+  } else {
+    //服务端
+    return http.requestGet(baseUrl + '/portal/article/list/' + page + '/' + size);
+  }
+};
 
+export const getTaobaoRecommend = (size) => {
+  return http.requestGet("/shop/recommend/random/" + size);
+};
+export const getSearchContent = (categoryId, keyword,
+                                 page,
+                                 size,
+                                 sort) => {
+  // console.log(categoryId);
+  // console.log(keyword);
+  // console.log(page);
+  // console.log(sort);
+  return http.requestGet(baseUrl + "/portal/search?keyword=" + encodeURIComponent(keyword)
+    + "&page=" + page + "&size="
+    + size + "&categoryId=" + categoryId
+    + "&sort=" + sort);
+};
 
-// 获取热门标签
-export const getHotLabels = (size) => {
-  return http.requestGetHandle("/portal/article/label/" + size);
-}
-
-// 获取友链
 export const getLinkList = () => {
   if (process.client) {
-    return http.requestGetHandle("/portal/web_size_info/friend_link");
+    return http.requestGet("/portal/web_size_info/friend_link");
+  } else {
+    return http.requestGet(baseUrl + "/portal/web_size_info/friend_link");
   }
-  return http.requestGetHandle(baseUrl + "portal/web_size_info/friend_link");
-}
+};
 
-// 搜索内容
-export const doSearch = (categoryId, keyword, page, size, sort) => {
-  return http.requestGetHandle(baseUrl + "portal/search?keyword=" + encodeURIComponent(keyword) + "&page=" + page + "&size="
-    + size + "&categoryId=" + categoryId + "&sort=" + sort);
-}
-
-// 获取二维码
 export const getLoginQrCode = () => {
-  return http.requestGetHandle("/user/utils/pc_login_qr_code");
+  return http.requestGet("/user/utils/pc_login_qr_code");
 };
 
-// 登录
+
 export const doLogin = (verifyCode, sobUser) => {
-  return http.requestPostHandle('/user/account/login/' + verifyCode + '/?from=_p', sobUser);
+  return http.requestPost('/user/account/login/' + verifyCode + '/?from=_p', sobUser);
 };
 
-// 检查扫描登录状态
-export const checkScanLoginState = (loginId) => {
-  return http.requestGetHandle('/user/account/qr_code_state/' + loginId);
-};
-
-// 获取用户登录状态
 export const checkToken = () => {
-  return http.requestGetHandle("/user/utils/check_token");
-}
+  return http.requestGet('/user/utils/check_token');
+};
 
-export const logout = () => {
-  return http.requestGetHandle("/user/account/logout");
-}
+export const doLogout = () => {
+  return http.requestGet('/user/account/logout');
+};
 
-export const sendEmail = (captchaCode, email, type) => {
-  return http.requestGetHandle("/user/utils/verify_code?captchaCode=" + captchaCode + "&email=" + email + "&type=" + type);
-}
 
-// 检查用户名是否存在
+export const checkScanLoginState = (loginId) => {
+  return http.requestGet('/user/account/qr_code_state/' + loginId);
+};
+
 export const checkUserName = (userName) => {
-  return http.requestGetHandle("/user/utils/user_name?userName=" + userName);
-}
+  return http.requestGet('/user/utils/user_name?userName=' + userName);
+};
 
-// 注册
-export const doRegister = (captcha_code, email_code, sobUser) => {
-  return http.requestPostHandle("/user/join_in?captcha_code=" + captcha_code + "&email_code=" + email_code, sobUser);
-}
+export const updateUserInfo = (sobUser, userId) => {
+  return http.requestPut('/user/user_info/' + userId, sobUser);
+};
 
-//验证邮箱验证码
-export const checkEmailCode = (captchaCode, email, emailCode) => {
-  return http.requestGetHandle("/user/utils/check_email_code?captchaCode=" + captchaCode + "&email=" + email + "&emailCode=" + emailCode);
-}
 
-//更新密码
-export const updatePassword = (verifyCode, user) => {
-  return http.requestPutHandle("/user/password/" + verifyCode, user);
-}
+export const sendEmailCode = (captchaCode, email, type) => {
+  return http.requestGet('/user/utils/verify_code?captchaCode=' + captchaCode
+    + '&email=' + email
+    + '&type=' + type);
+};
 
-// 获取文章详情
-export const getArticle = (id) => {
+export const registerUser = (captcha_code, email_code, sobUser) => {
+  return http.requestPost('/user/join_in/?captcha_code=' + captcha_code
+    + '&email_code=' + email_code, sobUser);
+};
+
+export const checkVerifyCode = (captchaCode, email, emailCode) => {
+  return http.requestGet('/user/utils/check_email_code?captchaCode=' + captchaCode
+    + '&email=' +
+    email
+    + '&emailCode='
+    + emailCode);
+};
+export const updatePassword = (verifyCode, sobUser) => {
+  return http.requestPut('/user/password/' + verifyCode, sobUser);
+};
+export const getArticleDetailById = (articleId) => {
+  return http.requestGet(baseUrl + '/portal/article/' + articleId);
+};
+export const getRecommendArticle = (articleId, size) => {
+  return http.requestGet(baseUrl + '/portal/article/recommend/' + articleId + '/' + size);
+};
+
+export const postComment = (articleComment) => {
+  return http.requestPost('/portal/comment', articleComment);
+};
+export const getFile = (url, params) => {
+  return http.requestGet(url, params);
+};
+
+export const getCommentsByArticleId = (articleId, page, size) => {
   if (process.client) {
-    return http.requestGetHandle("/portal/article/" + id);
+    return http.requestGet("/portal/comment/list/" + articleId + "/" + page + "/" + size);
+  } else {
+    return http.requestGet(baseUrl + "/portal/comment/list/" + articleId + "/" + page + "/" + size);
   }
-  return http.requestGetHandle(baseUrl + "portal/article/" + id);
-}
+};
 
-// 获取相关文章列表
-export const getRecommendArticle = (id, size) => {
-  return http.requestGetHandle(baseUrl + "portal/article/recommend/" + id + "/" + size);
-}
-
-// 获取文章评论列表
-export const getComments = (id, page, size) => {
+export const getUserInfo = (userId) => {
   if (process.client) {
-    return http.requestGetHandle("/portal/comment/list/" + id + "/" + page + "/" + size);
+    return http.requestGet("/user/user_info/" + userId);
+  } else {
+    return http.requestGet(baseUrl + "/user/user_info/" + userId);
   }
-  return http.requestGetHandle(baseUrl + "portal/comment/list/" + id + "/" + page + "/" + size);
-}
+};
 
-// 提交评论
-export const postComment = (comment) => {
-  return http.requestPostHandle('/portal/comment', comment);
-}
+
+

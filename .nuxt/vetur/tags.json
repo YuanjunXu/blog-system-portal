@@ -1,14 +1,11 @@
 {
-  "NuxtLogo": {
-    "description": "Auto imported from components/NuxtLogo.vue"
+  "Logo": {
+    "description": "Auto imported from components/Logo.vue"
   },
   "TaobaoLoop": {
     "description": "Auto imported from components/TaobaoLoop.vue"
   },
-  "Tutorial": {
-    "description": "Auto imported from components/Tutorial.vue"
-  },
   "WordCloud": {
-    "description": "Auto imported from components/wordCloud.vue"
+    "description": "Auto imported from components/WordCloud.vue"
   }
 }

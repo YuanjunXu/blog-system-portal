@@ -1,48 +1,49 @@
-import axios from 'axios';
+import axios from 'axios'
 
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 60000;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www=form-urlencoded';
 
 export default {
-
-  requestGetHandle(url, params = {}) {
+  // get请求
+  requestGet(url, params = {}) {
     return new Promise((resolve, reject) => {
-      axios.get(url, params).then((res) => {
-        resolve(res.data);
-      }).catch((err) => {
-        reject(err);
+      axios.get(url, params).then(res => {
+        resolve(res.data)
+      }).catch(error => {
+        reject(error)
       })
     })
   },
-
-  requestPutHandle(url, params = {}) {
+  // post请求
+  requestPost(url, params = {}) {
     return new Promise((resolve, reject) => {
-      axios.put(url, params).then((res) => {
-        resolve(res.data);
-      }).catch((err) => {
-        reject(err);
+      axios.post(url, params).then(res => {
+        resolve(res.data)
+      }).catch(error => {
+        reject(error)
       })
     })
   },
-
-  requestPostHandle(url, params = {}) {
+  // delete请求
+  requestDelete(url, params = {}) {
     return new Promise((resolve, reject) => {
-      axios.post(url, params).then((res) => {
-        resolve(res.data);
-      }).catch((err) => {
-        reject(err);
+      axios.delete(url, params).then(res => {
+        resolve(res.data)
+      }).catch(error => {
+        reject(error)
       })
     })
   },
-
-  requestDeleteHandle(url, params = {}) {
+  // put请求
+  requestPut(url, params = {}) {
     return new Promise((resolve, reject) => {
-      axios.delete(url, params).then((res) => {
-        resolve(res.data);
-      }).catch((err) => {
-        reject(err);
+      axios.put(url, params).then(res => {
+        resolve(res.data)
+      }).catch(error => {
+        reject(error)
       })
     })
   }
+
 }

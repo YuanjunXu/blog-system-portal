@@ -1,8 +1,6 @@
 <template>
-  <div id="index-page-box" class="index-page-box">
-
-    <div id="index-left-part" class="index-left-part float-left default-border-radius">
-      <!--用户信息-->
+  <div id="index-page-box" class="index-page-box clear-fix">
+    <div id="index-left-part" class="index-left-part default-border-radius float-left">
       <div class="index-left-user-info">
         <div class="user-avatar">
           <img :src="userInfo.avatar">
@@ -13,640 +11,586 @@
         <div class="user-sign">
           <span v-text="userInfo.sign"></span>
         </div>
-        <div class="user-self-link">
-          <el-popover
-            placement="bottom-end"
-            trigger="hover">
-            <div class="gong-zhong-hao-pop">
+      </div>
+      <div class="left-user-self-links">
+        <el-popover
+          popper-class="wechat-pop-container"
+          placement="bottom"
+          trigger="click">
+          <div class="index-wechat-pop-content">
+            <div class="wechat-subscription">
               <img src="http://fs.xuyuanjun.cn/20211109/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg">
             </div>
-            <span slot="reference" class="sob_blog sobwechat"></span>
-          </el-popover>
-          <a href="https://gitee.com/alex_xyj" target="_blank"><span class="sob_blog sobgithub"></span></a>
-          <a href="https://space.bilibili.com/393667619" target="_blank"><span class="sob_blog sobbilibili-line"></span></a>
-        </div>
+          </div>
+          <span slot="reference" class="sob_blog sobwechat"></span>
+        </el-popover>
+        <a href="https://gitee.com/alex_xyj" target="_blank">
+          <span class="sob_blog sobgithub"></span>
+        </a>
+        <a target="_blank" href="https://space.bilibili.com/393667619">
+          <span class="sob_blog sobbilibili-line"></span>
+        </a>
       </div>
-
-      <!--文章分类-->
       <div class="left-categories-box">
         <div
           :class="currentCategoryId===item.id?'category-item-active default-border-radius':'category-item default-border-radius'"
           v-for="(item,index) in categories" :key="index">
-          <div v-text="item.name" v-on:click="listArticlesByCategoryId(item)"></div>
+          <span v-text="item.name" @click="listArticlesByCategoryId(item)"></span>
         </div>
       </div>
-
     </div>
-
-    <div id="index-center-part" class="index-center-part float-left default-border-radius">
-      <!--顶部轮播图-->
+    <div id="index-center-part" class="index-center-part float-left">
       <div class="loop-box default-border-radius">
-        <el-carousel :interval="4000" type="card" height="200px">
-          <el-carousel-item v-for="(item,index) in loopImages" :key="index">
+        <el-carousel :interval="4000" arrow="always">
+          <el-carousel-item v-for="(item,index) in loop" :key="index">
             <img :src="item.imageUrl" style="object-fit: cover">
           </el-carousel-item>
         </el-carousel>
       </div>
-
-      <!--置顶文章-->
-      <div class="top-article-box">
+      <div class="top-articles-box">
         <div class="article-item default-border-radius clear-fix" v-for="(item,index) in topArticles" :key="index">
-          <div class="article-right float-right">
-            <div class="article-cover"><img :src="item.cover"></div>
-          </div>
           <div class="article-left float-left">
             <div class="article-title">
-              <span class="tips">置顶</span>
+              <span class="top-tips">置頂</span>
               <span class="title">
-                <a :href="'/article/'+item.id">{{ item.title }}</a>
+                <a :href="'/article/'+item.id">{{item.title}}</a>
               </span>
             </div>
-            <div class="article-summary clear-fix">
-              <div class="article-summary-left float-left">
-                <p>{{ item.summary }}</p>
-              </div>
-              <div class="article-summary-right float-right">
+            <div class="article-summary">
+              <p>
+                {{item.summary}}
+                <span>...</span>
                 <span class="read-more">阅读全文</span>
-              </div>
+              </p>
             </div>
-            <div class="article-label">
-              <el-tag size="mini"
-                      v-for="(tag,takIndex) in item.labels"
-                      :key="takIndex"
-                      type="info"
-                      effect="plain">
-                <a :href="'/search?keyword='+tag" target="_blank">{{ tag }}</a>
+            <div class="labels">
+              <el-tag
+                size="medium"
+                v-for="(tag,tagIndex) in item.labels"
+                :key="tagIndex"
+                type="info">
+                <a :href="'/search?keyword='+tag" target="_blank">{{tag}}</a>
               </el-tag>
             </div>
           </div>
-
+          <div class="article-right float-right">
+            <div class="article-cover">
+              <img :src="'/portal/image/'+item.cover">
+            </div>
+          </div>
         </div>
       </div>
-
-      <!--最新文章列表-->
-      <div class="latest-article" v-loading="isLoading">
-        <div class="article-item default-border-radius clear-fix" v-for="(item,index) in latestArticles.data"
-             :key="index">
-          <div class="article-right float-right">
-            <div class="article-cover"><img :src="item.cover"></div>
-          </div>
+      <div class="last-articles-box"
+           v-loading="isLoading">
+        <div class="article-item default-border-radius clear-fix" v-for="(item,index) in articles" :key="index">
           <div class="article-left float-left">
             <div class="article-title">
               <span class="title">
-              <a :href="'/article/'+item.id">{{ item.title }}</a>
+                 <a :href="'/article/'+item.id">{{item.title}}</a>
               </span>
             </div>
-            <div class="article-summary clear-fix">
-              <div class="article-summary-left float-left">
-                <p>{{ item.summary }}</p>
-              </div>
-              <div class="article-summary-right float-right">
+            <div class="article-summary">
+              <p>
+                {{item.summary}}
+                <span>...</span>
                 <span class="read-more">阅读全文</span>
-              </div>
+              </p>
             </div>
-            <div class="article-label">
-              <el-tag size="mini"
-                      v-for="(tag,takIndex) in item.labels"
-                      :key="takIndex"
-                      type="info"
-                      effect="plain">
-                <a :href="'/search?keyword='+tag" target="_blank"> {{ tag }}</a>
+            <div class="labels">
+              <el-tag
+                size="medium"
+                v-for="(tag,tagIndex) in item.labels"
+                :key="tagIndex"
+                type="info">
+                <a :href="'/search?keyword='+tag" target="_blank">{{tag}}</a>
               </el-tag>
             </div>
           </div>
-        </div>
-
-        <!--分页栏-->
-        <div class="article-page-navigation">
-          <el-pagination
-            background
-            @current-change="onPageChange"
-            :current-page="pageNum"
-            :page-size="pageSize"
-            layout="prev, pager, next"
-            :total="latestArticles.totalCount">
-          </el-pagination>
+          <div class="article-right float-right">
+            <div class="article-cover">
+              <img :src="'/portal/image/'+item.cover">
+            </div>
+          </div>
         </div>
       </div>
-
+      <div class="article-page-navigation-bar">
+        <el-pagination
+          class="user-list-page-navigation-bar"
+          background
+          @current-change="onPageChange"
+          :current-page="pageNavigation.currentPage"
+          :page-size="pageNavigation.pageSize"
+          layout="prev, pager, next"
+          :total="pageNavigation.totalCount">
+        </el-pagination>
+      </div>
     </div>
-
-    <div id="index-right-part" class="index-right-part float-right default-border-radius">
-      <!--搜索卡片-->
-      <div class="search-card default-border-radius">
+    <div class="index-right-part float-left">
+      <div class="right-card">
         <div class="card-title">
           内容搜索
         </div>
         <div class="card-content">
           <el-input
             @keyup.enter.native="toSearchPage"
-            placeholder="请输入搜索内容"
+            size="medium"
+            placeholder="搜索文章"
             prefix-icon="el-icon-search"
             v-model="keyword">
           </el-input>
         </div>
       </div>
-
-      <!--搜索热词卡片-->
-      <div class="hot-labels-card default-border-radius">
+      <div id="wechart-box" class="right-card">
         <div class="card-title">
-          热词
+          热门标签
         </div>
         <div class="card-content">
-          <div class="label-list-box">
-            <wordCloud></wordCloud>
+          <div class="labels-list-box">
+            <WordCloud></WordCloud>
           </div>
         </div>
       </div>
-
-      <!--每日一句卡片-->
-      <div class="right-card default-border-radius">
-        <div class="card-title">
-          每日一句
-        </div>
-        <div class="card-content">
-          热闹只是消耗品，撑起人生的是孤独。 ——宣君
-        </div>
-      </div>
-
-      <!--公众号卡片-->
-      <div class="right-card default-border-radius">
+      <div class="right-card">
         <div class="card-title">
           公众号
         </div>
         <div class="card-content">
-          <div class="gong-zhong-hao">
+          <div class="wechat-subscription">
             <img src="http://fs.xuyuanjun.cn/20211109/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg">
           </div>
         </div>
       </div>
-
-      <!--其它卡片-->
-      <div class="right-card default-border-radius">
-        <div class="card-title">
-          其它卡片
-        </div>
-        <div class="card-content">
-
-        </div>
+      <div class="taobao-ad-box" id="taobao-ad-box">
+        <TaobaoLoop></TaobaoLoop>
       </div>
-
-      <!--淘宝广告轮播卡片-->
-      <div class="taobao-ads-box">
-        <!--                  <TaobaoLoop></TaobaoLoop>-->
-      </div>
-
     </div>
-
   </div>
 </template>
 
+<script>
+  import * as api from '../api/api';
+
+  export default {
+    head() {
+      return {
+        title: '猿村',
+        meta: [
+          {
+            hid: 'description',
+            name: 'description',
+            content: '猿村,这是个人技术，主要包括系统定制(AOSP)，JavaWeb开始，前端'
+          },
+          {
+            hid: 'keywords',
+            name: 'keywords',
+            content: '猿村,java,android,开发,毕业设计,系统,程序员,拉大锯'
+          }
+        ]
+      }
+    },
+    data() {
+      return {
+        isLoading: false,
+        keyword: '',
+        currentCategoryId: ''
+      }
+    },
+    mounted() {
+      this.$store.commit("setCurrentActivityTab", "index");
+      this.onWindowScroll();
+      window.addEventListener('scroll', this.onWindowScroll);
+      let that = this;
+      window.onresize = function () {
+        that.onWindowScroll();
+      };
+    },
+    beforeDestroy() {
+      window.removeEventListener('scroll', this.onWindowScroll);
+    },
+    methods: {
+      toSearchPage() {
+        //如果没有输入内容，无效
+        this.keyword = this.keyword.trim();
+        if (this.keyword === '') {
+          console.log('内容为空.');
+          return;
+        }
+        location.href = "/search?keyword=" + encodeURIComponent(this.keyword);
+      },
+      listArticlesByCategoryId(item) {
+        if (this.currentCategoryId === item.id) {
+          return;
+        }
+        this.isLoading = true;
+        //console.log(item);
+        //重置页码
+        this.pageNavigation.currentPage = 1;
+        this.currentCategoryId = item.id;
+        //请求数据
+        api.getArticles(this.currentCategoryId,
+          this.pageNavigation.currentPage,
+          this.pageNavigation.pageSize).then(result => {
+          //处理结果
+          this.handleArticleResult(result);
+        });
+
+      },
+      onWindowScroll() {
+        let scrolledTop = document.documentElement.scrollTop;
+        let scrolledLeft = document.documentElement.scrollLeft;
+        let centerPart = document.getElementById('index-center-part');
+        let parentPart = document.getElementById('index-page-box');
+        //计算我们leftPart顶部
+        let leftPart = document.getElementById('index-left-part');
+        //左边内容悬浮控制
+        if (centerPart && leftPart && parentPart) {
+          //处理上下滑动
+          let baseTop = centerPart.offsetTop;
+          if (scrolledTop <= baseTop) {
+            leftPart.style.top = (baseTop - scrolledTop) + 'px';
+          } else {
+            leftPart.style.top = '20px';
+          }
+          //处理左右滑动
+          if (scrolledLeft > 0) {
+            leftPart.style.left = -scrolledLeft + 'px';
+          } else {
+            //正常状态的，左边应该它老爸的左边
+            leftPart.style.left = parentPart.offsetLeft + 'px';
+          }
+        }
+        //右边内容悬浮控制
+        let taobaoAd = document.getElementById('taobao-ad-box');
+        let hotLabelBox = document.getElementById('wechart-box');
+        if (taobaoAd && hotLabelBox) {
+          let bootomOfTB = taobaoAd.offsetTop + taobaoAd.offsetHeight;
+          //console.log('bootomOfTB == > ' + bootomOfTB);
+          if (scrolledTop >= bootomOfTB) {
+            // console.log('显示悬浮内容...');
+            hotLabelBox.style.position = 'fixed';
+            hotLabelBox.style.top = '20px';
+            hotLabelBox.style.width = '210px';
+            //显示我们的悬浮内容
+          } else {
+            hotLabelBox.style.position = '';
+            hotLabelBox.style.top = '';
+            // console.log('隐藏悬浮内容...')
+          }
+        }
+        //console.log('onscroll...' + scrolledTop);
+      },
+      handleArticleResult(result) {
+        if (result.code === api.success_code) {
+          this.articles = result.data.contents;
+          //回到顶部
+          let topHeader = document.getElementById('blog-header');
+          if (topHeader) {
+            topHeader.scrollIntoView({
+              block: 'start',
+              behavior: 'smooth'
+            })
+          }
+          //处理一下页码
+          this.pageNavigation.currentPage = result.data.currentPage;
+          this.pageNavigation.totalCount = result.data.totalCount;
+          this.pageNavigation.pageSize = result.data.pageSize;
+        } else {
+          this.$message.error(result.message);
+        }
+        this.isLoading = false;
+      },
+      onPageChange(page) {
+        this.isLoading = true;
+        //客户端了
+        //console.log(page);
+        //去加载当前页的内容
+        api.getArticles(this.currentCategoryId, page, this.pageNavigation.pageSize).then(result => {
+          this.handleArticleResult(result);
+        })
+      }
+    },
+    async asyncData({params}) {
+      let userInfoRes = await api.getAdminInfo();
+      let categoriesRes = await api.getCategories();
+      let loopRes = await api.getLoop();
+      let topArticlesRes = await api.getTopArticle();
+      //在服务渲染的
+      let articlesRes = await api.getArticles('', 1, 10);
+      let pageNavigation = {
+        currentPage: articlesRes.data.currentPage,
+        totalCount: articlesRes.data.totalCount,
+        pageSize: articlesRes.data.pageSize
+      };
+      let tempCategories = [];
+      tempCategories.push({
+        name: '全部分类',
+        id: ''
+      });
+      tempCategories = tempCategories.concat(categoriesRes.data);
+      return {
+        pageNavigation: pageNavigation,
+        articles: articlesRes.data.contents,
+        topArticles: topArticlesRes.data,
+        loop: loopRes.data,
+        categories: tempCategories,
+        userInfo: userInfoRes.data
+      };
+    }
+  };
+</script>
 <style>
 
-.taobao-ads-box {
-  padding: 1px;
-}
-
-.el-popover__title {
-  padding: 12px 0;
-  font-size: 18px;
-  margin-bottom: 0;
-  text-align: center;
-}
-
-.el-popover {
-  padding: 0;
-}
-
-.gong-zhong-hao-pop img {
-  height: 150px;
-  width: 150px;
-  border-radius: 8px;
-}
-
-.index-left-part {
-  background: #FFffff;
-  margin-bottom: 10px;
-  width: 235px;
-  position: fixed;
-  top: 71px;
-}
-
-.gong-zhong-hao img {
-  height: 150px;
-  width: 150px;
-  margin-left: 30px;
-  border-radius: 44px;
-}
-
-.search-card {
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #ffffff;
-}
-
-.search-card .card-title {
-  margin-bottom: 5px;
-}
-
-.right-card {
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #ffffff;
-}
-
-.hot-labels-card {
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #ffffff;
-  border-radius: 8px;
-}
-
-.hot-labels-card .card-content .label-list-box .wordCloud {
-  width: 100%;
-  height: 204px;
-}
-
-.wordCloud .text {
-  cursor: pointer;
-}
-
-.right-card .card-title {
-  color: #737F90;
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 10px;
-}
-
-.article-page-navigation {
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.article-page-navigation .el-pagination.is-background li {
-  background: #F4EFEFCC;
-}
-
-.article-label .el-tag a:hover {
-  color: #c9adf3;
-}
-
-.article-label .el-tag a {
-  color: #909399;
-}
-
-.article-label .el-tag {
-  margin-left: 5px;
-  cursor: pointer;
-
-}
-
-.article-label .el-tag {
-  margin-right: 10px;
-}
-
-.article-label {
-  margin-left: 30px;
-  margin-top: 10px;
-}
-
-.article-summary-right {
-  margin-top: 10px;
-}
-
-.article-summary-left {
-  width: 400px;
-  margin-left: 10px;
-  color: #909399;
-  margin-top: 10px;
-
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-
-}
-
-.article-title .title a:hover {
-  color: #c9adf3;
-}
-
-.article-title .title a {
-  color: #909399;
-}
-
-.article-title {
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size: 12px;
-  width: 440px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-}
-
-.read-more:hover {
-  color: #373735FF;
-}
-
-.read-more {
-  color: #D6CFC7D6;
-  border-radius: 8px;
-  padding: 2px 10px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-
-.article-title .tips {
-  padding: 2px 10px;
-  background: #f05c29;
-  border-radius: 4px;
-  margin-right: 5px;
-  vertical-align: middle;
-  color: white;
-}
-
-.article-cover img {
-  width: 150px;
-  height: 100px;
-  margin-right: 10px;
-  border-radius: 4px;
-  vertical-align: middle;
-}
-
-.article-title .title:hover {
-  color: #c9adf3;
-}
-
-.article-title .title {
-  font-size: 20px;
-  color: #606266;
-  vertical-align: middle;
-  cursor: pointer;
-}
-
-.top-article-box {
-  margin-top: 10px;
-}
-
-.article-item {
-  padding: 10px 0;
-  margin-bottom: 10px;
-  background: white;
-}
-
-.loop-box {
-  background: white;
-}
-
-.loop-box img {
-  width: 100%;
-  height: 200px;
-}
-
-
-.left-categories-box {
-  margin-top: 20px;
-  margin-left: 5px;
-  margin-right: 5px;
-  text-align: center;
-  padding: 0 0 10px 0;
-}
-
-.loop-box .el-carousel .el-carousel__button {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-
-.left-categories-box .category-item, .left-categories-box .category-item-active {
-  padding: 5px;
-  cursor: pointer;
-  color: #737F90;
-  margin-bottom: 5px;
-}
-
-
-.left-categories-box .category-item:hover, .left-categories-box .category-item-active {
-  background: #EBE9EEC1;
-  color: #c9adf3;
-}
-
-.index-left-user-info {
-  text-align: center;
-}
-
-.index-left-user-info .user-avatar {
-  padding: 20px 10px;
-}
-
-.index-left-user-info .user-avatar img {
-  width: 60px;
-  height: 60px;
-  border-radius: 50px;
-}
-
-.index-left-user-info .user-name {
-  font-size: 18px;
-}
-
-.index-left-user-info .user-sign {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #5a5858;
-}
-
-.index-left-part .user-self-link {
-  margin-top: 20px;
-}
-
-.index-left-part .user-self-link span {
-  font-size: 25px;
-  font-weight: 500;
-  color: #737F90;
-  padding: 2px;
-}
-
-.index-left-part .user-self-link span:hover {
-  cursor: pointer;
-  color: #c9adf3;
-}
-
-.index-page-box {
-  overflow: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.index-left-part {
-  width: 230px;
-}
-
-.index-right-part {
-  width: 230px;
-  color: #737F90;
-  position: fixed;
-  top: 71px;
-  margin-left: 910px;
-}
-
-.index-center-part {
-  width: 660px;
-  margin-left: 240px;
-}
-
-
-</style>
-
-
-<script>
-import * as api from '../api/api'
-import {getLatestArticles, getLatestArticlesByCategoryId, getLoopImages, getTopArticles} from "../api/api";
-
-export default {
-  head() {
-    return {
-      title: '猿村-首页',
-      meta: [
-        {
-          hid: 'description',
-          name: 'description',
-          content: '猿村-首页'
-        },
-        {
-          hid: 'keywords',
-          name: 'keywords',
-          content: '猿村,博客系统，程序员，前端，后端，随笔，数据库，java，.Net，C#,spring boot'
-        }
-      ]
-    }
-  },
-
-  data() {
-    return {
-      isLoading: false,
-      keyword: '',
-      currentCategoryId: ''
-    }
-  },
-
-  mounted() {
-    this.$store.commit('setCurrentActivatedTab', 'index');
-
-    this.onWindowScroll();
-    window.addEventListener("scroll", this.onWindowScroll);
-    let _this = this
-    window.onresize = function () {
-      _this.onWindowScroll();
-    }
-  },
-  beforeDestroy() {
-    window.removeEventListener("scroll", this.onWindowScroll);
-  },
-
-  methods: {
-
-    toSearchPage() {
-      // 跳转到搜索结果页面
-      location.href = '/search?keyword=' + encodeURIComponent(this.keyword);
-    },
-
-    listArticlesByCategoryId(category) {
-      if (this.currentCategoryId == category.id) {
-        return;
-      }
-      this.currentCategoryId = category.id;
-      // 重置页码
-      this.pagenum = 1;
-      // 获取数据
-      api.getLatestArticlesByCategoryId(this.currentCategoryId, this.pagenum, this.pageSize).then(res => {
-        if (res.code == api.successCode) {
-          this.latestArticles = res.data;
-        } else {
-          this.$message.error(res.message)
-        }
-      })
-    },
-
-    // 窗口滚动时，让左右板块悬浮滑动
-    onWindowScroll() {
-      let scrollTop = document.documentElement.scrollTop;
-      let scrollLeft = document.documentElement.scrollLeft;
-      let leftPart = document.getElementById('index-left-part');
-      let rightPart = document.getElementById('index-right-part');
-      let centerPart = document.getElementById('index-center-part');
-      let indexPageBox = document.getElementById('index-page-box');
-      if (rightPart && leftPart && centerPart && indexPageBox) {
-        // 处理上下滑动
-        let baseTop = centerPart.offsetTop;
-        if (scrollTop < baseTop) {
-          leftPart.style.top = (baseTop - scrollTop) + 'px';
-          rightPart.style.top = (baseTop - scrollTop) + 'px';
-        } else {
-          leftPart.style.top = 10 + 'px';
-          rightPart.style.top = 10 + 'px';
-        }
-        // 处理左右滑动
-        if (scrollLeft > 0) {
-          leftPart.style.left = -scrollLeft + 'px';
-          console.log(leftPart.style.left)
-          rightPart.style.left = -scrollLeft + 'px';
-        } else {
-          // 正常状态
-          leftPart.style.left = indexPageBox.offsetLeft + 'px';
-          console.log("indexPageBox.offsetLeft", indexPageBox.offsetLeft);
-          console.log("  leftPart.style.left", leftPart.style.left);
-          rightPart.style.left = indexPageBox.offsetLeft + 'px';
-        }
-      }
-    },
-
-    onPageChange(page) {
-      this.pagenum = page;
-      this.isLoading = true;
-      api.getLatestArticlesByCategoryId(this.currentCategoryId, page, this.pageSize).then(res => {
-        this.isLoading = false;
-        if (res.code == api.successCode) {
-          // 回到页面顶部
-          let header = document.getElementById('blog-header');
-          if (header) {
-            header.scrollIntoView({block: "start", behavior: "smooth"})
-          }
-          this.latestArticles = res.data;
-        } else {
-          this.$message.error(res.message)
-        }
-      })
-    }
-  },
-
-  async asyncData({params}) {
-    let adminUserInfoRes = await api.getAdmin();
-    let categoriesRes = await api.getCategories();
-    let loopImageRes = await api.getLoopImages();
-    let topArticlesRes = await api.getTopArticles();
-
-    let pageSize = 10;
-    let articlesRes = await api.getLatestArticlesByCategoryId('', 1, pageSize);
-
-
-    let tmpCategories = [];
-    tmpCategories.push({
-      name: "全部分类",
-      id: ""
-    });
-    tmpCategories = tmpCategories.concat(categoriesRes.data);
-    return {
-      userInfo: adminUserInfoRes.data,
-      categories: tmpCategories,
-      loopImages: loopImageRes.data,
-      topArticles: topArticlesRes.data,
-      latestArticles: articlesRes.data,
-      pageSize: pageSize,
-      pageNum: 1,
-    }
+  .wechat-pop-container {
+    padding: 0 !important;
   }
-}
-</script>
+
+  #index-left-part {
+    position: fixed;
+    top: 91px;
+  }
+
+  .taobao-ad-box .el-carousel__button {
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+  }
+
+  .taobao-ad-box .el-carousel__container {
+    height: 230px;
+  }
+
+  .wechat-subscription img {
+    object-fit: cover;
+    width: 210px;
+    height: 210px;
+  }
+
+  .wordCloud .text {
+    cursor: pointer;
+  }
+
+  .labels-list-box {
+    height: 240px;
+  }
+
+  .labels-list-box .wordCloud {
+    width: 100%;
+    height: 240px;
+  }
+
+  .right-card {
+    background: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+  .right-card .card-title {
+    font-size: 14px;
+    color: #409EFF;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .article-page-navigation-bar {
+    text-align: center;
+  }
+
+  .article-page-navigation-bar .el-pagination.is-background .el-pager li {
+    background-color: #fff;
+  }
+
+  .labels .el-tag--medium {
+    height: 22px;
+    line-height: 22px;
+  }
+
+  .labels .el-tag a:hover {
+    color: #409EFF;
+  }
+
+  .labels .el-tag a {
+    color: #909399;
+    padding: 0 10px;
+  }
+
+  .labels .el-tag {
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+  }
+
+  .labels {
+    margin-top: 20px;
+  }
+
+  .read-more:hover {
+    color: #444444;
+  }
+
+  .read-more {
+    font-size: 12px;
+    color: #999999;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 3px 10px;
+  }
+
+  .article-summary {
+    max-width: 500px;
+    margin-top: 20px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    color: #909399;
+  }
+
+  .article-title .top-tips {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    vertical-align: middle;
+    background: #ff4500;
+    color: #fff;
+  }
+
+  .article-title {
+    display: -webkit-box;
+    max-width: 500px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+
+  .article-title .title a:hover {
+    color: #409EFF;
+  }
+
+  .article-title .title a {
+    cursor: pointer;
+    font-size: 20px;
+    vertical-align: middle;
+    color: #606266;
+  }
+
+  .article-item {
+    background: #fff;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  .top-articles-box {
+    margin-top: 20px;
+  }
+
+  .article-cover img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+
+  .loop-box {
+    background: #fff;
+    padding: 10px;
+  }
+
+  .loop-box img {
+    width: 100%;
+    border-radius: 4px;
+    height: 300px;
+  }
+
+  .left-categories-box .category-item:hover,
+  .left-categories-box .category-item-active {
+    background: #F5F5F5;
+    color: #409EFF !important;
+  }
+
+  .left-categories-box .category-item, .left-categories-box .category-item-active {
+    padding: 10px 5px;
+    cursor: pointer;
+    margin-left: 15px;
+    margin-right: 15px;
+    color: #999999;
+  }
+
+  .left-categories-box {
+    background: #fff;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  .left-user-self-links a > span:hover, .left-user-self-links .sobwechat:hover {
+    color: #409EFF;
+  }
+
+  .left-user-self-links {
+    text-align: center;
+    margin-top: 20px;
+    background: #fff;
+  }
+
+  .left-user-self-links a > span, .left-user-self-links .sobwechat {
+    font-size: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 15px;
+    display: inline-block;
+    color: #CACACA;
+    margin-right: 15px;
+  }
+
+  .index-left-user-info {
+    background: #fff;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .index-left-user-info .user-sign {
+    margin-top: 14px;
+    color: #CACACA;
+  }
+
+  .index-left-user-info .user-name {
+    margin-top: 14px;
+    color: #606060;
+    font-size: 18px;
+  }
+
+  .index-left-user-info .user-avatar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+  }
+
+  .index-page-box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+
+  .index-right-part {
+
+  }
+
+  .index-left-part {
+    background: #fff;
+    margin-right: 10px;
+    width: 230px;
+  }
+
+  .index-right-part {
+    margin-left: 10px;
+    width: 230px;
+  }
+
+  .index-center-part {
+    width: 640px;
+    margin-right: 10px;
+    margin-left: 250px;
+  }
+</style>
