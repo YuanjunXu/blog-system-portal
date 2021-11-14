@@ -38,13 +38,19 @@
 
       <div class="navigation-box float-right">
         <nuxt-link to="/">
-          <span> <i class="sob_blog sobhome"></i> 首页</span>
+          <span :class="$store.state.currentActivatedTab==='index'? 'header-activity':''">
+            <i class="sob_blog sobhome"></i>
+            首页</span>
         </nuxt-link>
         <nuxt-link to="/about">
-          <span> <i class="sob_blog sobabout_line"></i> 关于</span>
+          <span :class="$store.state.currentActivatedTab==='about'? 'header-activity':''">
+            <i class="sob_blog sobabout_line"></i>
+            关于</span>
         </nuxt-link>
         <nuxt-link to="link">
-          <span> <i class="sob_blog soblink"></i> 友链</span>
+          <span :class="$store.state.currentActivatedTab==='link'? 'header-activity':''">
+            <i class="sob_blog soblink"></i>
+            友链</span>
         </nuxt-link>
 
       </div>
@@ -55,15 +61,20 @@
     <div class="blog-footer">
       <div class="copyright-box">
         <p> Copyright ©
-          <a href="/" target="_blank">猿村</a> (2021)本站由宣君用爱发电，记录程序猿成长.
+          <a href="/" target="">猿村</a> (2021)本站由宣君用爱发电，记录程序猿成长.
         </p>
       </div>
 
       <div class="bottom-link">
         <span><a href="/" target="_blank">关于作者</a></span> |
         <span><a href="/" target="_blank">联系作者</a></span> |
-        <span><a href="/" target="_blank">友情链接</a></span>
+        <span><a href="/link" target="_blank">友情链接</a></span>
       </div>
+    </div>
+
+    <div id="to-top-g" style="display: none" @click="toTop">
+      <div class="el-icon-caret-top"></div>
+      <div>回到<br>顶部</div>
     </div>
   </div>
 </template>
@@ -86,6 +97,31 @@ a:hover {
   color: #c9adf3;
 }
 
+.header-activity {
+  color: #c9adf3 !important;
+}
+
+
+#to-top-g .el-icon-caret-top {
+  font-size: 40px;
+}
+
+#to-top-g:hover {
+  cursor: pointer;
+  color: #c9adf3;
+  border: #c9adf3 1px solid;
+}
+
+#to-top-g {
+  position: fixed;
+  right: 20px;
+  bottom: 200px;
+  text-align: center;
+  border: #999999 1px solid;
+  padding: 0 10px 10px 10px;
+  border-radius: 8px;
+}
+
 .blog-header {
   margin-top: 10px;
   background: #Fff;
@@ -95,9 +131,9 @@ a:hover {
 }
 
 .blog-footer {
+  margin-top: 20px;
   text-align: center;
   font-size: 14px;
-  margin-bottom: 10px;
 }
 
 .logo-box .logo {
@@ -199,6 +235,9 @@ import * as api from "../api/api";
 export default {
   mounted() {
 
+    window.addEventListener("scroll", this.onWindowScroll);
+
+
     if (this.redirectPath !== '?redirect=' + location.href
       && this.$route.path !== '/'
       && this.$route.path !== '/login'
@@ -209,10 +248,30 @@ export default {
       this.redirectPath = '?redirect=' + location.href;
     }
 
-
     this.checkToken();
   },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onWindowScroll);
+  },
+
   methods: {
+    toTop() {
+      document.documentElement.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    },
+
+    onWindowScroll() {
+      let toTopBox = document.getElementById("to-top-g");
+      let offTop = document.documentElement.scrollTop;
+      if (offTop > 600 && toTopBox) {
+        toTopBox.style.display = "block";
+      } else {
+        toTopBox.style.display = "none";
+      }
+    },
+
     handleCommand(command) {
       if (command === 'logout') {
         api.logout().then(res => {
@@ -227,7 +286,7 @@ export default {
         console.log("======跳转到管理中心=====")
         // location.href='/login';
       } else if (command === 'userInfo') {
-        location.href = '/userInfo';
+        location.href = '/userInfo/' + this.userInfo.id;
       }
     },
     checkToken() {
@@ -236,7 +295,8 @@ export default {
         let userInfoBox = document.getElementById('user-info-box');
         if (res.code == api.successCode) {
           this.userInfo = res.data;
-
+          //拿到id以后，通过状态树共享，跟其他组件共享
+          this.$store.commit("setCurrentUserId", this.userInfo.id);
           // 控制顶部用户信息和登录注册显示
           if (userInfoBox) {
             userInfoBox.style.display = 'block';
@@ -252,6 +312,7 @@ export default {
       })
     },
   },
+
   data() {
     return {
       redirectPath: '',

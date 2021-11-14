@@ -14,9 +14,16 @@
           <span v-text="userInfo.sign"></span>
         </div>
         <div class="user-self-link">
-          <span class="sob_blog sobwechat"></span>
-          <span class="sob_blog sobgithub"></span>
-          <span class="sob_blog sobbilibili-line"></span>
+          <el-popover
+            placement="bottom-end"
+            trigger="hover">
+            <div class="gong-zhong-hao-pop">
+              <img src="http://fs.xuyuanjun.cn/20211109/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg">
+            </div>
+            <span slot="reference" class="sob_blog sobwechat"></span>
+          </el-popover>
+          <a href="https://gitee.com/alex_xyj" target="_blank"><span class="sob_blog sobgithub"></span></a>
+          <a href="https://space.bilibili.com/393667619" target="_blank"><span class="sob_blog sobbilibili-line"></span></a>
         </div>
       </div>
 
@@ -197,7 +204,24 @@
 <style>
 
 .taobao-ads-box {
+  padding: 1px;
+}
 
+.el-popover__title {
+  padding: 12px 0;
+  font-size: 18px;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.el-popover {
+  padding: 0;
+}
+
+.gong-zhong-hao-pop img {
+  height: 150px;
+  width: 150px;
+  border-radius: 8px;
 }
 
 .index-left-part {
@@ -277,7 +301,7 @@
 
 }
 
-.article-label .el-tag{
+.article-label .el-tag {
   margin-right: 10px;
 }
 
@@ -442,7 +466,7 @@
   font-size: 25px;
   font-weight: 500;
   color: #737F90;
-  padding: 10px;
+  padding: 2px;
 }
 
 .index-left-part .user-self-link span:hover {
@@ -482,6 +506,23 @@ import * as api from '../api/api'
 import {getLatestArticles, getLatestArticlesByCategoryId, getLoopImages, getTopArticles} from "../api/api";
 
 export default {
+  head() {
+    return {
+      title: '猿村-首页',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '猿村-首页'
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: '猿村,博客系统，程序员，前端，后端，随笔，数据库，java，.Net，C#,spring boot'
+        }
+      ]
+    }
+  },
 
   data() {
     return {
@@ -492,6 +533,7 @@ export default {
   },
 
   mounted() {
+    this.$store.commit('setCurrentActivatedTab', 'index');
 
     this.onWindowScroll();
     window.addEventListener("scroll", this.onWindowScroll);

@@ -110,6 +110,28 @@ import {hex_md5} from "@/utils/md5";
 import {updatePassword} from "@/api/api";
 
 export default {
+  head() {
+    return {
+      title: '猿村-忘记密码',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '猿村-忘记密码'
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: '猿村,博客系统，程序员，前端，后端，随笔'
+        }
+      ]
+    }
+  },
+
+
+  mounted() {
+    this.$store.commit('setCurrentActivatedTab', 'index');
+  },
 
   methods: {
     updateVerifyCode() {
@@ -154,16 +176,16 @@ export default {
       this.user.password = hex_md5(this.originalPassword);
       api.updatePassword(this.emailCode, this.user).then(res => {
         if (res.code === api.successCode) {
-           this.$message.success(res.message);
-           location.href="/login";
-        }else {
+          this.$message.success(res.message);
+          location.href = "/login";
+        } else {
           this.$message.error(res.message);
-          this.showType="verifyCode";
+          this.showType = "verifyCode";
           this.updateVerifyCode();
         }
       }).catch(err => {
         this.$message.error(err.message);
-        this.showType="verifyCode";
+        this.showType = "verifyCode";
         this.updateVerifyCode();
       })
     },

@@ -107,6 +107,28 @@ import {checkUserName, sendEmail} from "../../api/api";
 import {hex_md5} from "@/utils/md5";
 
 export default {
+  head() {
+    return {
+      title: '猿村-注册',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '猿村-注册'
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: '猿村,博客系统，程序员，前端，后端，随笔'
+        }
+      ]
+    }
+  },
+
+  mounted() {
+    this.$store.commit('setCurrentActivatedTab', 'index');
+  },
+
   methods: {
 
     checkUserName() {
@@ -146,13 +168,13 @@ export default {
       // 加密密码
       this.user.password = hex_md5(this.originalPassword);
       // 提交数据
-      api.doRegister(this.captchaCode,this.emailCode,this.user).then(res => {
+      api.doRegister(this.captchaCode, this.emailCode, this.user).then(res => {
         if (res.code == api.successCode) {
           //注册成功
           this.$message.success(res.message);
           //跳转登录界面
-          location.href="/login";
-        }else {
+          location.href = "/login";
+        } else {
           this.$message.error(res.message);
           this.updateVerifyCode();
         }

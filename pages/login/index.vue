@@ -74,7 +74,7 @@ export default {
     }
   },
   mounted() {
-    // this.$store.commit("setCurrentActivityTab", "index");
+    this.$store.commit('setCurrentActivatedTab','index');
   },
   asyncData() {
     return {

@@ -7,11 +7,23 @@ const baseUrl = 'http://localhost:2021/';
 //获取管理员信息
 export const getAdmin = () => {
   if (process.client) {
-    return http.requestGetHandle('/user/user_info/20173013961932800');
+    return http.requestGetHandle('/user/user_info/909158951612841984');
   } else {
-    return http.requestGetHandle(baseUrl + 'user/user_info/20173013961932800');
+    return http.requestGetHandle(baseUrl + 'user/user_info/909158951612841984');
   }
 }
+
+export const getUserInfo = (id) => {
+  if (process.client) {
+    return http.requestGetHandle('/user/user_info/' + id);
+  } else {
+    return http.requestGetHandle(baseUrl + 'user/user_info/' + id);
+  }
+}
+
+export const updateUserInfo = (user, userId) => {
+  return http.requestPutHandle('/user/user_info/' + userId, user);
+};
 
 // 获取分类
 export const getCategories = () => {

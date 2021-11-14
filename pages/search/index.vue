@@ -313,6 +313,28 @@
 import * as api from "../../api/api"
 
 export default {
+  head() {
+    return {
+      title: '猿村-搜索结果',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '猿村-搜索结果'
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: '猿村,博客系统，程序员，前端，后端，随笔'
+        }
+      ]
+    }
+  },
+
+  mounted() {
+    this.$store.commit('setCurrentActivatedTab','index');
+  },
+
 
   methods: {
     doSearchByCategory(categoryId) {

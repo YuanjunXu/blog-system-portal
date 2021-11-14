@@ -42,18 +42,18 @@
     "_name": "_70f37247"
   },
   {
-    "name": "userInfo",
-    "path": "/userInfo",
-    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\userInfo\\\\index.vue",
-    "chunkName": "pages/userInfo/index",
-    "_name": "_8d3c3a14"
-  },
-  {
     "name": "article-id",
     "path": "/article/:id?",
     "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\article\\\\_id.vue",
     "chunkName": "pages/article/_id",
     "_name": "_2f17e4f7"
+  },
+  {
+    "name": "userInfo-id",
+    "path": "/userInfo/:id?",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\userInfo\\\\_id.vue",
+    "chunkName": "pages/userInfo/_id",
+    "_name": "_424faa44"
   },
   {
     "name": "index",

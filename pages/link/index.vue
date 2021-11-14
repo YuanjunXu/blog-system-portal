@@ -23,7 +23,7 @@
   color: #737F90;
 }
 
-.link-page-box{
+.link-page-box {
   margin: 10px auto;
   background: #FFffff;
   border-radius: 8px;
@@ -63,6 +63,28 @@
 import * as api from '../../api/api'
 
 export default {
+  head() {
+    return {
+      title: '猿村-友情链接',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '猿村-友情链接'
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: '猿村,博客系统，程序员，前端，后端，随笔'
+        }
+      ]
+    }
+  },
+
+  mounted() {
+    this.$store.commit('setCurrentActivatedTab', 'link');
+  },
+
   async asyncData({params}) {
     return await api.getLinkList().then(res => {
       return {

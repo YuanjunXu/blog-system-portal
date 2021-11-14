@@ -10,8 +10,8 @@ const _0d1c9df5 = () => interopDefault(import('..\\pages\\link\\index.vue' /* we
 const _bb456588 = () => interopDefault(import('..\\pages\\login\\index.vue' /* webpackChunkName: "pages/login/index" */))
 const _755f612c = () => interopDefault(import('..\\pages\\register\\index.vue' /* webpackChunkName: "pages/register/index" */))
 const _70f37247 = () => interopDefault(import('..\\pages\\search\\index.vue' /* webpackChunkName: "pages/search/index" */))
-const _8d3c3a14 = () => interopDefault(import('..\\pages\\userInfo\\index.vue' /* webpackChunkName: "pages/userInfo/index" */))
 const _2f17e4f7 = () => interopDefault(import('..\\pages\\article\\_id.vue' /* webpackChunkName: "pages/article/_id" */))
+const _424faa44 = () => interopDefault(import('..\\pages\\userInfo\\_id.vue' /* webpackChunkName: "pages/userInfo/_id" */))
 const _101e616f = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
 const emptyFn = () => {}
@@ -50,13 +50,13 @@ export const routerOptions = {
     component: _70f37247,
     name: "search"
   }, {
-    path: "/userInfo",
-    component: _8d3c3a14,
-    name: "userInfo"
-  }, {
     path: "/article/:id?",
     component: _2f17e4f7,
     name: "article-id"
+  }, {
+    path: "/userInfo/:id?",
+    component: _424faa44,
+    name: "userInfo-id"
   }, {
     path: "/",
     component: _101e616f,

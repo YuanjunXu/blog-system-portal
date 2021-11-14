@@ -17,8 +17,18 @@
               {{ item }}
             </el-tag>
           </div>
-          <div id="article-content-category-box" class="catalog-box"></div>
-          <div id="article-content" class="article-content" v-html="articleRes.content"></div>
+          <!--加载文章过程动画-->
+          <div class="article-loading-part" v-if="isArticleProcessing">
+            <div class="content-loading">
+              <div class="loading-title clear-fix"></div>
+              <div class="loading-content">
+                <div class="loading-text"></div>
+                <div class="loading-text animation-delay"></div>
+              </div>
+            </div>
+          </div>
+          <div id="article-content-category-box" class="catalog-box"  v-show="!isArticleProcessing"></div>
+          <div id="article-content" class="article-content" v-html="articleRes.content"  v-show="!isArticleProcessing"></div>
         </div>
         <!--输入评论-->
         <div class="article-comment-input">
@@ -39,19 +49,20 @@
         </div>
         <!--评论区-->
         <div class="article-comment-box default-border-radius">
-          <div class="article-comment-list-box">
+          <div id="article-comment-list-box" class="article-comment-list-box">
             <div class="article-comment-header">
               评论列表
             </div>
             <div class="comment-item-list">
               <div class="article-comment-item" v-for="(comment,comIndex) in comments" :key="comIndex">
                 <div class="article-comment-user-info">
-                  <a :href="'/user/'+comment.userId">
+                  <a :href="'/userInfo/'+comment.userId">
                     <img :src="comment.userAvatar">
                     <span class="username">{{ comment.userName }}</span>
                   </a>
+                  <el-tag size="mini" type="danger" v-if="comment.state==='3'">置顶</el-tag>
                 </div>
-                <div class="article-comment-reply" v-if="comment.parentContent!==null">
+                <div class="article-comment-reply" v-if="comment.parentContent!=='' && comment.parentContent!==null">
                   <span>回复：{{ comment.parentContent }}</span>
                 </div>
                 <div class="article-comment-content">
@@ -60,12 +71,29 @@
                 <div class="article-comment-action">
                   <span class="el-icon-date"> {{ comment.updateTime|formatDate('yyyy-MM-dd hh:mm:ss') }}</span>
                   ·
-                  <span class="item-reply-btn">回复</span>
+                  <span class="item-reply-btn" @click="onReplyClick(comIndex,comment.userName)">回复</span>
+                </div>
+                <div class="article-sub-comment-box clear-fix" style="display: none" :id="'sub_input_'+comIndex">
+                  <div class="sub-comment-input float-left">
+                    <el-input
+                      @focus="checkLogin"
+                      rows="2"
+                      type="textarea"
+                      :placeholder="subCommentPlaceholder"
+                      v-model="subComment"
+                      maxlength="255"
+                      show-word-limit>
+                    </el-input>
+                  </div>
+                  <div class="sub-comment-submit-btn float-right">
+                    <el-button size="mini" type="primary" @click="doSubComment(comment.content)">回复</el-button>
+                  </div>
+
                 </div>
               </div>
             </div>
             <div class="no-comment" v-if="comments.length===0">暂时没有评论，赶快写下宝贵的的建议吧~</div>
-            <div class="load-more-comment" v-else-if="!isLastPage">加载更多>></div>
+            <div class="load-more-comment" v-else-if="!isLastPage" @click="doLoadMore">加载更多>></div>
           </div>
 
         </div>
@@ -135,6 +163,70 @@
 </template>
 
 <style>
+.article-loading-part .content-loading {
+  padding: 10px;
+  background: #f3f3f3;
+  margin-top: 5px;
+}
+
+.article-loading-part .loading-title {
+  width: 200px;
+  height: 24px;
+  background-color: #eaeaea;
+}
+
+.article-loading-part .loading-content {
+  margin-left: 10px;
+  margin-top: 10px;
+  width: 600px;
+}
+
+.article-loading-part .loading-text {
+  width: 100%;
+  height: 16px;
+  margin: 0 0 10px;
+  background-color: #eaeaea;
+  -webkit-animation: loading 1s ease-in-out infinite;
+  animation: loading 1s ease-in-out infinite;
+}
+
+.article-loading-part {
+  margin-top: 20px;
+}
+
+.article-loading-part .animation-delay {
+  -webkit-animation: loading 1s ease-in-out -.5s infinite;
+  animation: loading 1s ease-in-out -.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    width: 20%;
+  }
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 20%;
+  }
+}
+
+
+.article-sub-comment-box {
+  margin: 10px auto;
+}
+
+.sub-comment-submit-btn {
+  display: inline-block;
+  margin-top: 14px;
+  margin-right: 42px;
+}
+
+.sub-comment-input {
+  display: inline-block;
+  width: 700px;
+  margin-left: 30px;
+}
 
 
 .comment-input-header {
@@ -193,8 +285,10 @@
 }
 
 .article-comment-content {
-  padding: 10px;
-  margin-left: 20px;
+  padding: 10px 0 5px 0;
+  margin-left: 30px;
+  color: #606266;
+  font-size: 16px;
 }
 
 .item-reply-btn:hover {
@@ -210,6 +304,7 @@
   font-size: 14px;
   font-weight: 500;
   text-align: right;
+  margin-right: 40px;
 }
 
 .comment-item-list {
@@ -509,20 +604,53 @@ import 'highlight.js/styles/atom-one-dark.css'
 import * as api from '../../api/api'
 import Catelog from '../../utils/headerLineHandler'
 
+let lastInputBox = null;
+
 export default {
+  head() {
+    return {
+      title: '猿村-' + this.articleRes.title,
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '猿村-文章详情'
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: '猿村,博客系统，程序员，前端，后端，随笔'
+        }
+      ]
+    }
+  },
+
   data() {
     return {
+      isArticleProcessing: true,
+      pageSize: 10,
+      currentPage: 1,
       isImageDialogShow: false,
       targetImgPath: '',
       comment: {
         content: '',
         articleId: '',
-        parentComment: ''
-      }
+        parentContent: ''
+      },
+      subComment: '',
+      subCommentPlaceholder: ''
     }
   },
 
   mounted() {
+    this.$store.commit('setCurrentActivatedTab', 'index');
+
+    let that = this;
+    let timer = setInterval(function () {
+      that.isArticleProcessing = false;
+      clearInterval(timer)
+    }, 1000);
+
     // 初始化高亮插件
     hljs.initHighlighting();
 
@@ -548,6 +676,67 @@ export default {
   },
 
   methods: {
+
+    doSubComment(parentContent) {
+      if (this.subComment === '') {
+        this.$message.error("评论内容不可以为空");
+        return;
+      }
+      this.comment.content = this.subComment;
+      this.comment.parentContent = parentContent;
+      this.comment.articleId = this.articleRes.id;
+
+      // 提交回复
+      api.postComment(this.comment).then(res => {
+        if (res.code === api.successCode) {
+          this.$message.success("评论成功");
+          // 刷新列表
+          this.getArticlesComments(this.articleRes.id, this.currentPage, this.pageSize);
+          this.resetComment();
+          // 滚动到评论区顶端
+          let articleCommentBox = document.getElementById("article-comment-list-box");
+          if (articleCommentBox) {
+            articleCommentBox.scrollIntoView({
+              behavior: 'smooth',
+              block: "start",
+            })
+          }
+        } else {
+          this.$message.error(res.message);
+        }
+      }).catch(err => {
+        this.$message.error(err.message);
+      })
+    },
+
+    onReplyClick(index, username) {
+      //清空输入内容
+      this.subComment = '';
+      let subInputBox = document.getElementById("sub_input_" + index);
+      this.subCommentPlaceholder = "请用心回复 @" + username + " 哟~";
+      if (subInputBox) {
+        if (lastInputBox) {
+          lastInputBox.style.display = "none";
+        }
+        lastInputBox = subInputBox;
+        subInputBox.style.display = "block";
+      }
+    },
+
+    doLoadMore() {
+      this.currentPage++;
+      api.getComments(this.articleRes.id, this.currentPage, this.pageSize).then(res => {
+        if (res.code === api.successCode) {
+          this.comments = this.comments.concat(res.data.data);
+          if (res.data.data.length < this.pageSize) {
+            this.isLastPage = true;
+          }
+        }
+      }).catch(err => {
+
+      })
+    },
+
     doComment() {
       //检查是否登录
       if (document.cookie.indexOf('sob_blog_token') === -1) {
@@ -563,13 +752,24 @@ export default {
         if (res.code === api.successCode) {
           this.$message.success("评论成功");
           // 刷新列表
-          this.getArticlesComments(this.articleRes.id, 1, 10);
+          this.getArticlesComments(this.articleRes.id, this.currentPage, this.pageSize);
+          this.resetComment();
         } else {
           this.$message.error(res.message);
         }
       }).catch(err => {
         this.$message.error(err.message);
       })
+    },
+
+    // 重置评论输入内容
+    resetComment() {
+      this.comment.content = '';
+      this.comment.parentContent = '';
+      this.subComment = '';
+      if (lastInputBox) {
+        lastInputBox.style.display = 'none';
+      }
     },
 
     checkLogin() {
@@ -579,10 +779,12 @@ export default {
         }
       })
     },
+
     getArticlesComments(articleId, page, size) {
       api.getComments(articleId, page, size).then(res => {
         if (res.code === api.successCode) {
           this.comments = res.data.data;
+          this.currentPage = page;
         } else {
           this.$message.error(res.message);
         }
@@ -595,6 +797,7 @@ export default {
       this.isImageDialogShow = true;
       this.targetImgPath = event.target.src;
     },
+
     previewImage() {
       // 遍历图片
       let articleContent = document.getElementById("article-content");
@@ -605,6 +808,7 @@ export default {
         })
       }
     },
+
     // 窗口滚动时，让左右板块悬浮滑动
     onWindowScroll() {
       let scrollTop = document.documentElement.scrollTop;
