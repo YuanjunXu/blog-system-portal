@@ -4,7 +4,7 @@
       <div class="search-input-box">
         <div class="search-input-container clear-fix">
           <div class="search-logo float-left">
-            <span class="logo">SOB</span>
+            <span class="logo">猿村</span>
             <span>|</span>
             <span>搜索</span>
           </div>

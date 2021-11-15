@@ -51,7 +51,7 @@
 <style>
   .link-title {
     text-align: center;
-    font-size: 30px;
+    font-size: 20px;
     color: #7f828b;
     margin-top: 20px;
     margin-bottom: 20px;

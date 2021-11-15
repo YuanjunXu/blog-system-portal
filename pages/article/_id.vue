@@ -19,7 +19,7 @@
           </div>
           <div class="article-labels">
             <el-tag type="info" size="mini" v-for="(item,index) in articleRes.labels" :key="index">
-              {{ item }}
+              <a :href="'/search?keyword='+item" target="_blank">{{ item }}</a>
             </el-tag>
           </div>
           <div class="article-loading-part" v-if="isArticleProcessing">
@@ -147,14 +147,14 @@
           </div>
         </div>
         <!--广告-->
-<!--        <div class="article-right-card" id="article-right-taobao-ad">-->
-<!--          <div class="right-card-title">-->
-<!--            赞助商广告-->
-<!--          </div>-->
-<!--          <div class="right-card-content article-right-taobao-ad">-->
-<!--            <TaobaoLoop></TaobaoLoop>-->
-<!--          </div>-->
-<!--        </div>-->
+        <!--        <div class="article-right-card" id="article-right-taobao-ad">-->
+        <!--          <div class="right-card-title">-->
+        <!--            赞助商广告-->
+        <!--          </div>-->
+        <!--          <div class="right-card-content article-right-taobao-ad">-->
+        <!--            <TaobaoLoop></TaobaoLoop>-->
+        <!--          </div>-->
+        <!--        </div>-->
         <div class="article-right-card" id="article-right-subscription-box">
           <div class="right-card-title">
             公众号
@@ -777,9 +777,14 @@ export default {
 
 
 .article-content p img {
-  max-width: 740px;
+  width: 100%;
+  /*max-width: 740px;*/
   cursor: zoom-in;
   border-radius: 4px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border: #7f828b 1px solid;
+  max-height: 600px;
 }
 
 .article-content pre {
@@ -825,6 +830,14 @@ export default {
 
 .article-content {
   margin-top: 20px;
+}
+
+.article-labels .el-tag a:hover {
+  color: #409EFF;
+}
+
+.article-labels .el-tag a {
+  color: #737F90;
 }
 
 .article-labels .el-tag {

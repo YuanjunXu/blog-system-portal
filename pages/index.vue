@@ -41,9 +41,9 @@
     </div>
     <div id="index-center-part" class="index-center-part float-left">
       <div class="loop-box default-border-radius">
-        <el-carousel :interval="4000" arrow="always">
+        <el-carousel :interval="3000" arrow="always">
           <el-carousel-item v-for="(item,index) in loop" :key="index">
-            <img :src="item.imageUrl" style="object-fit: cover">
+            <a :href="item.targetUrl"><img :src="item.imageUrl" style="object-fit: cover"></a>
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -428,7 +428,7 @@ export default {
 }
 
 .labels {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .read-more:hover {
@@ -445,7 +445,7 @@ export default {
 
 .article-summary {
   max-width: 500px;
-  margin-top: 20px;
+  margin-top: 10px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
@@ -493,8 +493,8 @@ export default {
 }
 
 .article-cover img {
-  width: 120px;
-  height: 120px;
+  width: 160px;
+  height: 100px;
   object-fit: cover;
   border-radius: 4px;
 }

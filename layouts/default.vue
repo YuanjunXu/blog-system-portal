@@ -24,11 +24,11 @@
         <div class="header-user-username float-left" v-if="userInfo!==null">
           <el-dropdown @command="handlerCommand">
                       <span class="el-dropdown-link">
-                        {{userInfo.userName}} <i class="el-icon-arrow-down el-icon--right"></i>
+                        {{ userInfo.userName }} <i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="userInfo">用户信息</el-dropdown-item>
-              <el-dropdown-item command="adminCenter" v-if="userInfo.roles==='role_admin'">管理中心</el-dropdown-item>
+              <el-dropdown-item command="userInfo">个人中心</el-dropdown-item>
+              <el-dropdown-item command="adminCenter" v-if="userInfo.roles==='role_admin'">后台管理</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -53,7 +53,7 @@
       <div class="copy-right-box">
         <p>
           Copyright ©
-          <a href="https://www.sunofbeach.net" target="_blank">
+          <a href="http://www.xuyuanjun.cn" target="_blank">
             猿村
           </a>
           (2021） 本网站由宣君创立，记录程序猿的历程
@@ -88,258 +88,262 @@
   </div>
 </template>
 <script>
-  import * as api from '../api/api';
+import * as api from '../api/api';
 
-  export default {
-    methods: {
-      toTop() {
-        document.documentElement.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        })
-      },
-      onWindowScroll() {
-        let offTop = document.documentElement.scrollTop;
-        let toTopBox = document.getElementById('g-to-top');
-        if (offTop > 500) {
-          toTopBox.style.display = 'block';
-        } else {
-          toTopBox.style.display = 'none';
-        }
-      },
-      handlerCommand(command) {
-        if (command === 'logout') {
-          api.doLogout().then(result => {
-            if (result.code === api.success_code) {
-              //跳转到登录页面
-              location.href = "/login"
-            }
-          })
-        } else if (command === 'adminCenter') {
-          //location.href = 'http://mp.xuyuanjun.cn/#/index';
-           location.href = 'http://lochalhost:8080/#/index'
-        } else if (command === 'userInfo') {
-          location.href = "/userInfo/" + this.userInfo.id;
-        }
-      },
-      checkToken() {
-        api.checkToken().then(result => {
-          let loginTips = document.getElementById('login-tips-text-box');
-          let userInfoBox = document.getElementById('user-info-box');
+export default {
+  methods: {
+    toTop() {
+      document.documentElement.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
+    },
+    onWindowScroll() {
+      let offTop = document.documentElement.scrollTop;
+      let toTopBox = document.getElementById('g-to-top');
+      if (offTop > 500) {
+        toTopBox.style.display = 'block';
+      } else {
+        toTopBox.style.display = 'none';
+      }
+    },
+    handlerCommand(command) {
+      if (command === 'logout') {
+        api.doLogout().then(result => {
           if (result.code === api.success_code) {
-            //获取成功
-            this.userInfo = result.data;
-            //拿到id以后，通过状态树共享，跟其他组件共享
-            this.$store.commit("setCurrentUserId", this.userInfo.id);
-            if (userInfoBox) {
-              userInfoBox.style.display = 'block';
-            }
-          } else {
-            if (loginTips) {
-              //控制顶部登录提示的显示
-               loginTips.style.display = 'block';
-            }
+            //跳转到登录页面
+            location.href = "/login"
           }
         })
+      } else if (command === 'adminCenter') {
+        location.href = 'http://mp.xuyuanjun.cn/#/index';
+        //  location.href = 'http://lochalhost:8080/#/index'
+      } else if (command === 'userInfo') {
+        location.href = "/userInfo/" + this.userInfo.id;
       }
     },
-    beforeDestroy() {
-      window.removeEventListener("scroll", this.onWindowScroll);
-    },
-    mounted() {
-      window.addEventListener("scroll", this.onWindowScroll);
-      if (this.redirectPath !== '?redirect=' + location.href &&
-        this.$route.path !== '/'
-        && this.$route.path !== '/login'
-        && this.$route.path !== '/register'
-        && this.$route.path !== '/forget'
-      ) {
-        //排除一些特殊的，比如说登录
-        //比如说首页
-        this.redirectPath = '?redirect=' + location.href;
-      }
-      this.checkToken()
-    },
-    data() {
-      return {
-        redirectPath: '',
-        userInfo: null
-      }
+    checkToken() {
+      api.checkToken().then(result => {
+        let loginTips = document.getElementById('login-tips-text-box');
+        let userInfoBox = document.getElementById('user-info-box');
+        if (result.code === api.success_code) {
+          //获取成功
+          this.userInfo = result.data;
+          //拿到id以后，通过状态树共享，跟其他组件共享
+          this.$store.commit("setCurrentUserId", this.userInfo.id);
+          if (userInfoBox) {
+            userInfoBox.style.display = 'block';
+          }
+        } else {
+          if (loginTips) {
+            //控制顶部登录提示的显示
+            loginTips.style.display = 'block';
+          }
+        }
+      })
     }
-  };
+  },
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.onWindowScroll);
+  },
+  mounted() {
+    window.addEventListener("scroll", this.onWindowScroll);
+    if (this.redirectPath !== '?redirect=' + location.href &&
+      this.$route.path !== '/'
+      && this.$route.path !== '/login'
+      && this.$route.path !== '/register'
+      && this.$route.path !== '/forget'
+    ) {
+      //排除一些特殊的，比如说登录
+      //比如说首页
+      this.redirectPath = '?redirect=' + location.href;
+    }
+    this.checkToken()
+  },
+  data() {
+    return {
+      redirectPath: '',
+      userInfo: null
+    }
+  }
+};
 </script>
 <style>
 
-  #g-to-top .el-icon-caret-top {
-    font-size: 30px;
-  }
+#g-to-top .el-icon-caret-top {
+  font-size: 30px;
+}
 
-  #g-to-top:hover {
-    border: 1px solid #409EFF;
-    color: #409EFF !important;
-  }
+#g-to-top:hover {
+  border: 1px solid #409EFF;
+  color: #409EFF !important;
+}
 
-  #g-to-top {
-    border: 1px solid #7f828b;
-    padding: 0 10px 5px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    position: fixed;
-    right: 20px;
-    text-align: center;
-    bottom: 200px;
-  }
+#g-to-top {
+  border: 1px solid #7f828b;
+  padding: 0 10px 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: fixed;
+  right: 20px;
+  text-align: center;
+  bottom: 200px;
+}
 
-  .beian-box{
-    margin-top: 10px;
-  }
+.beian-box {
+  margin-top: 10px;
+}
 
-  .beian-box span:hover{
-    color: #409EFF;
-  }
+.beian-box span:hover {
+  color: #409EFF;
+}
 
-  .beian-box span{
-    color: #737F90;
-  }
+.beian-box span {
+  color: #737F90;
+}
 
-  .bottom-link a:hover {
-    color: #409EFF;
-  }
+.bottom-link a:hover {
+  color: #409EFF;
+}
 
-  .header-title-activity {
-    color: #409EFF !important;
-  }
+.header-title-activity {
+  color: #409EFF !important;
+}
 
-  .header-user-username span {
-    font-weight: 600;
-    cursor: pointer;
-    color: #737F90;
-  }
+.header-user-username span {
+  font-weight: 600;
+  cursor: pointer;
+  color: #737F90;
+}
 
-  .header-user-avatar {
-    margin-right: 10px;
-  }
+.header-user-avatar {
+  margin-right: 10px;
+}
 
-  .header-user-avatar img {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    vertical-align: middle;
-  }
+.header-user-avatar img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
 
-  .el-message {
-    min-width: 0 !important;
-  }
+.el-message {
+  min-width: 0 !important;
+}
 
-  .el-carousel__button {
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-  }
-
-
-  h1 {
-    color: #737F90;
-    font-size: 24px;
-    font-weight: 600;
-  }
-
-  .default-border-radius {
-    border-radius: 8px;
-  }
-
-  .navigation-box span:hover, .login-tips-text-box span:hover {
-    color: #409EFF;
-  }
-
-  .navigation-box span {
-    margin-right: 40px;
-    color: #737F90;
-    font-size: 18px;
-    cursor: pointer;
-  }
-
-  .navigation-box i {
-    font-size: 20px;
-    font-weight: 600;
-  }
-
-  .navigation-box {
-    position: absolute;
-    right: 200px;
-  }
-
-  .login-tips-text-box a:hover {
-    color: #409EFFFF;
-  }
-
-  .login-tips-text-box a {
-    margin-right: 10px;
-    color: #737F90;
-  }
-
-  .login-tips-text-box {
-    font-size: 16px;
-  }
-
-  .logo-box {
-    margin-left: 10px;
-  }
-
-  .logo-box .logo {
-    color: #737F90;
-    font-size: 24px;
-    font-weight: 600;
-  }
+.el-carousel__button {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+}
 
 
-  a {
-    text-decoration: none;
-  }
+h1 {
+  color: #737F90;
+  font-size: 24px;
+  font-weight: 600;
+}
 
-  .copy-right-box {
-    margin-bottom: 10px;
-  }
+.default-border-radius {
+  border-radius: 8px;
+}
 
-  .blog-footer {
-    color: #737F90;
-    padding-bottom: 30px;
-    text-align: center;
-  }
+.navigation-box span:hover, .login-tips-text-box span:hover {
+  color: #409EFF;
+}
 
-  * {
-    padding: 0;
-    margin: 0;
-  }
+.navigation-box span {
+  margin-right: 40px;
+  color: #737F90;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-  .blog-header {
-    margin-top: 10px;
-    line-height: 30px;
-    position: relative;
-    background: #Fff;
-    padding: 10px;
-  }
+.navigation-box i {
+  font-size: 20px;
+  font-weight: 600;
+}
 
-  body {
-    /*background: #e4e4f9;*/
-    background-image: linear-gradient(to right , #efe7f5, #d7f4f2);
-  }
+.navigation-box {
+  position: absolute;
+  right: 200px;
+}
 
-  #blog-box {
-    width: 1140px;
-    margin: 0 auto;
-  }
+.login-tips-text-box a:hover {
+  color: #409EFFFF;
+}
 
-  .float-left {
-    float: left;
-  }
+.login-tips-text-box a {
+  margin-right: 10px;
+  color: #737F90;
+}
 
-  .float-right {
-    float: right;
-  }
+.login-tips-text-box {
+  font-size: 16px;
+}
 
-  .clear-fix {
-    overflow: hidden;
-    zoom: 1;
-  }
+.logo-box {
+  margin-left: 10px;
+}
+
+.logo-box .logo {
+  color: #737F90;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+
+a {
+  text-decoration: none;
+}
+
+.copy-right-box {
+  margin-bottom: 10px;
+}
+
+.copy-right-box a:hover {
+  color: #409EFF;
+}
+
+.blog-footer {
+  color: #737F90;
+  text-align: center;
+  font-size: 16px;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.blog-header {
+  margin-top: 10px;
+  line-height: 30px;
+  position: relative;
+  background: #Fff;
+  padding: 10px;
+}
+
+body {
+  /*background: #e4e4f9;*/
+  background-image: linear-gradient(to right, #efe7f5, #d7f4f2);
+}
+
+#blog-box {
+  width: 1140px;
+  margin: 0 auto;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.clear-fix {
+  overflow: hidden;
+  zoom: 1;
+}
 </style>
