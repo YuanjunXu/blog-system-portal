@@ -24,12 +24,12 @@
           {
             hid: 'description',
             name: 'description',
-            content: '猿村-友情链接'
+            content: '友情链接'
           },
           {
             hid: 'keywords',
             name: 'keywords',
-            content: '猿村,java,android,开发,毕业设计,系统,程序员,拉大锯'
+            content: '猿村,java,C#,开发,系统,程序员,宣君'
           }
         ]
       }
@@ -62,6 +62,7 @@
     margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
+    border-radius: 8px;
   }
 
   .link-item img {

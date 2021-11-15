@@ -60,12 +60,12 @@
           {
             hid: 'description',
             name: 'description',
-            content: '猿村-找回密码'
+            content: '找回密码'
           },
           {
             hid: 'keywords',
             name: 'keywords',
-            content: '猿村,java,android,开发,毕业设计,系统,程序员,拉大锯'
+            content: '猿村,java,C#,开发,系统,程序员,宣君'
           }
         ]
       }

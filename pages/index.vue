@@ -53,14 +53,14 @@
             <div class="article-title">
               <span class="top-tips">置頂</span>
               <span class="title">
-                <a :href="'/article/'+item.id">{{item.title}}</a>
+                <a :href="'/article/'+item.id">{{ item.title }}</a>
               </span>
             </div>
             <div class="article-summary">
               <p>
-                {{item.summary}}
+                {{ item.summary }}
                 <span>...</span>
-                <span class="read-more">阅读全文</span>
+                <a :href="'/article/'+item.id"><span class="read-more">阅读全文</span></a>
               </p>
             </div>
             <div class="labels">
@@ -69,7 +69,7 @@
                 v-for="(tag,tagIndex) in item.labels"
                 :key="tagIndex"
                 type="info">
-                <a :href="'/search?keyword='+tag" target="_blank">{{tag}}</a>
+                <a :href="'/search?keyword='+tag" target="_blank">{{ tag }}</a>
               </el-tag>
             </div>
           </div>
@@ -86,14 +86,14 @@
           <div class="article-left float-left">
             <div class="article-title">
               <span class="title">
-                 <a :href="'/article/'+item.id">{{item.title}}</a>
+                 <a :href="'/article/'+item.id">{{ item.title }}</a>
               </span>
             </div>
             <div class="article-summary">
               <p>
-                {{item.summary}}
+                {{ item.summary }}
                 <span>...</span>
-                <span class="read-more">阅读全文</span>
+                <a :href="'/article/'+item.id"><span class="read-more">阅读全文</span></a>
               </p>
             </div>
             <div class="labels">
@@ -102,12 +102,12 @@
                 v-for="(tag,tagIndex) in item.labels"
                 :key="tagIndex"
                 type="info">
-                <a :href="'/search?keyword='+tag" target="_blank">{{tag}}</a>
+                <a :href="'/search?keyword='+tag" target="_blank">{{ tag }}</a>
               </el-tag>
             </div>
           </div>
           <div class="article-right float-right">
-            <div class="article-cover">
+            <div class="article-cover" v-if="item.cover!=='' && item.cover!==null">
               <img :src="'/portal/image/'+item.cover">
             </div>
           </div>
@@ -160,437 +160,444 @@
           </div>
         </div>
       </div>
-      <div class="taobao-ad-box" id="taobao-ad-box">
-        <TaobaoLoop></TaobaoLoop>
-      </div>
+      <!--广告卡片-->
+      <!--      <div class="taobao-ad-box" id="taobao-ad-box">-->
+      <!--        <TaobaoLoop></TaobaoLoop>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
 
 <script>
-  import * as api from '../api/api';
+import * as api from '../api/api';
 
-  export default {
-    head() {
-      return {
-        title: '猿村',
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: '猿村,这是个人技术，主要包括系统定制(AOSP)，JavaWeb开始，前端'
-          },
-          {
-            hid: 'keywords',
-            name: 'keywords',
-            content: '猿村,java,android,开发,毕业设计,系统,程序员,拉大锯'
-          }
-        ]
-      }
-    },
-    data() {
-      return {
-        isLoading: false,
-        keyword: '',
-        currentCategoryId: ''
-      }
-    },
-    mounted() {
-      this.$store.commit("setCurrentActivityTab", "index");
-      this.onWindowScroll();
-      window.addEventListener('scroll', this.onWindowScroll);
-      let that = this;
-      window.onresize = function () {
-        that.onWindowScroll();
-      };
-    },
-    beforeDestroy() {
-      window.removeEventListener('scroll', this.onWindowScroll);
-    },
-    methods: {
-      toSearchPage() {
-        //如果没有输入内容，无效
-        this.keyword = this.keyword.trim();
-        if (this.keyword === '') {
-          console.log('内容为空.');
-          return;
+export default {
+  head() {
+    return {
+      title: '猿村-记录程序猿技术成长路线',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '猿村,这是个人技术，包括前端，后台'
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: '猿村,java,C#,开发,系统,程序员,宣君'
         }
-        location.href = "/search?keyword=" + encodeURIComponent(this.keyword);
-      },
-      listArticlesByCategoryId(item) {
-        if (this.currentCategoryId === item.id) {
-          return;
+      ],
+      link: [
+        {
+          rel: 'stylesheet',
+          href: '../static/favicon.ico'
         }
-        this.isLoading = true;
-        //console.log(item);
-        //重置页码
-        this.pageNavigation.currentPage = 1;
-        this.currentCategoryId = item.id;
-        //请求数据
-        api.getArticles(this.currentCategoryId,
-          this.pageNavigation.currentPage,
-          this.pageNavigation.pageSize).then(result => {
-          //处理结果
-          this.handleArticleResult(result);
-        });
-
-      },
-      onWindowScroll() {
-        let scrolledTop = document.documentElement.scrollTop;
-        let scrolledLeft = document.documentElement.scrollLeft;
-        let centerPart = document.getElementById('index-center-part');
-        let parentPart = document.getElementById('index-page-box');
-        //计算我们leftPart顶部
-        let leftPart = document.getElementById('index-left-part');
-        //左边内容悬浮控制
-        if (centerPart && leftPart && parentPart) {
-          //处理上下滑动
-          let baseTop = centerPart.offsetTop;
-          if (scrolledTop <= baseTop) {
-            leftPart.style.top = (baseTop - scrolledTop) + 'px';
-          } else {
-            leftPart.style.top = '20px';
-          }
-          //处理左右滑动
-          if (scrolledLeft > 0) {
-            leftPart.style.left = -scrolledLeft + 'px';
-          } else {
-            //正常状态的，左边应该它老爸的左边
-            leftPart.style.left = parentPart.offsetLeft + 'px';
-          }
-        }
-        //右边内容悬浮控制
-        let taobaoAd = document.getElementById('taobao-ad-box');
-        let hotLabelBox = document.getElementById('wechart-box');
-        if (taobaoAd && hotLabelBox) {
-          let bootomOfTB = taobaoAd.offsetTop + taobaoAd.offsetHeight;
-          //console.log('bootomOfTB == > ' + bootomOfTB);
-          if (scrolledTop >= bootomOfTB) {
-            // console.log('显示悬浮内容...');
-            hotLabelBox.style.position = 'fixed';
-            hotLabelBox.style.top = '20px';
-            hotLabelBox.style.width = '210px';
-            //显示我们的悬浮内容
-          } else {
-            hotLabelBox.style.position = '';
-            hotLabelBox.style.top = '';
-            // console.log('隐藏悬浮内容...')
-          }
-        }
-        //console.log('onscroll...' + scrolledTop);
-      },
-      handleArticleResult(result) {
-        if (result.code === api.success_code) {
-          this.articles = result.data.contents;
-          //回到顶部
-          let topHeader = document.getElementById('blog-header');
-          if (topHeader) {
-            topHeader.scrollIntoView({
-              block: 'start',
-              behavior: 'smooth'
-            })
-          }
-          //处理一下页码
-          this.pageNavigation.currentPage = result.data.currentPage;
-          this.pageNavigation.totalCount = result.data.totalCount;
-          this.pageNavigation.pageSize = result.data.pageSize;
-        } else {
-          this.$message.error(result.message);
-        }
-        this.isLoading = false;
-      },
-      onPageChange(page) {
-        this.isLoading = true;
-        //客户端了
-        //console.log(page);
-        //去加载当前页的内容
-        api.getArticles(this.currentCategoryId, page, this.pageNavigation.pageSize).then(result => {
-          this.handleArticleResult(result);
-        })
-      }
-    },
-    async asyncData({params}) {
-      let userInfoRes = await api.getAdminInfo();
-      let categoriesRes = await api.getCategories();
-      let loopRes = await api.getLoop();
-      let topArticlesRes = await api.getTopArticle();
-      //在服务渲染的
-      let articlesRes = await api.getArticles('', 1, 10);
-      let pageNavigation = {
-        currentPage: articlesRes.data.currentPage,
-        totalCount: articlesRes.data.totalCount,
-        pageSize: articlesRes.data.pageSize
-      };
-      let tempCategories = [];
-      tempCategories.push({
-        name: '全部分类',
-        id: ''
-      });
-      tempCategories = tempCategories.concat(categoriesRes.data);
-      return {
-        pageNavigation: pageNavigation,
-        articles: articlesRes.data.contents,
-        topArticles: topArticlesRes.data,
-        loop: loopRes.data,
-        categories: tempCategories,
-        userInfo: userInfoRes.data
-      };
+      ]
     }
-  };
+  },
+  data() {
+    return {
+      isLoading: false,
+      keyword: '',
+      currentCategoryId: ''
+    }
+  },
+  mounted() {
+    this.$store.commit("setCurrentActivityTab", "index");
+    this.onWindowScroll();
+    window.addEventListener('scroll', this.onWindowScroll);
+    let that = this;
+    window.onresize = function () {
+      that.onWindowScroll();
+    };
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.onWindowScroll);
+  },
+  methods: {
+    toSearchPage() {
+      //如果没有输入内容，无效
+      this.keyword = this.keyword.trim();
+      if (this.keyword === '') {
+        console.log('内容为空.');
+        return;
+      }
+      location.href = "/search?keyword=" + encodeURIComponent(this.keyword);
+    },
+    listArticlesByCategoryId(item) {
+      if (this.currentCategoryId === item.id) {
+        return;
+      }
+      this.isLoading = true;
+      //console.log(item);
+      //重置页码
+      this.pageNavigation.currentPage = 1;
+      this.currentCategoryId = item.id;
+      //请求数据
+      api.getArticles(this.currentCategoryId,
+        this.pageNavigation.currentPage,
+        this.pageNavigation.pageSize).then(result => {
+        //处理结果
+        this.handleArticleResult(result);
+      });
+
+    },
+    onWindowScroll() {
+      let scrolledTop = document.documentElement.scrollTop;
+      let scrolledLeft = document.documentElement.scrollLeft;
+      let centerPart = document.getElementById('index-center-part');
+      let parentPart = document.getElementById('index-page-box');
+      //计算我们leftPart顶部
+      let leftPart = document.getElementById('index-left-part');
+      //左边内容悬浮控制
+      if (centerPart && leftPart && parentPart) {
+        //处理上下滑动
+        let baseTop = centerPart.offsetTop;
+        if (scrolledTop <= baseTop) {
+          leftPart.style.top = (baseTop - scrolledTop) + 'px';
+        } else {
+          leftPart.style.top = '20px';
+        }
+        //处理左右滑动
+        if (scrolledLeft > 0) {
+          leftPart.style.left = -scrolledLeft + 'px';
+        } else {
+          //正常状态的，左边应该它老爸的左边
+          leftPart.style.left = parentPart.offsetLeft + 'px';
+        }
+      }
+      //右边内容悬浮控制
+      let taobaoAd = document.getElementById('taobao-ad-box');
+      let hotLabelBox = document.getElementById('wechart-box');
+      if (taobaoAd && hotLabelBox) {
+        let bootomOfTB = taobaoAd.offsetTop + taobaoAd.offsetHeight;
+        //console.log('bootomOfTB == > ' + bootomOfTB);
+        if (scrolledTop >= bootomOfTB) {
+          // console.log('显示悬浮内容...');
+          hotLabelBox.style.position = 'fixed';
+          hotLabelBox.style.top = '20px';
+          hotLabelBox.style.width = '210px';
+          //显示我们的悬浮内容
+        } else {
+          hotLabelBox.style.position = '';
+          hotLabelBox.style.top = '';
+          // console.log('隐藏悬浮内容...')
+        }
+      }
+      //console.log('onscroll...' + scrolledTop);
+    },
+    handleArticleResult(result) {
+      if (result.code === api.success_code) {
+        this.articles = result.data.contents;
+        //回到顶部
+        let topHeader = document.getElementById('blog-header');
+        if (topHeader) {
+          topHeader.scrollIntoView({
+            block: 'start',
+            behavior: 'smooth'
+          })
+        }
+        //处理一下页码
+        this.pageNavigation.currentPage = result.data.currentPage;
+        this.pageNavigation.totalCount = result.data.totalCount;
+        this.pageNavigation.pageSize = result.data.pageSize;
+      } else {
+        this.$message.error(result.message);
+      }
+      this.isLoading = false;
+    },
+    onPageChange(page) {
+      this.isLoading = true;
+      //客户端了
+      //console.log(page);
+      //去加载当前页的内容
+      api.getArticles(this.currentCategoryId, page, this.pageNavigation.pageSize).then(result => {
+        this.handleArticleResult(result);
+      })
+    }
+  },
+  async asyncData({params}) {
+    let userInfoRes = await api.getAdminInfo();
+    let categoriesRes = await api.getCategories();
+    let loopRes = await api.getLoop();
+    let topArticlesRes = await api.getTopArticle();
+    //在服务渲染的
+    let articlesRes = await api.getArticles('', 1, 10);
+    let pageNavigation = {
+      currentPage: articlesRes.data.currentPage,
+      totalCount: articlesRes.data.totalCount,
+      pageSize: articlesRes.data.pageSize
+    };
+    let tempCategories = [];
+    tempCategories.push({
+      name: '全部分类',
+      id: ''
+    });
+    tempCategories = tempCategories.concat(categoriesRes.data);
+    return {
+      pageNavigation: pageNavigation,
+      articles: articlesRes.data.contents,
+      topArticles: topArticlesRes.data,
+      loop: loopRes.data,
+      categories: tempCategories,
+      userInfo: userInfoRes.data
+    };
+  }
+};
 </script>
 <style>
 
-  .wechat-pop-container {
-    padding: 0 !important;
-  }
+.wechat-pop-container {
+  padding: 0 !important;
+}
 
-  #index-left-part {
-    position: fixed;
-    top: 91px;
-  }
+#index-left-part {
+  position: fixed;
+  top: 91px;
+}
 
-  .taobao-ad-box .el-carousel__button {
-    height: 5px;
-    width: 5px;
-    border-radius: 50%;
-  }
+.taobao-ad-box .el-carousel__button {
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+}
 
-  .taobao-ad-box .el-carousel__container {
-    height: 230px;
-  }
+.taobao-ad-box .el-carousel__container {
+  height: 230px;
+}
 
-  .wechat-subscription img {
-    object-fit: cover;
-    width: 210px;
-    height: 210px;
-  }
+.wechat-subscription img {
+  object-fit: cover;
+  width: 210px;
+  height: 210px;
+}
 
-  .wordCloud .text {
-    cursor: pointer;
-  }
+.wordCloud .text {
+  cursor: pointer;
+}
 
-  .labels-list-box {
-    height: 240px;
-  }
+.labels-list-box {
+  height: 240px;
+}
 
-  .labels-list-box .wordCloud {
-    width: 100%;
-    height: 240px;
-  }
+.labels-list-box .wordCloud {
+  width: 100%;
+  height: 240px;
+}
 
-  .right-card {
-    background: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-  }
+.right-card {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
 
-  .right-card .card-title {
-    font-size: 14px;
-    color: #409EFF;
-    margin-bottom: 10px;
-    font-weight: 600;
-  }
+.right-card .card-title {
+  font-size: 14px;
+  color: #409EFF;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
 
-  .article-page-navigation-bar {
-    text-align: center;
-  }
+.article-page-navigation-bar {
+  text-align: center;
+}
 
-  .article-page-navigation-bar .el-pagination.is-background .el-pager li {
-    background-color: #fff;
-  }
+.article-page-navigation-bar .el-pagination.is-background .el-pager li {
+  background-color: #fff;
+}
 
-  .labels .el-tag--medium {
-    height: 22px;
-    line-height: 22px;
-  }
+.labels .el-tag--medium {
+  height: 22px;
+  line-height: 22px;
+}
 
-  .labels .el-tag a:hover {
-    color: #409EFF;
-  }
+.labels .el-tag a:hover {
+  color: #409EFF;
+}
 
-  .labels .el-tag a {
-    color: #909399;
-    padding: 0 10px;
-  }
+.labels .el-tag a {
+  color: #909399;
+  padding: 0 10px;
+}
 
-  .labels .el-tag {
-    cursor: pointer;
-    padding: 0;
-    margin-right: 10px;
-  }
+.labels .el-tag {
+  cursor: pointer;
+  padding: 0;
+  margin-right: 10px;
+}
 
-  .labels {
-    margin-top: 20px;
-  }
+.labels {
+  margin-top: 20px;
+}
 
-  .read-more:hover {
-    color: #444444;
-  }
+.read-more:hover {
+  color: #444444;
+}
 
-  .read-more {
-    font-size: 12px;
-    color: #999999;
-    cursor: pointer;
-    border-radius: 4px;
-    padding: 3px 10px;
-  }
+.read-more {
+  font-size: 12px;
+  color: #999999;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 3px 10px;
+}
 
-  .article-summary {
-    max-width: 500px;
-    margin-top: 20px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-    color: #909399;
-  }
+.article-summary {
+  max-width: 500px;
+  margin-top: 20px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  color: #909399;
+}
 
-  .article-title .top-tips {
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    vertical-align: middle;
-    background: #ff4500;
-    color: #fff;
-  }
+.article-title .top-tips {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  vertical-align: middle;
+  background: #ff4500;
+  color: #fff;
+}
 
-  .article-title {
-    display: -webkit-box;
-    max-width: 500px;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-    margin-top: 10px;
-  }
+.article-title {
+  display: -webkit-box;
+  max-width: 500px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  margin-top: 10px;
+}
 
-  .article-title .title a:hover {
-    color: #409EFF;
-  }
+.article-title .title a:hover {
+  color: #409EFF;
+}
 
-  .article-title .title a {
-    cursor: pointer;
-    font-size: 20px;
-    vertical-align: middle;
-    color: #606266;
-  }
+.article-title .title a {
+  cursor: pointer;
+  font-size: 20px;
+  vertical-align: middle;
+  color: #606266;
+}
 
-  .article-item {
-    background: #fff;
-    padding: 10px;
-    margin-bottom: 20px;
-  }
+.article-item {
+  background: #fff;
+  padding: 10px;
+  margin-bottom: 20px;
+}
 
-  .top-articles-box {
-    margin-top: 20px;
-  }
+.top-articles-box {
+  margin-top: 20px;
+}
 
-  .article-cover img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 4px;
-  }
+.article-cover img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+}
 
-  .loop-box {
-    background: #fff;
-    padding: 10px;
-  }
+.loop-box {
+  background: #fff;
+  padding: 10px;
+}
 
-  .loop-box img {
-    width: 100%;
-    border-radius: 4px;
-    height: 300px;
-  }
+.loop-box img {
+  width: 100%;
+  border-radius: 4px;
+  height: 300px;
+}
 
-  .left-categories-box .category-item:hover,
-  .left-categories-box .category-item-active {
-    background: #F5F5F5;
-    color: #409EFF !important;
-  }
+.left-categories-box .category-item:hover,
+.left-categories-box .category-item-active {
+  background: #F5F5F5;
+  color: #409EFF !important;
+}
 
-  .left-categories-box .category-item, .left-categories-box .category-item-active {
-    padding: 10px 5px;
-    cursor: pointer;
-    margin-left: 15px;
-    margin-right: 15px;
-    color: #999999;
-  }
+.left-categories-box .category-item, .left-categories-box .category-item-active {
+  padding: 10px 5px;
+  cursor: pointer;
+  margin-left: 15px;
+  margin-right: 15px;
+  color: #999999;
+}
 
-  .left-categories-box {
-    background: #fff;
-    margin-bottom: 20px;
-    margin-top: 20px;
-    text-align: center;
-  }
+.left-categories-box {
+  background: #fff;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
 
-  .left-user-self-links a > span:hover, .left-user-self-links .sobwechat:hover {
-    color: #409EFF;
-  }
+.left-user-self-links a > span:hover, .left-user-self-links .sobwechat:hover {
+  color: #409EFF;
+}
 
-  .left-user-self-links {
-    text-align: center;
-    margin-top: 20px;
-    background: #fff;
-  }
+.left-user-self-links {
+  text-align: center;
+  margin-top: 20px;
+  background: #fff;
+}
 
-  .left-user-self-links a > span, .left-user-self-links .sobwechat {
-    font-size: 30px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-left: 15px;
-    display: inline-block;
-    color: #CACACA;
-    margin-right: 15px;
-  }
+.left-user-self-links a > span, .left-user-self-links .sobwechat {
+  font-size: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 15px;
+  display: inline-block;
+  color: #CACACA;
+  margin-right: 15px;
+}
 
-  .index-left-user-info {
-    background: #fff;
-    margin-top: 10px;
-    text-align: center;
-  }
+.index-left-user-info {
+  background: #fff;
+  margin-top: 10px;
+  text-align: center;
+}
 
-  .index-left-user-info .user-sign {
-    margin-top: 14px;
-    color: #CACACA;
-  }
+.index-left-user-info .user-sign {
+  margin-top: 14px;
+  color: #CACACA;
+}
 
-  .index-left-user-info .user-name {
-    margin-top: 14px;
-    color: #606060;
-    font-size: 18px;
-  }
+.index-left-user-info .user-name {
+  margin-top: 14px;
+  color: #606060;
+  font-size: 18px;
+}
 
-  .index-left-user-info .user-avatar img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-  }
+.index-left-user-info .user-avatar img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
 
-  .index-page-box {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+.index-page-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
 
-  .index-right-part {
+.index-right-part {
 
-  }
+}
 
-  .index-left-part {
-    background: #fff;
-    margin-right: 10px;
-    width: 230px;
-  }
+.index-left-part {
+  background: #fff;
+  margin-right: 10px;
+  width: 230px;
+}
 
-  .index-right-part {
-    margin-left: 10px;
-    width: 230px;
-  }
+.index-right-part {
+  margin-left: 10px;
+  width: 230px;
+}
 
-  .index-center-part {
-    width: 640px;
-    margin-right: 10px;
-    margin-left: 250px;
-  }
+.index-center-part {
+  width: 640px;
+  margin-right: 10px;
+  margin-left: 250px;
+}
 </style>

@@ -63,12 +63,12 @@
           {
             hid: 'description',
             name: 'description',
-            content: '猿村-登录'
+            content: '登录'
           },
           {
             hid: 'keywords',
             name: 'keywords',
-            content: '猿村,java,android,开发,毕业设计,系统,程序员,拉大锯'
+            content: '猿村,java,C#,开发,系统,程序员,宣君'
           }
         ]
       }
@@ -332,7 +332,7 @@
 
 
   .login-box {
-    border-radius: 4px;
+    border-radius: 8px;
     margin-top: 20px;
     padding: 20px;
     margin-bottom: 20px;

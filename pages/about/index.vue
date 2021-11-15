@@ -3,9 +3,9 @@
     <div class="about-left-part float-left" id="about-left-part">
       <el-tabs tab-position="left" v-model="target" @tab-click="onLeftItemClick">
         <el-tab-pane label="关于猿村(about)" name="about"></el-tab-pane>
-        <el-tab-pane label="我们的使命(mission)" name="mission"></el-tab-pane>
-        <el-tab-pane label="我们的愿景(vision)" name="vision"></el-tab-pane>
-        <el-tab-pane label="旗下网站(websites)" name="websites"></el-tab-pane>
+        <el-tab-pane label="猿村的使命(mission)" name="mission"></el-tab-pane>
+        <el-tab-pane label="猿村的愿景(vision)" name="vision"></el-tab-pane>
+        <el-tab-pane label="猿村站点(websites)" name="websites"></el-tab-pane>
         <el-tab-pane label="联系我们(contacts)" name="contacts"></el-tab-pane>
       </el-tabs>
     </div>
@@ -15,42 +15,40 @@
           关于猿村
         </h1>
         <p>
-          猿村创立于2014年11月22日，那是一个阳光明媚的下午。韩寒的电影《后会无期》里面有一句台词：sun of beach
-          （猿村），于是猿村创立。猿村是一个学习编程的社区网站。
-          你可以在这里学习，写，写笔记，分享经验，提问题，分享链接。你可以遇到志同道合的人，收获知识、经验与同性朋友。
+          猿村创立于2021年11月15日，想找一个喜欢的，能记录自己技术路线成长的地方，于是猿村诞生...
         </p>
       </div>
       <div class="about-item">
         <h1 id="mission">
-          我们的使命
+          猿村的使命
         </h1>
         <p>
-          让学习编程变得更加简单。
+          记录自己的技术成长路线。
         </p>
       </div>
       <div class="about-item">
         <h1 id="vision">
-          我们的愿景
+          猿村的愿景
         </h1>
         <p>
-          让每一个热爱编程的年轻人成为优秀的程序员。
+          有更多的程序猿(媛)们加入
         </p>
       </div>
       <div class="about-item">
         <h1 id="websites">
-          旗下网站
+          猿村站点
         </h1>
         <div class="websites">
           <ul>
             <li>
-              <a href="https://www.sunofbeach.net" target="_blank">猿村主站</a>
+              <a href="https://www.xuyuanjun.cn" target="_blank">猿村主站</a>
             </li>
-            <li>
-              <a href="https://shop.sunofbeach.net" target="_blank">猿村商城</a>
-            </li>
-            <li>
-              <a href="https://sunofbeach.taobao.com" target="_blank">猿村网店</a>
-            </li>
+<!--            <li>-->
+<!--              <a href="https://shop.sunofbeach.net" target="_blank">猿村商城</a>-->
+<!--            </li>-->
+<!--            <li>-->
+<!--              <a href="https://sunofbeach.taobao.com" target="_blank">猿村网店</a>-->
+<!--            </li>-->
           </ul>
         </div>
       </div>
@@ -59,15 +57,15 @@
           联系我们
         </h1>
         <p class="contact">
-          广告投放 ad@sunofbeach.net(仅作演示)
+          广告投放 xxxx(演示)
           <br>
-          商务合作 bd@sunofbeach.net(仅作演示)
+          商务合作 xxxx(演示)
           <br>
-          内容投诉 rp@sunofbeach.net(仅作演示)
+          内容投诉 xxxx(演示)
         </p>
       </div>
       <div class="about-img">
-        <img src="/about.png">
+<!--        <img src="/about.png">-->
       </div>
     </div>
   </div>
@@ -82,12 +80,12 @@
           {
             hid: 'description',
             name: 'description',
-            content: '猿村-关于'
+            content: '猿村,这是个人技术，包括前端，后台'
           },
           {
             hid: 'keywords',
             name: 'keywords',
-            content: '猿村,java,android,开发,毕业设计,系统,程序员,拉大锯'
+            content: '猿村,java,C#,开发,系统,程序员,宣君'
           }
         ]
       }
@@ -141,10 +139,6 @@
         } else {
           this.isClickLeftSwitch = false;
         }
-        //console.log("scroll...");
-        // if (dy === 0) {
-        //
-        // }
       }
     },
     beforeDestroy() {

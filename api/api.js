@@ -1,14 +1,19 @@
 import http from './http';
 
+// 服务器
+ //const baseUrl =  'http://42.192.76.36:8010';
+// 测试
 const baseUrl =  'http://localhost:2021';
 
 export const success_code = 20000;
 
 export const getAdminInfo = () => {
   if (process.client) {
-    return http.requestGet('/user/user_info/909640634728448000');
+    // 测试账号  909839901371924480
+    // 生产账号  909839612229189632
+    return http.requestGet('/user/user_info/909839901371924480');
   } else {
-    return http.requestGet(baseUrl + '/user/user_info/909640634728448000');
+    return http.requestGet(baseUrl + '/user/user_info/909839901371924480');
   }
 };
 
@@ -56,10 +61,6 @@ export const getSearchContent = (categoryId, keyword,
                                  page,
                                  size,
                                  sort) => {
-  // console.log(categoryId);
-  // console.log(keyword);
-  // console.log(page);
-  // console.log(sort);
   return http.requestGet(baseUrl + "/portal/search?keyword=" + encodeURIComponent(keyword)
     + "&page=" + page + "&size="
     + size + "&categoryId=" + categoryId

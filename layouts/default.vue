@@ -46,9 +46,6 @@
         <a href="/about" target="_blank">
           <span><i class="el-icon-goods"></i> 关于</span>
         </a>
-        <a href="https://www.sunofbeach.net/wenda" target="_blank">
-          <span><i class="sob_blog sobabout_line"></i> 技术交流</span>
-        </a>
       </div>
     </div>
     <Nuxt/>
@@ -59,7 +56,7 @@
           <a href="https://www.sunofbeach.net" target="_blank">
             猿村
           </a>
-          (2014-2020） 本网站由程序猿(媛)用爱驱动
+          (2021） 本网站由宣君创立，记录程序猿的历程
         </p>
       </div>
       <div class="bottom-link">
@@ -74,6 +71,9 @@
         <span>
          <a href="/link" target="_blank">友情链接</a>
         </span>
+      </div>
+      <div class="beian-box">
+        <a href="https://beian.miit.gov.cn/" target="_blank"><span>鄂ICP备2020020513号-1</span></a>
       </div>
     </div>
     <div id="g-to-top" style="display: none;" @click="toTop">
@@ -116,7 +116,8 @@
             }
           })
         } else if (command === 'adminCenter') {
-          location.href = 'http://mp.coincent.cn/#/index'
+          //location.href = 'http://mp.xuyuanjun.cn/#/index';
+           location.href = 'http://lochalhost:8080/#/index'
         } else if (command === 'userInfo') {
           location.href = "/userInfo/" + this.userInfo.id;
         }
@@ -189,6 +190,18 @@
     bottom: 200px;
   }
 
+  .beian-box{
+    margin-top: 10px;
+  }
+
+  .beian-box span:hover{
+    color: #409EFF;
+  }
+
+  .beian-box span{
+    color: #737F90;
+  }
+
   .bottom-link a:hover {
     color: #409EFF;
   }
@@ -232,7 +245,7 @@
   }
 
   .default-border-radius {
-    border-radius: 4px;
+    border-radius: 8px;
   }
 
   .navigation-box span:hover, .login-tips-text-box span:hover {
@@ -300,6 +313,7 @@
   }
 
   .blog-header {
+    margin-top: 10px;
     line-height: 30px;
     position: relative;
     background: #Fff;

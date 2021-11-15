@@ -146,20 +146,21 @@
             <WordCloud></WordCloud>
           </div>
         </div>
-        <div class="article-right-card" id="article-right-taobao-ad">
-          <div class="right-card-title">
-            赞助商广告
-          </div>
-          <div class="right-card-content article-right-taobao-ad">
-            <TaobaoLoop></TaobaoLoop>
-          </div>
-        </div>
+        <!--广告-->
+<!--        <div class="article-right-card" id="article-right-taobao-ad">-->
+<!--          <div class="right-card-title">-->
+<!--            赞助商广告-->
+<!--          </div>-->
+<!--          <div class="right-card-content article-right-taobao-ad">-->
+<!--            <TaobaoLoop></TaobaoLoop>-->
+<!--          </div>-->
+<!--        </div>-->
         <div class="article-right-card" id="article-right-subscription-box">
           <div class="right-card-title">
             公众号
           </div>
           <div class="right-card-content">
-            <img src="https://imgs.sunofbeaches.com/group1/M00/00/02/rBPLFV1xNueAUn46AABvo6ZL4uM251.jpg">
+            <img src="http://fs.xuyuanjun.cn/20211109/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg">
           </div>
         </div>
         <div class="article-right-card" id="catalog-box">
@@ -682,12 +683,14 @@ export default {
   padding: 20px;
   background: #fff;
   margin-bottom: 20px;
+  border-radius: 8px;
 }
 
 .article-comment-list {
   background: #fff;
   margin-bottom: 20px;
   padding: 20px;
+  border-radius: 8px;
 }
 
 .comment-item-list {
@@ -709,6 +712,7 @@ export default {
 .article-recommend-box {
   background: #fff;
   padding: 20px;
+  border-radius: 8px;
 }
 
 
@@ -737,6 +741,7 @@ export default {
   width: 300px !important;
   margin-bottom: 20px;
   background: #fff;
+  border-radius: 8px;
 }
 
 .right-card-content .wordCloud {
@@ -772,7 +777,7 @@ export default {
 
 
 .article-content p img {
-  max-width: 780px;
+  max-width: 740px;
   cursor: zoom-in;
   border-radius: 4px;
 }
@@ -858,6 +863,7 @@ export default {
   background: #fff;
   margin-bottom: 20px;
   padding: 20px;
+  border-radius: 8px;
 }
 
 .article-left-part {
