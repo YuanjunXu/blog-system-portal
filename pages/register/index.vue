@@ -6,7 +6,7 @@
       </div>
       <div class="form-content">
         <el-form label-width="100px">
-          <el-form-item label="人类验证码" required>
+          <el-form-item label="图灵验证码" required>
             <el-input v-model="captchaCode" placeholder="请输入右侧验证码"
                       @keyup.enter.native="doLogin"></el-input>
             <img
@@ -58,7 +58,7 @@ import {hex_md5} from "../../utils/md5";
 * 3、邮箱验证码
 * 1、用户名
 * 4、密码
-* 5、人类验证码
+* 5、图灵验证码
 * 6、注册按钮
 *
 * 结果处理：
@@ -114,7 +114,7 @@ export default {
     doRegister() {
       //检查内容
       if (this.captchaCode === '') {
-        this.$message.error("证明一下你是人类");
+        this.$message.error("证明一下你是图灵");
         return;
       }
       if (this.sobUser.email === '') {
@@ -168,14 +168,14 @@ export default {
     },
     getVerifyCode() {
       /*
-      * 检查人类验证码是否为空
+      * 检查图灵验证码是否为空
       * 检查邮箱地址是否为空
       * 校验邮箱格式
       * 请求发送验证码
       * 禁止按钮点击并且倒计时
       * */
       if (this.captchaCode === '') {
-        this.$message.error("请输入人类验证码");
+        this.$message.error("请输入图灵验证码");
         return;
       }
 

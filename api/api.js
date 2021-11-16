@@ -1,25 +1,25 @@
 import http from './http';
 
-// 服务器
-//const baseUrl =  'http://42.192.76.36:8010';
+// 生产服务器
+const baseUrl =  'http://42.192.76.36:8010';
 // 测试
-const baseUrl =  'http://localhost:2021';
+// const baseUrl =  'http://localhost:2021';
 
 export const success_code = 20000;
 
 export const getAdminInfo = () => {
   if (process.client) {
     // 生产账号  909839612229189632
-    // return http.requestGet('/user/user_info/909839612229189632');
+    return http.requestGet('/user/user_info/909839612229189632');
 
     // 测试账号  909839901371924480
-    return http.requestGet('/user/user_info/909839901371924480');
+    // return http.requestGet('/user/user_info/909839901371924480');
   } else {
     // 生产账号
-    // return http.requestGet(baseUrl + '/user/user_info/909839612229189632');
+    return http.requestGet(baseUrl + '/user/user_info/909839612229189632');
 
     // 测试账号
-    return http.requestGet(baseUrl + '/user/user_info/909839901371924480');
+    // return http.requestGet(baseUrl + '/user/user_info/909839901371924480');
   }
 };
 

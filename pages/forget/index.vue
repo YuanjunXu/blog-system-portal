@@ -7,7 +7,7 @@
       <div class="forget-form-container">
         <div class="verify-code-container" v-if="showType==='verifyCode'">
           <el-form label-width="100px">
-            <el-form-item label="人类验证码" required>
+            <el-form-item label="图灵验证码" required>
               <el-input v-model="captchaCode" placeholder="请输入右侧验证码"
                         @keyup.enter.native="doLogin"></el-input>
               <img
@@ -99,14 +99,14 @@
       },
       getVerifyCode() {
         /*
-        * 检查人类验证码是否为空
+        * 检查图灵验证码是否为空
         * 检查邮箱地址是否为空
         * 校验邮箱格式
         * 请求发送验证码
         * 禁止按钮点击并且倒计时
         * */
         if (this.captchaCode === '') {
-          this.$message.error("请输入人类验证码");
+          this.$message.error("请输入图灵验证码");
           return;
         }
 
@@ -151,7 +151,7 @@
       },
       resetPassword() {
         if (this.captchaCode === '') {
-          this.$message.error('请证明你是人类');
+          this.$message.error('请证明你是图灵');
           return;
         }
         if (this.sobUser.email === '') {
