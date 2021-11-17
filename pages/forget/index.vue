@@ -72,7 +72,7 @@
     },
     methods: {
       mounted() {
-        this.$store.commit("setCurrentActivityTab", "index");
+        this.$store.commit("setCurrentActivityTab", "forget");
       },
       setPassword() {
         //真的是找回密码

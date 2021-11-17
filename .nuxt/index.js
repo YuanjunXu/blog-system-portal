@@ -18,6 +18,7 @@ import nuxt_plugin_axios_6b4f998a from 'nuxt_plugin_axios_6b4f998a' // Source: .
 import nuxt_plugin_elementui_d905880e from 'nuxt_plugin_elementui_d905880e' // Source: ..\\plugins\\element-ui (mode: 'all')
 import nuxt_plugin_dateformat_9df47bce from 'nuxt_plugin_dateformat_9df47bce' // Source: ..\\plugins\\dateformat (mode: 'all')
 import nuxt_plugin_wordcloud_f0c2c2b4 from 'nuxt_plugin_wordcloud_f0c2c2b4' // Source: ..\\plugins\\word-cloud (mode: 'client')
+import nuxt_plugin_vuemavoneditor_e5e1de58 from 'nuxt_plugin_vuemavoneditor_e5e1de58' // Source: ..\\plugins\\vue-mavon-editor (mode: 'client')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -232,6 +233,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (process.client && typeof nuxt_plugin_wordcloud_f0c2c2b4 === 'function') {
     await nuxt_plugin_wordcloud_f0c2c2b4(app.context, inject)
+  }
+
+  if (process.client && typeof nuxt_plugin_vuemavoneditor_e5e1de58 === 'function') {
+    await nuxt_plugin_vuemavoneditor_e5e1de58(app.context, inject)
   }
 
   // Lock enablePreview in context

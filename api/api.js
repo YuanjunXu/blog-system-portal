@@ -1,25 +1,25 @@
 import http from './http';
 
-// 生产服务器
-const baseUrl =  'http://42.192.76.36:8010';
+//生产服务器
+//const baseUrl =  'http://42.192.76.36:8010';
 // 测试
-// const baseUrl =  'http://localhost:2021';
+const baseUrl = 'http://localhost:2021';
 
 export const success_code = 20000;
 
 export const getAdminInfo = () => {
   if (process.client) {
     // 生产账号  909839612229189632
-    return http.requestGet('/user/user_info/909839612229189632');
+    // return http.requestGet('/user/user_info/909839612229189632');
 
     // 测试账号  909839901371924480
-    // return http.requestGet('/user/user_info/909839901371924480');
+    return http.requestGet('/user/user_info/909839901371924480');
   } else {
     // 生产账号
-    return http.requestGet(baseUrl + '/user/user_info/909839612229189632');
+    // return http.requestGet(baseUrl + '/user/user_info/909839612229189632');
 
     // 测试账号
-    // return http.requestGet(baseUrl + '/user/user_info/909839901371924480');
+    return http.requestGet(baseUrl + '/user/user_info/909839901371924480');
   }
 };
 
@@ -91,7 +91,10 @@ export const doLogin = (verifyCode, sobUser) => {
 };
 
 export const checkToken = () => {
-  return http.requestGet('/user/utils/check_token');
+  if (process.client) {
+    return http.requestGet('/user/utils/check_token');
+  }
+  return http.requestGet(baseUrl + '/user/utils/check_token');
 };
 
 export const doLogout = () => {
@@ -161,6 +164,28 @@ export const getUserInfo = (userId) => {
   } else {
     return http.requestGet(baseUrl + "/user/user_info/" + userId);
   }
+};
+
+
+// 提交文章
+export const postArticle = (article) => {
+  return http.requestPost('/portal/article/post_article', article);
+}
+
+export const updateArticle = (id, article) => {
+  return http.requestPut('/portal/article/update_article/' + id, article);
+}
+
+//获取图片列表
+export const listImages = (page, size, original) => {
+  return http.requestGet('/portal/image/list/' + page + '/' + size + '?original=' + original);
+};
+
+export const getArticleDetail = (articleId) => {
+  if (process.client) {
+    return http.requestGet('/portal/article/get_article_for_user_edit/' + articleId);
+  }
+  return http.requestGet(baseUrl + '/portal/article/get_article_for_user_edit/' + articleId);
 };
 
 

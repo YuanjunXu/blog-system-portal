@@ -29,7 +29,7 @@ export default {
   */
   css: [
     'element-ui/lib/theme-chalk/index.css',
-    '@/assets/icons/iconfont.css'
+    '@/assets/icons/iconfont.css',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -46,6 +46,10 @@ export default {
     },
     {
       src: '@/plugins/word-cloud',
+      ssr: false
+    },
+    {
+      src: '@/plugins/vue-mavon-editor',
       ssr: false
     },
   ],

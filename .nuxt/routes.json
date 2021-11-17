@@ -49,6 +49,13 @@
     "_name": "_2f17e4f7"
   },
   {
+    "name": "editor-id",
+    "path": "/editor/:id?",
+    "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\editor\\\\_id.vue",
+    "chunkName": "pages/editor/_id",
+    "_name": "_02a7e76c"
+  },
+  {
     "name": "userInfo-id",
     "path": "/userInfo/:id?",
     "component": "F:\\\\Code\\\\Java\\\\blogSystem\\\\blog-system-portal\\\\pages\\\\userInfo\\\\_id.vue",

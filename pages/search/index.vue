@@ -25,7 +25,7 @@
         <div class="select-item">
           <span :class="categoryId===''?'category-active':''" @click="doSearchByCategory('')">全部分类</span><span
           @click="doSearchByCategory(item.id)" :class="categoryId===item.id?'category-active':''"
-          v-for="item in categories" :key="item.id">{{item.name}}</span>
+          v-for="item in categories" :key="item.id">{{ item.name }}</span>
         </div>
       </div>
     </div>
@@ -50,10 +50,10 @@
               </div>
               <div class="search-info-box">
               <span class="sob_blog sobicon">
-                {{item.blogCreateTime | formatDate("yyyy-MM-dd hh:mm")}}
+                {{ item.blogCreateTime | formatDate("yyyy-MM-dd hh:mm") }}
               </span>
                 <span class="sob_blog sobview">
-                {{item.blogViewCount}}
+                {{ item.blogViewCount }}
               </span>
                 <span>
                 <el-tag
@@ -100,12 +100,22 @@
           </div>
           <WordCloud></WordCloud>
         </div>
-        <div class="search-taobao-ad default-border-radius">
-          <div class="card-header">
-            赞助商广告
+        <!--        <div class="search-taobao-ad default-border-radius">-->
+        <!--          <div class="card-header">-->
+        <!--            赞助商广告-->
+        <!--          </div>-->
+        <!--          <div class="search-taobao-ad-box">-->
+        <!--            <TaobaoLoop></TaobaoLoop>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <div class="right-card">
+          <div class="card-title">
+            公众号
           </div>
-          <div class="search-taobao-ad-box">
-            <TaobaoLoop></TaobaoLoop>
+          <div class="card-content">
+            <div class="wechat-subscription">
+              <img src="http://fs.xuyuanjun.cn/20211109/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg">
+            </div>
           </div>
         </div>
       </div>
@@ -113,284 +123,303 @@
   </div>
 </template>
 <script>
-  import * as api from '../../api/api';
+import * as api from '../../api/api';
 
-  export default {
-    head() {
-      return {
-        title: '猿村-搜索',
-        meta: [
-          {
-            hid: 'description',
-            name: 'description',
-            content: '猿村-搜索页面'
-          },
-          {
-            hid: 'keywords',
-            name: 'keywords',
-            content: '猿村,java,C#,开发,系统,程序员,宣君'
-          }
-        ]
-      }
-    },
-    mounted() {
-      this.$store.commit("setCurrentActivityTab", "index");
-    },
-    async asyncData({query}) {
-      let categoryId = query.categoryId ? query.categoryId : '';
-      let keyword = query.keyword ? query.keyword : '';
-      let page = query.page ? query.page : 1;
-      let size = query.size ? query.size : 10;
-      let sort = query.sort ? query.sort : '';
-
-      //发起请求，获取搜索内容
-      let result = await api.getSearchContent(categoryId, keyword,
-        page,
-        size,
-        sort);
-
-      //console.log(result.data);
-      //处理一下标签再返回
-      let temResult = result.data;
-      let contents = temResult.contents;
-      contents.forEach(item => {
-        item.blogLabels = item.blogLabels.split("-");
-        //console.log(item.blogLabels);
-      });
-
-      //获取分类内容
-      let categoriesRes = await api.getCategories();
-      //console.log(categoriesRes.data);
-      return {
-        categories: categoriesRes.data,
-        categoryId: categoryId,
-        keyword: keyword,
-        page: parseInt(page),
-        size: parseInt(size),
-        sort: sort,
-        isFirst: temResult.first,
-        isLast: temResult.last,
-        searchResult: temResult
-      }
-    },
-    methods: {
-      doSearchByCategory(categoryId) {
-        location.href = "/search?keyword=" + encodeURIComponent(this.keyword) + '&sort=' + this.sort + '&categoryId=' + categoryId;
-      },
-      doSearchBySort(sort) {
-        //console.log(sort);
-        //首先，进来的不是空，是2，表示按时间排序
-        //如果跟当前的sort一样，那变换成1
-        if (sort === '2' && this.sort === '2') {
-          sort = '1';
+export default {
+  head() {
+    return {
+      title: '猿村-搜索',
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: '猿村-搜索页面'
+        },
+        {
+          hid: 'keywords',
+          name: 'keywords',
+          content: '猿村,java,C#,开发,系统,程序员,宣君'
         }
+      ]
+    }
+  },
+  mounted() {
+    this.$store.commit("setCurrentActivityTab", "index");
+  },
+  async asyncData({query}) {
+    let categoryId = query.categoryId ? query.categoryId : '';
+    let keyword = query.keyword ? query.keyword : '';
+    let page = query.page ? query.page : 1;
+    let size = query.size ? query.size : 10;
+    let sort = query.sort ? query.sort : '';
 
-        //如果是4，表是按浏览量降序DESC
-        if (sort === '4' && this.sort === '4') {
-          sort = '3';
-        }
-        // console.log(sort);
-        location.href = "/search?keyword=" + encodeURIComponent(this.keyword) + '&sort=' + sort + '&categoryId=' + this.categoryId;
-      },
-      toSearchPage() {
-        location.href = "/search?keyword=" + encodeURIComponent(this.keyword);
+    //发起请求，获取搜索内容
+    let result = await api.getSearchContent(categoryId, keyword,
+      page,
+      size,
+      sort);
+
+    //console.log(result.data);
+    //处理一下标签再返回
+    let temResult = result.data;
+    let contents = temResult.contents;
+    contents.forEach(item => {
+      item.blogLabels = item.blogLabels.split("-");
+      //console.log(item.blogLabels);
+    });
+
+    //获取分类内容
+    let categoriesRes = await api.getCategories();
+    //console.log(categoriesRes.data);
+    return {
+      categories: categoriesRes.data,
+      categoryId: categoryId,
+      keyword: keyword,
+      page: parseInt(page),
+      size: parseInt(size),
+      sort: sort,
+      isFirst: temResult.first,
+      isLast: temResult.last,
+      searchResult: temResult
+    }
+  },
+  methods: {
+    doSearchByCategory(categoryId) {
+      location.href = "/search?keyword=" + encodeURIComponent(this.keyword) + '&sort=' + this.sort + '&categoryId=' + categoryId;
+    },
+    doSearchBySort(sort) {
+      //console.log(sort);
+      //首先，进来的不是空，是2，表示按时间排序
+      //如果跟当前的sort一样，那变换成1
+      if (sort === '2' && this.sort === '2') {
+        sort = '1';
       }
+
+      //如果是4，表是按浏览量降序DESC
+      if (sort === '4' && this.sort === '4') {
+        sort = '3';
+      }
+      // console.log(sort);
+      location.href = "/search?keyword=" + encodeURIComponent(this.keyword) + '&sort=' + sort + '&categoryId=' + this.categoryId;
+    },
+    toSearchPage() {
+      location.href = "/search?keyword=" + encodeURIComponent(this.keyword);
     }
   }
+}
 </script>
 <style>
-  .search-input-parent {
-    background: #fff;
-  }
 
-  .search-hot-word, .search-taobao-ad {
-    margin-bottom: 20px;
-    background: #fff;
-    padding: 20px;
-  }
+.right-card .wechat-subscription {
+  text-align: center;
+}
 
-  .search-taobao-ad-box .el-carousel__container {
-    height: 260px;
-  }
+.right-card {
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
 
-  .search-taobao-ad-box {
-    width: 260px;
-  }
+.right-card .card-title {
+  font-size: 14px;
+  color: #409EFF;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
 
-  .card-header {
-    font-weight: 600;
-    padding-top: 5px;
-    padding-bottom: 15px;
-    border-bottom: solid 1px #DCDFE6;
-  }
+.search-input-parent {
+  background: #fff;
+}
 
-  .search-result-empty-box .sobemptybox {
-    font-size: 70px;
+.search-hot-word, .search-taobao-ad {
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 20px;
+}
 
-  }
+.search-taobao-ad-box .el-carousel__container {
+  height: 260px;
+}
 
-  .search-result-empty-box .empty-text {
-    font-size: 20px;
-    line-height: 40px;
-  }
+.search-taobao-ad-box {
+  width: 260px;
+}
 
-  .search-result-empty-box {
-    height: 380px;
-    color: #50A7FC;
-    margin-top: 120px;
-    text-align: center;
-  }
+.card-header {
+  font-weight: 600;
+  padding-top: 5px;
+  padding-bottom: 15px;
+  border-bottom: solid 1px #DCDFE6;
+}
 
-  .category-active, .sort-active {
-    background: dodgerblue;
-    border-radius: 4px;
-    color: #fff !important;
-  }
+.search-result-empty-box .sobemptybox {
+  font-size: 70px;
 
-  .select-item span:hover {
-    color: dodgerblue;
-  }
+}
 
-  .select-item span {
-    color: #7f828b;
-    margin-left: 8px;
-    font-size: 13px;
-    cursor: pointer;
-    margin-right: 8px;
-    padding: 5px 15px;
-  }
+.search-result-empty-box .empty-text {
+  font-size: 20px;
+  line-height: 40px;
+}
 
-  .select-item {
-    margin-top: 10px;
-    line-height: 24px;
-  }
+.search-result-empty-box {
+  height: 380px;
+  color: #50A7FC;
+  margin-top: 120px;
+  text-align: center;
+}
 
-  .search-logo .logo {
-    font-size: 30px;
-  }
+.category-active, .sort-active {
+  background: dodgerblue;
+  border-radius: 4px;
+  color: #fff !important;
+}
 
-  .search-logo {
-    color: dodgerblue;
-    margin-right: 20px;
-    font-size: 20px;
-  }
+.select-item span:hover {
+  color: dodgerblue;
+}
 
-  .search-input-container {
-    line-height: 40px;
-    display: inline-block;
-  }
+.select-item span {
+  color: #7f828b;
+  margin-left: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-right: 8px;
+  padding: 5px 15px;
+}
 
-  .search-input .el-input__inner {
-    border-width: 2px;
-  }
+.select-item {
+  margin-top: 10px;
+  line-height: 24px;
+}
 
-  .search-input {
-    width: 250px;
-    margin-right: 20px;
-  }
+.search-logo .logo {
+  font-size: 30px;
+}
 
-  .search-pre:hover, .search-next:hover {
-    color: dodgerblue;
-  }
+.search-logo {
+  color: dodgerblue;
+  margin-right: 20px;
+  font-size: 20px;
+}
 
-  .search-pre-disable, .search-next-disable {
-    cursor: not-allowed;
-  }
+.search-input-container {
+  line-height: 40px;
+  display: inline-block;
+}
 
-  .search-pre, .search-next {
-    cursor: pointer;
-  }
+.search-input .el-input__inner {
+  border-width: 2px;
+}
 
-  .search-result-list {
-    padding-top: 20px;
-    background: #fff;
-  }
+.search-input {
+  width: 250px;
+  margin-right: 20px;
+}
 
-  .search-result-page-navigation-box {
-    background: #fff;
-    margin-top: 20px;
-    padding: 20px;
-  }
+.search-pre:hover, .search-next:hover {
+  color: dodgerblue;
+}
 
-  .search-info-box span {
-    margin-right: 10px;
-  }
+.search-pre-disable, .search-next-disable {
+  cursor: not-allowed;
+}
 
-  .search-info-box {
-    color: #999;
-    font-size: 14px;
-  }
+.search-pre, .search-next {
+  cursor: pointer;
+}
 
-  .result-item-content {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color: #4d5156;
-    font-size: 16px;
-    line-height: 20px;
-    height: 40px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
+.search-result-list {
+  padding-top: 20px;
+  background: #fff;
+}
 
-  .search-result-item {
-    margin-bottom: 20px;
-  }
+.search-result-page-navigation-box {
+  background: #fff;
+  margin-top: 20px;
+  padding: 20px;
+}
 
-  .result-item-title {
-    color: dodgerblue;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    line-height: 26px;
-    cursor: pointer;
-    height: 26px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    overflow: hidden;
-    font-size: 20px;
-  }
+.search-info-box span {
+  margin-right: 10px;
+}
 
-  .search-result-list-box {
-    padding: 20px;
-  }
+.search-info-box {
+  color: #999;
+  font-size: 14px;
+}
 
-  .search-result-count-info {
-    color: #70757a;
-    line-height: 20px;
-    font-size: 16px;
-    margin-left: 20px;
-  }
+.result-item-content {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #4d5156;
+  font-size: 16px;
+  line-height: 20px;
+  height: 40px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
 
-  .search-condition-box {
-    border-top: solid 1px #DCDFE6;
-    margin-bottom: 20px;
-    padding: 20px 20px 30px;
-  }
+.search-result-item {
+  margin-bottom: 20px;
+}
 
-  .search-input-box {
-    text-align: center;
-    padding: 20px;
-  }
+.result-item-title {
+  color: dodgerblue;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  line-height: 26px;
+  cursor: pointer;
+  height: 26px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  font-size: 20px;
+}
 
-  .search-box {
-    margin-top: 20px;
-    margin-bottom: 20px;
-  }
+.search-result-list-box {
+  padding: 20px;
+}
 
-  .search-left-part {
-    width: 820px;
-    margin-right: 20px;
-  }
+.search-result-count-info {
+  color: #70757a;
+  line-height: 20px;
+  font-size: 16px;
+  margin-left: 20px;
+}
 
-  .search-hot-word .wordCloud {
-    width: 260px;
-    height: 260px;
-  }
+.search-condition-box {
+  border-top: solid 1px #DCDFE6;
+  margin-bottom: 20px;
+  padding: 20px 20px 30px;
+}
 
-  .search-right-part {
-    width: 300px;
-  }
+.search-input-box {
+  text-align: center;
+  padding: 20px;
+}
+
+.search-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.search-left-part {
+  width: 820px;
+  margin-right: 20px;
+}
+
+.search-hot-word .wordCloud {
+  width: 260px;
+  height: 260px;
+}
+
+.search-right-part {
+  width: 300px;
+}
 
 </style>

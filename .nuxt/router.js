@@ -11,6 +11,7 @@ const _bb456588 = () => interopDefault(import('..\\pages\\login\\index.vue' /* w
 const _755f612c = () => interopDefault(import('..\\pages\\register\\index.vue' /* webpackChunkName: "pages/register/index" */))
 const _70f37247 = () => interopDefault(import('..\\pages\\search\\index.vue' /* webpackChunkName: "pages/search/index" */))
 const _2f17e4f7 = () => interopDefault(import('..\\pages\\article\\_id.vue' /* webpackChunkName: "pages/article/_id" */))
+const _02a7e76c = () => interopDefault(import('..\\pages\\editor\\_id.vue' /* webpackChunkName: "pages/editor/_id" */))
 const _424faa44 = () => interopDefault(import('..\\pages\\userInfo\\_id.vue' /* webpackChunkName: "pages/userInfo/_id" */))
 const _101e616f = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 
@@ -53,6 +54,10 @@ export const routerOptions = {
     path: "/article/:id?",
     component: _2f17e4f7,
     name: "article-id"
+  }, {
+    path: "/editor/:id?",
+    component: _02a7e76c,
+    name: "editor-id"
   }, {
     path: "/userInfo/:id?",
     component: _424faa44,

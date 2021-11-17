@@ -46,6 +46,7 @@
         <a href="/about" target="_blank">
           <span><i class="el-icon-goods"></i> 关于</span>
         </a>
+        <span @click="checkPublish"><i class="el-icon-goods"></i> 发布内容</span>
       </div>
     </div>
     <Nuxt/>
@@ -92,6 +93,19 @@ import * as api from '../api/api';
 
 export default {
   methods: {
+    checkPublish() {
+      api.checkToken().then(res => {
+        if (res.code === api.success_code) {
+          location.href = '/editor';
+        } else {
+          this.$message.warning("请先登录哦");
+          return;
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+
     toTop() {
       document.documentElement.scrollTo({
         top: 0,

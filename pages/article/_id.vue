@@ -3,9 +3,18 @@
     <div class="content-box clear-fix">
       <div class="article-left-part default-border-radius float-left">
         <div class="article-content-box">
-          <div class="article-detail-title">
-            <h1 v-text="articleRes.title"></h1>
+          <div class="article-title-header clear-fix">
+            <div class="article-detail-title float-left">
+              <h1 v-text="articleRes.title"></h1>
+            </div>
+            <div class="modify-article float-right" v-if="enableEdit">
+              <el-tooltip content="编辑" placement="top" effect="light">
+                <a :href="'/editor/'+articleRes.id"><span>...</span></a>
+              </el-tooltip>
+            </div>
           </div>
+
+
           <div class="article-info">
             <img :src="articleRes.sobUser.avatar" size="small">
             <span class="user-name">
@@ -220,7 +229,8 @@ export default {
       targetImagePath: '',
       currentPage: 1,
       pageSize: 10,
-      subCommentPlaceholder: '请文明回复'
+      subCommentPlaceholder: '请认真回复哦',
+      enableEdit: false
     };
   },
   /*加载文章详情,需要把文章的ID传过来*/
@@ -245,10 +255,11 @@ export default {
       recommendArticles: recommendArticleRes.data,
       commentList: commentRes.data.contents,
       isLastPage: commentRes.data.last,
-      labelsStr: labels
+      labelsStr: labels,
     }
   },
   methods: {
+
     doLoadMore() {
       this.currentPage++;
       api.getCommentsByArticleId(this.articleRes.id, this.currentPage, this.pageSize).then(result => {
@@ -308,7 +319,6 @@ export default {
     checkLogin() {
       //检查是否有效
       api.checkToken().then(result => {
-        //console.log(result);
         if (result.code === 40000) {
           //跳转登录界面
           location.href = "/login?redirect=" + location.href;
@@ -405,6 +415,15 @@ export default {
     }
   },
   mounted() {
+     api.checkToken().then(res=>{
+       if (res.code === api.success_code) {
+         let userId = res.data.id;
+         if (userId === this.articleRes.sobUser.id) {
+           this.enableEdit = true;
+         }
+       }
+    }),
+
 
     new Catelog({
       contentEl: 'article-content',
@@ -432,6 +451,24 @@ export default {
 
 
 <style>
+
+.modify-article .modify-article-btn {
+
+}
+
+.modify-article .modify-article-btn:hover {
+  background: #FFFFFF;
+}
+
+.modify-article .modify-article-btn {
+  border: 0;
+  background: #FFFFFF;
+  font-weight: 600;
+}
+
+.article-detail-title {
+  max-width: 720px;
+}
 
 .article-loading-part .content-loading {
   padding: 10px;
