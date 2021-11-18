@@ -86,7 +86,7 @@
               <div class="image-action-bar">
                 <el-upload
                   class="image-selector-uploader"
-                  action="/admin/image/article"
+                  action="/portal/image/article"
                   :show-file-list="false"
                   :on-error="onUploadError"
                   :on-success="uploadSuccess"

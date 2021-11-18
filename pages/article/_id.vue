@@ -662,6 +662,16 @@ export default {
   line-height: 30px;
 }
 
+.article-content p strong{
+  color: #1c1b1b;
+}
+.article-content p code{
+  color: #8caff1;
+  font-weight: 600;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
 .recommend-info span {
   margin-right: 10px;
 }
@@ -814,8 +824,7 @@ export default {
 
 
 .article-content p img {
-  width: 100%;
-  /*max-width: 740px;*/
+  width: 97%;
   cursor: zoom-in;
   border-radius: 4px;
   margin-top: 5px;
@@ -838,6 +847,9 @@ export default {
   font-family: "PingFang SC";
 }
 
+.hljs{
+  color: #e1e5ed;
+}
 
 .article-content ul, .article-content ol {
   margin-left: 20px;

@@ -444,7 +444,7 @@ export default {
 }
 
 .article-summary {
-  max-width: 500px;
+  max-width: 400px;
   margin-top: 10px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -464,7 +464,7 @@ export default {
 
 .article-title {
   display: -webkit-box;
-  max-width: 500px;
+  max-width: 400px;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   overflow: hidden;
