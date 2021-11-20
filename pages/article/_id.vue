@@ -599,7 +599,7 @@ export default {
 }
 
 #article-catalog-container {
-  max-height: 300px;
+  /*max-height: 300px;*/
   overflow: hidden;
 }
 
@@ -666,8 +666,9 @@ export default {
 .article-content p code{
   color: #8caff1;
   font-weight: 600;
-  padding-right: 5px;
-  padding-left: 5px;
+  background: #f2f2f2;
+  padding: 2px 5px;
+  border-radius: 8px;
 }
 
 .recommend-info span {
@@ -851,6 +852,30 @@ export default {
 
 .article-content ul, .article-content ol {
   margin-left: 20px;
+}
+.article-content ol li code{
+  font-weight: 600;
+  font-size: 16px;
+  color: #409EFF;
+}
+
+.article-content table {
+width: 100%;
+  text-align: center;
+  border: 1px solid #edebeb;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.article-content blockquote{
+  margin: 5px auto;
+}
+
+.article-content blockquote p{
+  background: #edebeb;
+  font-style: oblique;
+  border-radius: 4px;
 }
 
 .article-detail-title h1 {
