@@ -78,11 +78,11 @@
                   </a>
                   <el-tag size="mini" type="danger" v-if="item.state==='3'">置顶</el-tag>
                 </div>
-                <div class="article-comment-reply" v-if="item.parentContent!==null&&item.parentContent!==''">
-                  <span>回复：{{ item.parentContent }}</span>
-                </div>
-                <div class="article-comment-content">
+                <div class="article-comment-content" v-if="item.parentContent===null || item.parentContent===''">
                   {{ item.content }}
+                  <div class="article-comment-reply" v-if="item.parentContent!==null&&item.parentContent!==''">
+                    <span>回复：{{ item.parentContent }}</span>
+                  </div>
                 </div>
                 <div class="article-comment-action">
                   <span class="el-icon-date">
@@ -298,21 +298,19 @@ export default {
       this.comment.parentContent = parentContent;
       api.postComment(this.comment).then(result => {
         if (result.code === api.success_code) {
-          if (result.code === api.success_code) {
-            //刷新评论列表
-            this.getArticleCommentByPage(1);
-            this.resetComment();
-            this.$message.success(result.message);
-            let commentList = document.getElementById('article-comment-list');
-            if (commentList) {
-              commentList.scrollIntoView({
-                block: 'start',
-                behavior: 'smooth'
-              })
-            }
-          } else {
-            this.$message.error(result.message);
+          //刷新评论列表
+          this.getArticleCommentByPage(1);
+          this.resetComment();
+          this.$message.success(result.message);
+          let commentList = document.getElementById('article-comment-list');
+          if (commentList) {
+            commentList.scrollIntoView({
+              block: 'start',
+              behavior: 'smooth'
+            })
           }
+        } else {
+          this.$message.error(result.message);
         }
       })
     },

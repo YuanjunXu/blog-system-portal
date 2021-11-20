@@ -1,41 +1,47 @@
 <template>
   <div id="index-page-box" class="index-page-box clear-fix">
     <div id="index-left-part" class="index-left-part default-border-radius float-left">
-      <div class="index-left-user-info">
-        <div class="user-avatar">
-          <img :src="userInfo.avatar">
-        </div>
-        <div class="user-name">
-          <span v-text="userInfo.userName"></span>
-        </div>
-        <div class="user-sign">
-          <span v-text="userInfo.sign"></span>
-        </div>
-      </div>
-      <div class="left-user-self-links">
-        <el-popover
-          popper-class="wechat-pop-container"
-          placement="bottom"
-          trigger="click">
-          <div class="index-wechat-pop-content">
-            <div class="wechat-subscription">
-              <img src="http://fs.xuyuanjun.cn/20211109/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg">
-            </div>
+      <!--管理员信息展示-->
+      <div class="about-admin">
+        <div class="title">关于作者</div>
+        <div class="index-left-user-info">
+          <div class="user-avatar">
+            <img :src="userInfo.avatar">
           </div>
-          <span slot="reference" class="sob_blog sobwechat"></span>
-        </el-popover>
-        <a href="https://gitee.com/alex_xyj" target="_blank">
-          <span class="sob_blog sobgithub"></span>
-        </a>
-        <a target="_blank" href="https://space.bilibili.com/393667619">
-          <span class="sob_blog sobbilibili-line"></span>
-        </a>
+          <div class="user-name">
+            <span v-text="userInfo.userName"></span>
+          </div>
+          <div class="user-sign">
+            <span v-text="userInfo.sign"></span>
+          </div>
+        </div>
+        <div class="left-user-self-links">
+          <el-popover
+            popper-class="wechat-pop-container"
+            placement="bottom"
+            trigger="click">
+            <div class="index-wechat-pop-content">
+              <div class="wechat-subscription">
+                <img src="http://fs.xuyuanjun.cn/20211109/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7.jpg">
+              </div>
+            </div>
+            <span slot="reference" class="sob_blog sobwechat"></span>
+          </el-popover>
+          <a href="https://gitee.com/alex_xyj" target="_blank">
+            <span class="sob_blog sobgithub"></span>
+          </a>
+          <a target="_blank" href="https://space.bilibili.com/393667619">
+            <span class="sob_blog sobbilibili-line"></span>
+          </a>
+        </div>
       </div>
+
+
       <div class="left-categories-box">
         <div
           :class="currentCategoryId===item.id?'category-item-active default-border-radius':'category-item default-border-radius'"
           v-for="(item,index) in categories" :key="index">
-          <span v-text="item.name" @click="listArticlesByCategoryId(item)"></span>
+          <div v-text="item.name" @click="listArticlesByCategoryId(item)"></div>
         </div>
       </div>
     </div>
@@ -170,6 +176,7 @@
 
 <script>
 import * as api from '../api/api';
+import {getDailyContent} from "../api/api";
 
 export default {
   head() {
@@ -199,7 +206,11 @@ export default {
     return {
       isLoading: false,
       keyword: '',
-      currentCategoryId: ''
+      currentCategoryId: '',
+      dailyContent: {
+        content: '',
+        from: ''
+      }
     }
   },
   mounted() {
@@ -210,6 +221,7 @@ export default {
     window.onresize = function () {
       that.onWindowScroll();
     };
+
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.onWindowScroll);
@@ -314,7 +326,8 @@ export default {
       api.getArticles(this.currentCategoryId, page, this.pageNavigation.pageSize).then(result => {
         this.handleArticleResult(result);
       })
-    }
+    },
+
   },
   async asyncData({params}) {
     let userInfoRes = await api.getAdminInfo();
@@ -346,6 +359,20 @@ export default {
 };
 </script>
 <style>
+.about-admin .title {
+  font-size: 14px;
+  color: #409EFF;
+  margin-bottom: 10px;
+  font-weight: 600;
+  margin-left: 10px;
+  padding-top: 10px;
+}
+
+.about-admin {
+  background: #FFFFFF;
+  padding-bottom: 20px;
+  border-radius: 8px;
+}
 
 .wechat-pop-container {
   padding: 0 !important;
@@ -512,7 +539,7 @@ export default {
 
 .left-categories-box .category-item:hover,
 .left-categories-box .category-item-active {
-  background: #F5F5F5;
+  background: #eceaea;
   color: #409EFF !important;
 }
 
@@ -521,14 +548,18 @@ export default {
   cursor: pointer;
   margin-left: 15px;
   margin-right: 15px;
+  margin-top: 5px;
   color: #999999;
 }
 
 .left-categories-box {
+  border-radius: 8px;
   background: #fff;
   margin-bottom: 20px;
   margin-top: 20px;
   text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .left-user-self-links a > span:hover, .left-user-self-links .sobwechat:hover {
@@ -585,7 +616,6 @@ export default {
 }
 
 .index-left-part {
-  background: #fff;
   margin-right: 10px;
   width: 230px;
 }

@@ -46,7 +46,7 @@
         <a href="/about" target="_blank">
           <span><i class="el-icon-goods"></i> 关于</span>
         </a>
-        <span @click="checkPublish"><i class="el-icon-goods"></i> 发布内容</span>
+        <span @click="checkPublish"><i class="el-icon-document"></i> 发布内容</span>
       </div>
     </div>
     <Nuxt/>
@@ -131,7 +131,7 @@ export default {
         })
       } else if (command === 'adminCenter') {
         location.href = 'http://mp.xuyuanjun.cn/#/index';
-        //  location.href = 'http://lochalhost:8080/#/index'
+        //  location.href = 'http://localhost:8080/#/index';
       } else if (command === 'userInfo') {
         location.href = "/userInfo/" + this.userInfo.id;
       }
@@ -325,6 +325,10 @@ a {
   font-size: 16px;
 }
 
+.blog-footer a {
+  color: #9ab6e3;
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -340,12 +344,14 @@ a {
 
 body {
   /*background: #e4e4f9;*/
-  background-image: linear-gradient(to right, #efe7f5, #d7f4f2);
+  background-image: linear-gradient(to left, #b8edeb 0%, #fce6ee 100%);
 }
 
 #blog-box {
   width: 1140px;
   margin: 0 auto;
+  height: 100%;
+  background: rgba(255, 255, 255, 0);
 }
 
 .float-left {

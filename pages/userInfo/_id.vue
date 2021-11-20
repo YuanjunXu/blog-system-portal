@@ -172,7 +172,7 @@
   .user-info-header-bg img {
     width: 100%;
     object-fit: cover;
-    filter: blur(4px) contrast(.8);
+    filter: blur(4px) contrast(1);
     height: 200px;
   }
 
@@ -189,6 +189,7 @@
     background: #fff;
     margin-top: 20px;
     margin-bottom: 20px;
+    border-radius: 8px;
   }
 
   .user-info-left-part .el-tabs--left .el-tabs__header.is-left {

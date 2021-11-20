@@ -145,6 +145,8 @@
       window.removeEventListener('scroll', this.onWindowScroll);
     },
     mounted() {
+      this.$store.commit("setCurrentActivityTab", "about");
+
       //处理内容部分的H1标签距离，如果是后台获取数据
       //那就在数据获取完以后进行处理
       let rightContent = document.getElementById('about-right-part');
@@ -162,7 +164,7 @@
         that.onWindowScroll();
       };
       window.addEventListener("scroll", this.onWindowScroll);
-      this.$store.commit("setCurrentActivityTab", "about");
+
       this.onWindowScroll();
     },
   };
@@ -178,6 +180,7 @@
     background: #fff;
     margin-top: 20px;
     margin-bottom: 20px;
+    border-radius: 8px;
   }
 
   .about-left-part .el-tabs--left .el-tabs__header.is-left {

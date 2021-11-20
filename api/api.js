@@ -16,7 +16,7 @@ export const getAdminInfo = () => {
     return http.requestGet('/user/user_info/909839901371924480');
   } else {
     // 生产账号
-    // return http.requestGet(baseUrl + '/user/user_info/909839612229189632');
+    //return http.requestGet(baseUrl + '/user/user_info/909839612229189632');
 
     // 测试账号
     return http.requestGet(baseUrl + '/user/user_info/909839901371924480');
@@ -187,6 +187,7 @@ export const getArticleDetail = (articleId) => {
   }
   return http.requestGet(baseUrl + '/portal/article/get_article_for_user_edit/' + articleId);
 };
+
 
 
 
