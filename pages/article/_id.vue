@@ -14,7 +14,6 @@
             </div>
           </div>
 
-
           <div class="article-info">
             <img :src="articleRes.sobUser.avatar" size="small">
             <span class="user-name">
@@ -45,6 +44,15 @@
           </div>
           <div id="article-content" class="article-content" v-html="articleRes.content" v-show="!isArticleProcessing">
 
+          </div>
+
+          <div class="right-show-text">
+            <span class="el-icon-warning-outline"></span>
+            本文由
+            <a :href="'/userInfo/'+user.id" target="_blank">{{ user.userName }}</a>
+            原创发布于
+            <a href="http://www.xuyuanjun.cn/" target="_blank">猿村</a>
+            ，未经作者授权，禁止转载
           </div>
         </div>
         <div class="article-comment-box">
@@ -256,6 +264,7 @@ export default {
       commentList: commentRes.data.contents,
       isLastPage: commentRes.data.last,
       labelsStr: labels,
+      user: articleResult.data.sobUser
     }
   },
   methods: {
@@ -413,21 +422,21 @@ export default {
     }
   },
   mounted() {
-     api.checkToken().then(res=>{
-       if (res.code === api.success_code) {
-         let userId = res.data.id;
-         if (userId === this.articleRes.sobUser.id) {
-           this.enableEdit = true;
-         }
-       }
+    api.checkToken().then(res => {
+      if (res.code === api.success_code) {
+        let userId = res.data.id;
+        if (userId === this.articleRes.sobUser.id) {
+          this.enableEdit = true;
+        }
+      }
     }),
 
 
-    new Catelog({
-      contentEl: 'article-content',
-      catalogEl: 'article-catalog-container',
-      selector: ['h1', 'h2', 'h3']
-    });
+      new Catelog({
+        contentEl: 'article-content',
+        catalogEl: 'article-catalog-container',
+        selector: ['h1', 'h2', 'h3']
+      });
 
     hljs.initHighlighting();
 
@@ -449,6 +458,24 @@ export default {
 
 
 <style>
+
+.right-show-text a {
+  color: #f492a8;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.right-show-text .el-icon-warning-outline {
+  color: red;
+  font-weight: 600;
+}
+
+.right-show-text {
+  margin: 20px auto;
+  text-align: center;
+  padding-top: 30px;
+  border-top: solid 1px #9a9a9a;
+}
 
 .modify-article .modify-article-btn {
 
@@ -660,15 +687,18 @@ export default {
   line-height: 30px;
 }
 
-.article-content p strong{
+
+.article-content p strong {
   color: #1c1b1b;
 }
-.article-content p code{
-  color: #8caff1;
-  font-weight: 600;
-  background: #f2f2f2;
-  padding: 2px 5px;
-  border-radius: 8px;
+
+.article-content p code {
+  font-size: 0.85em;
+  font-family: "Roboto Mono", Monaco, courier, monospace;
+  background: #f8f8f8;
+  color: #d63200;
+  padding: 0 5px;
+  border-radius: 4px;
 }
 
 .recommend-info span {
@@ -823,7 +853,7 @@ export default {
 
 
 .article-content p img {
-  width: 97%;
+  width: 100%;
   cursor: zoom-in;
   border-radius: 4px;
   margin-top: 5px;
@@ -842,25 +872,41 @@ export default {
   font-size: 14px;
   padding: 10px;
   border-radius: 4px;
-  margin-right: 20px;
   font-family: "PingFang SC";
 }
 
-.hljs{
+.hljs {
   color: #e1e5ed;
 }
 
 .article-content ul, .article-content ol {
   margin-left: 20px;
 }
-.article-content ol li code{
-  font-weight: 600;
-  font-size: 16px;
-  color: #409EFF;
+
+.article-content li{
+  margin-left: 30px;
+}
+
+.article-content ol li code {
+  font-size: 0.85em;
+  /*font-family: "Roboto Mono", Monaco, courier, monospace;*/
+  background: #f8f8f8;
+  color: #d63200;
+  padding: 0 5px;
+  border-radius: 4px;
+}
+
+.article-content ul li code {
+  font-size: 0.85em;
+  /*font-family: "Roboto Mono", Monaco, courier, monospace;*/
+  background: #f8f8f8;
+  color: #d63200;
+  padding: 0 5px;
+  border-radius: 4px;
 }
 
 .article-content table {
-width: 100%;
+  width: 100%;
   text-align: center;
   border: 1px solid #edebeb;
   margin-top: 10px;
@@ -868,11 +914,11 @@ width: 100%;
   border-radius: 5px;
 }
 
-.article-content blockquote{
+.article-content blockquote {
   margin: 5px auto;
 }
 
-.article-content blockquote p{
+.article-content blockquote p {
   background: #edebeb;
   font-style: oblique;
   border-radius: 4px;
@@ -886,9 +932,13 @@ width: 100%;
   color: #000;
 }
 
+.article-content hr{
+  margin: 5px 0;
+}
+
 .article-content p, .article-content ul {
   line-height: 24px;
-  color: #7f828b;
+  color: #4b4c51;
   font-size: 16px;
   padding: 5px 0;
 }
