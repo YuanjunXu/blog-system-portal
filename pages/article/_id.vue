@@ -30,6 +30,9 @@
               <a :href="'/search?keyword='+item" target="_blank">{{ item }}</a>
             </el-tag>
           </div>
+          <div class="article-detail-cover">
+            <img :src="'/portal/image/'+articleRes.cover">
+          </div>
           <div class="article-loading-part" v-if="isArticleProcessing">
             <div class="content-loading">
               <div class="loading-title clear-fix"></div>
@@ -244,10 +247,10 @@ export default {
   /*加载文章详情,需要把文章的ID传过来*/
   async asyncData({params}) {
     let articleResult = await api.getArticleDetailById(params.id);
+    // console.log(articleResult.data);
     let recommendArticleRes = await api.getRecommendArticle(articleResult.data.id, 10);
     //加载第一页评论数据
     let commentRes = await api.getCommentsByArticleId(articleResult.data.id, 1, 10);
-    // console.log(commentRes.data.contents);
     let labels = '';
     let labelsList = articleResult.data.labels;
     labelsList.forEach((label, index) => {
@@ -458,6 +461,18 @@ export default {
 
 
 <style>
+
+.article-detail-cover {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.article-detail-cover img {
+  object-fit: fill;
+  width: 100%;
+  height: 350px;
+  border-radius: 4px;
+}
 
 .right-show-text a {
   color: #f492a8;
@@ -692,9 +707,12 @@ export default {
   color: #1c1b1b;
 }
 
+.article-content ol li p img {
+  margin-left: 0 !important;
+}
+
 .article-content p code {
   font-size: 0.85em;
-  font-family: "Roboto Mono", Monaco, courier, monospace;
   background: #f8f8f8;
   color: #d63200;
   padding: 0 5px;
@@ -883,7 +901,7 @@ export default {
   margin-left: 20px;
 }
 
-.article-content li{
+.article-content li {
   margin-left: 30px;
 }
 
@@ -932,7 +950,7 @@ export default {
   color: #000;
 }
 
-.article-content hr{
+.article-content hr {
   margin: 5px 0;
 }
 
